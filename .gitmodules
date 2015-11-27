@@ -1,0 +1,3 @@
+[submodule "orpsoc-cores"]
+	path = orpsoc-cores
+	url = git://github.com/openrisc/orpsoc-cores.git
