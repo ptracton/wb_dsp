@@ -19,6 +19,7 @@ module testing_wb_slave (/*AUTOARG*/
    parameter dw = 32;
    parameter aw = 32;
    parameter DEBUG = 0;
+   parameter BASE_ADDRESS = 32'h9000_0000;
    
    
    input                  wb_clk;
@@ -41,6 +42,39 @@ module testing_wb_slave (/*AUTOARG*/
    reg [dw-1:0]           slave_reg2;
    reg [dw-1:0]           slave_reg3;
 
+   reg [aw-1:0]           addr_reg;
+   reg [dw-1:0]           data_reg;
    
+   
+   always @(posedge wb_clk)
+     if (wb_rst) begin
+        wb_ack_o <= 1'b0;
+        wb_err_o <= 1'b0;
+        wb_rty_o <= 1'b0;  
+        addr_reg <= 32'b0;
+        data_reg <= 32'b0;
+        
+     end else begin
+        if (wb_cyc_i & wb_stb_i) begin
+           addr_reg <= wb_adr_i;
+           data_reg <= wb_dat_i;
+           wb_ack_o <= 1;           
+        end else begin
+           wb_ack_o <= 0;           
+        end
+           
+        
+     end
+   
+
+   always @(posedge wb_clk)
+     if (wb_rst) begin
+        slave_reg0 <= 32'b0;
+        slave_reg1 <= 32'b0;
+        slave_reg2 <= 32'b0;
+        slave_reg3 <= 32'b0;        
+     end else begin
+        
+     end
    
 endmodule // testing_wb_slave

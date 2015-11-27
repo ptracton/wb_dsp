@@ -55,7 +55,7 @@ module testbench_testing_wb_slave (/*AUTOARG*/ ) ;
                             .wb_rst(wb_rst), 
                             .wb_adr_i(wb_m2s_wb_slave0_adr), 
                             .wb_dat_i(wb_m2s_wb_slave0_dat), 
-                            .wb_sel_i(wb_m2s_wb_slave0_set), 
+                            .wb_sel_i(wb_m2s_wb_slave0_sel), 
                             .wb_we_i(wb_m2s_wb_slave0_we), 
                             .wb_cyc_i(wb_m2s_wb_slave0_cyc),
                             .wb_stb_i(wb_m2s_wb_slave0_stb), 
@@ -75,16 +75,22 @@ module testbench_testing_wb_slave (/*AUTOARG*/ ) ;
                             .wb_rst(wb_rst), 
                             .wb_adr_i(wb_m2s_wb_slave1_adr), 
                             .wb_dat_i(wb_m2s_wb_slave1_dat), 
-                            .wb_sel_i(wb_m2s_wb_slave1_set), 
+                            .wb_sel_i(wb_m2s_wb_slave1_sel), 
                             .wb_we_i(wb_m2s_wb_slave1_we), 
                             .wb_cyc_i(wb_m2s_wb_slave1_cyc),
                             .wb_stb_i(wb_m2s_wb_slave1_stb), 
                             .wb_cti_i(wb_m2s_wb_slave1_cti),
                             .wb_bte_i(wb_m2s_wb_slave1_bte)
                             ) ;   
-
+   reg  err;
+   
    initial begin
       #100 $display("Simulation Running");
+      master0.reset();
+      master0.write(32'h9000_0000, 32'hdead_beef, 4'hF, err);
+      master0.write(32'h9000_0004, 32'hf00d_d00f, 4'hF, err);
+      master0.write(32'h9000_0008, 32'h0123_4567, 4'hF, err);
+      master0.write(32'h9000_000C, 32'h89AB_CDEF, 4'hF, err);      
       #1000 $finish;
       
    end
