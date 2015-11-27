@@ -66,7 +66,9 @@ module testing_wb_slave (/*AUTOARG*/
         
      end
    
-
+   //
+   // Register Write Logic
+   //
    always @(posedge wb_clk)
      if (wb_rst) begin
         slave_reg0 <= 32'b0;
@@ -74,7 +76,52 @@ module testing_wb_slave (/*AUTOARG*/
         slave_reg2 <= 32'b0;
         slave_reg3 <= 32'b0;        
      end else begin
-        
+        if (wb_cyc_i & wb_stb_i & wb_we_i) begin
+           case (wb_adr_i[3:0])
+             4'h0: begin
+                slave_reg0[7:0]   <= wb_sel_i[0] ? wb_dat_i[7:0]   : slave_reg0[7:0];                
+                slave_reg0[15:8]  <= wb_sel_i[1] ? wb_dat_i[15:8]  : slave_reg0[15:8];                               
+                slave_reg0[23:16] <= wb_sel_i[2] ? wb_dat_i[23:16] : slave_reg0[23:16];
+                slave_reg0[31:24] <= wb_sel_i[3] ? wb_dat_i[31:24] : slave_reg0[31:24];
+                
+             end
+             4'h4:begin
+                slave_reg1[7:0]   <= wb_sel_i[0] ? wb_dat_i[7:0]   : slave_reg1[7:0];                
+                slave_reg1[15:8]  <= wb_sel_i[1] ? wb_dat_i[15:8]  : slave_reg1[15:8];               
+                slave_reg1[23:16] <= wb_sel_i[2] ? wb_dat_i[23:16] : slave_reg1[23:16];                
+                slave_reg1[31:24] <= wb_sel_i[3] ? wb_dat_i[31:24] : slave_reg0[31:24];                
+             end
+             4'h8:begin
+                slave_reg2[7:0]   <= wb_sel_i[0] ? wb_dat_i[7:0]   : slave_reg2[7:0];                                               
+                slave_reg2[15:8]  <= wb_sel_i[1] ? wb_dat_i[15:8]  : slave_reg2[15:8];                
+                slave_reg2[23:16] <= wb_sel_i[2] ? wb_dat_i[23:16] : slave_reg2[23:16]; 
+                slave_reg2[31:24] <= wb_sel_i[3] ? wb_dat_i[31:24] : slave_reg2[31:24];                
+             end 
+             4'hC:begin
+                slave_reg3[7:0]   <= wb_sel_i[0] ? wb_dat_i[7:0]   : slave_reg3[7:0];                
+                slave_reg3[15:8]  <= wb_sel_i[1] ? wb_dat_i[15:8]  : slave_reg3[15:8];                
+                slave_reg3[23:16] <= wb_sel_i[2] ? wb_dat_i[23:16] : slave_reg3[23:16]; 
+                slave_reg3[31:24] <= wb_sel_i[3] ? wb_dat_i[31:24] : slave_reg3[31:24];               
+             end 
+           endcase // case (wb_adr_i[3:0])
+        end // if (wb_cyc_i & wb_stb_i & wb_we_i)        
+     end // else: !if(wb_rst)
+   
+   //
+   // Register Read Logic
+   //
+   always @(posedge wb_clk)
+     if (wb_rst) begin
+        wb_dat_o <= 32'b0;        
+     end else begin
+        if (wb_cyc_i & wb_stb_i & ~wb_we_i) begin
+           case (wb_adr_i[3:0])
+             4'h0: wb_dat_o <= slave_reg0;
+             4'h4: wb_dat_o <= slave_reg1;
+             4'h8: wb_dat_o <= slave_reg2;
+             4'hC: wb_dat_o <= slave_reg3;
+           endcase // case (wb_adr_i[3:0])           
+        end
      end
    
 endmodule // testing_wb_slave

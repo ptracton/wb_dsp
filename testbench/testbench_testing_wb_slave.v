@@ -83,6 +83,7 @@ module testbench_testing_wb_slave (/*AUTOARG*/ ) ;
                             .wb_bte_i(wb_m2s_wb_slave1_bte)
                             ) ;   
    reg  err;
+   reg [31:0] data_out;
    
    initial begin
       #100 $display("Simulation Running");
@@ -90,7 +91,19 @@ module testbench_testing_wb_slave (/*AUTOARG*/ ) ;
       master0.write(32'h9000_0000, 32'hdead_beef, 4'hF, err);
       master0.write(32'h9000_0004, 32'hf00d_d00f, 4'hF, err);
       master0.write(32'h9000_0008, 32'h0123_4567, 4'hF, err);
-      master0.write(32'h9000_000C, 32'h89AB_CDEF, 4'hF, err);      
+      master0.write(32'h9000_000C, 32'h89AB_CDEF, 4'hF, err);
+      master0.read_burst(32'h9000_0000, data_out, 4'hF, 32'h1, 4'h0, err);
+      @(posedge wb_clk);
+      
+      master0.read_burst(32'h9000_0004, data_out, 4'hF, 32'h1, 4'h0, err);
+      @(posedge wb_clk);
+      
+      master0.read_burst(32'h9000_0008, data_out, 4'hF, 32'h1, 4'h0, err);
+      @(posedge wb_clk);
+      
+      master0.read_burst(32'h9000_000C, data_out, 4'hF, 32'h1, 4'h0, err);
+      @(posedge wb_clk);      
+//      master0.read_burst(32'h9000_000C, data_out, 4'hF, 32'h1, 4'h0, err);
       #1000 $finish;
       
    end
