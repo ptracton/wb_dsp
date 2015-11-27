@@ -1,0 +1,12 @@
+[submodule "cores/cpu/lm32"]
+	path = cores/cpu/lm32
+	url = git://github.com/m-labs/lm32.git
+[submodule "cores/cpu/mor1kx"]
+	path = cores/cpu/mor1kx
+	url = https://github.com/openrisc/mor1kx.git
+[submodule "cores/orpsoc-cores"]
+	path = cores/orpsoc-cores
+	url = https://github.com/openrisc/orpsoc-cores.git
+[submodule "cores/tools/fusesoc"]
+	path = cores/tools/fusesoc
+	url = https://github.com/olofk/fusesoc.git
