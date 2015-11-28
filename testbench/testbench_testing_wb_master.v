@@ -62,7 +62,7 @@ module testbench_testing_wb_master (/*AUTOARG*/ ) ;
                              );
    
    
-   wb_bfm_slave slave0 (/*AUTOARG*/
+   testing_wb_slave slave0 (/*AUTOARG*/
                         // Outputs
                         .wb_dat_o(wb_s2m_wb_slave0_dat), 
                         .wb_ack_o(wb_s2m_wb_slave0_ack), 
@@ -82,7 +82,7 @@ module testbench_testing_wb_master (/*AUTOARG*/ ) ;
                         ) ;
    
    
-   wb_bfm_slave slave1 (/*AUTOARG*/
+   testing_wb_slave slave1 (/*AUTOARG*/
                         // Outputs
                         .wb_dat_o(wb_s2m_wb_slave1_dat), 
                         .wb_ack_o(wb_s2m_wb_slave1_ack), 
@@ -115,7 +115,10 @@ module testbench_testing_wb_master (/*AUTOARG*/ ) ;
       @(negedge wb_rst);
       #15;
       master_write(32'h9000_0000, 32'hdead_beef, 4'hf);
+      repeat(2) @(posedge wb_clk);
       
+      master_read(32'h9000_0000, data_out, 4'hf);
+//      repeat(2) @(posedge wb_clk);
       
    end
    
@@ -126,7 +129,34 @@ module testbench_testing_wb_master (/*AUTOARG*/ ) ;
       
    end
 
-
+   task master_read;
+      input [31:0] taddress;
+      output [31:0] tdata;
+      input [3:0]  tselection;
+      begin
+         write     <= 0;         
+         start     <= 0;
+         address   <= 0;
+         selection <= 0;
+         write     <= 0;   
+         data_wr   <= 0;
+         @(posedge wb_clk);
+         start     <= 1;
+         write     <= 0;
+         address   <= taddress;
+         selection <= tselection;
+         
+         @(posedge clk);
+         tdata     <= data_rd;         
+         write     <= 0;         
+         start     <= 0;
+         address   <= 0;
+         selection <= 0;
+         write     <= 0;   
+         data_wr   <= 0;         
+      end
+   endtask 
+   
    task master_write;
       input [31:0] taddress;
       input [31:0] tdata;
@@ -153,7 +183,7 @@ module testbench_testing_wb_master (/*AUTOARG*/ ) ;
          write     <= 0;   
          data_wr   <= 0;         
       end
-   endtask //
+   endtask 
    
      
 endmodule // testbench_testing_wb_slave
