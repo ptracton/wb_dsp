@@ -92,18 +92,46 @@ module testbench_testing_wb_slave (/*AUTOARG*/ ) ;
       master0.write(32'h9000_0004, 32'hf00d_d00f, 4'hF, err);
       master0.write(32'h9000_0008, 32'h0123_4567, 4'hF, err);
       master0.write(32'h9000_000C, 32'h89AB_CDEF, 4'hF, err);
-      master0.read_burst(32'h9000_0000, data_out, 4'hF, 32'h1, 4'h0, err);
+      master0.read_burst(32'h9000_0000, data_out, 4'hF, 32'h0, 4'h0, err);
       @(posedge wb_clk);
       
-      master0.read_burst(32'h9000_0004, data_out, 4'hF, 32'h1, 4'h0, err);
+      master0.read_burst(32'h9000_0004, data_out, 4'hF, 32'h0, 4'h0, err);
       @(posedge wb_clk);
       
-      master0.read_burst(32'h9000_0008, data_out, 4'hF, 32'h1, 4'h0, err);
+      master0.read_burst(32'h9000_0008, data_out, 4'hF, 32'h0, 4'h0, err);
       @(posedge wb_clk);
       
-      master0.read_burst(32'h9000_000C, data_out, 4'hF, 32'h1, 4'h0, err);
+      master0.read_burst(32'h9000_000C, data_out, 4'hF, 32'h0, 4'h0, err);
       @(posedge wb_clk);      
-//      master0.read_burst(32'h9000_000C, data_out, 4'hF, 32'h1, 4'h0, err);
+
+      master0.write(32'h9000_0000, 32'h0000_0011, 4'h1, err);
+      master0.read_burst(32'h9000_0000, data_out, 4'h1, 32'h1, 4'h0, err);
+      @(posedge wb_clk);            
+      if (data_out != 32'hdead_be11)begin
+         test_failed <= 1;         
+      end
+
+      master0.write(32'h9000_0000, 32'h0000_2200, 4'h2, err);
+      master0.read_burst(32'h9000_0000, data_out, 4'h2, 32'h1, 4'h0, err);
+      @(posedge wb_clk);      
+      if (data_out != 32'hdead_2211)begin
+         test_failed <= 1;         
+      end
+
+      master0.write(32'h9000_0000, 32'h0033_0000, 4'h4, err);
+      master0.read_burst(32'h9000_0000, data_out, 4'h4, 32'h1, 4'h0, err);
+      @(posedge wb_clk);      
+      if (data_out != 32'hde33_2211)begin
+         test_failed <= 1;         
+      end
+
+      master0.write(32'h9000_0000, 32'h4400_0000, 4'h8, err);
+      master0.read_burst(32'h9000_0000, data_out, 4'h8, 32'h1, 4'h0, err);
+      @(posedge wb_clk);      
+      if (data_out != 32'h4433_2211)begin
+         test_failed <= 1;         
+      end
+      
       #1000 $finish;
       
    end

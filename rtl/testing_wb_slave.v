@@ -19,8 +19,6 @@ module testing_wb_slave (/*AUTOARG*/
    parameter dw = 32;
    parameter aw = 32;
    parameter DEBUG = 0;
-   parameter BASE_ADDRESS = 32'h9000_0000;
-   
    
    input                  wb_clk;
    input                  wb_rst;
