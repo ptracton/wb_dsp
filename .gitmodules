@@ -1,6 +1,3 @@
-[submodule "cores/cpu/lm32"]
-	path = cores/cpu/lm32
-	url = git://github.com/m-labs/lm32.git
 [submodule "cores/cpu/mor1kx"]
 	path = cores/cpu/mor1kx
 	url = https://github.com/openrisc/mor1kx.git

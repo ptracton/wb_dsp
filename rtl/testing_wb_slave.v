@@ -8,6 +8,7 @@
 // Update Count    : 0
 // Status          : Unknown, Use with caution!
 
+`timescale 1ns/1ns
 
 module testing_wb_slave (/*AUTOARG*/
    // Outputs

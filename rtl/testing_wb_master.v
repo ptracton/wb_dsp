@@ -7,6 +7,10 @@
 // Last Modified On: Fri Nov 27 16:22:45 2015
 // Update Count    : 0
 // Status          : Unknown, Use with caution!
+
+`timescale 1ns/1ns
+
+
 module testing_wb_master (/*AUTOARG*/
    // Outputs
    wb_adr_o, wb_dat_o, wb_sel_o, wb_we_o, wb_cyc_o, wb_stb_o,

@@ -7,6 +7,8 @@
 // Last Modified On: Fri Nov 27 13:42:16 2015
 // Update Count    : 0
 // Status          : Unknown, Use with caution!
+
+`timescale 1ns/1ns
 module syscon (/*AUTOARG*/
    // Outputs
    wb_clk_o, wb_rst_o,
