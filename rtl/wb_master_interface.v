@@ -24,14 +24,14 @@ module wb_master_interface (/*AUTOARG*/
 
    input 		wb_clk;
    input 		wb_rst;
-   output reg [aw-1:0] wb_adr_o;
-   output reg [dw-1:0] wb_dat_o;
-   output reg [3:0]    wb_sel_o;
-   output reg          wb_we_o;
-   output reg          wb_cyc_o;
-   output reg          wb_stb_o;
-   output reg [2:0]    wb_cti_o;
-   output reg [1:0]    wb_bte_o;
+   output reg [aw-1:0] wb_adr_o=0;
+   output reg [dw-1:0] wb_dat_o=0;
+   output reg [3:0]    wb_sel_o=0;
+   output reg          wb_we_o=0;
+   output reg          wb_cyc_o=0;
+   output reg          wb_stb_o=0;
+   output reg [2:0]    wb_cti_o=0;
+   output reg [1:0]    wb_bte_o=0;
    input [dw-1:0]      wb_dat_i;
    input               wb_ack_i;
    input               wb_err_i;
@@ -42,8 +42,8 @@ module wb_master_interface (/*AUTOARG*/
    input [3:0]         selection;
    input               write;   
    input [dw-1:0]      data_wr;
-   output reg [dw-1:0] data_rd;
-   output reg          active;
+   output reg [dw-1:0] data_rd=0;
+   output reg          active=0;
    
    
    reg [1:0]           state;

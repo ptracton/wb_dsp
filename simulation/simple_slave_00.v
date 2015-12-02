@@ -18,13 +18,13 @@ module test_case (/*AUTOARG*/ ) ;
    
    initial begin
       $display("Simple Slave Test Case");
-      
+      `TB.master_bfm.reset();      
       @(posedge `WB_RST);
       @(negedge `WB_RST);
       @(posedge `WB_CLK);
 
       
-      `TB.master_bfm.reset();
+
       `TB.master_bfm.write(32'h1000_0000, 32'hdead_beef, 4'hF, err);
       `TB.master_bfm.write(32'h5000_0000, 32'h1122_3344, 4'hF, err);
       
