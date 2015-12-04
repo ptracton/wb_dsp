@@ -56,10 +56,10 @@ module test_case ();
          `TEST_COMPARE("RAM0 Read", {i[7:0],i[7:0],i[7:0],i[7:0]}, data_out);
       end
       for (i=0; i<4096; i=i+4)begin
-         `TB.master_bfm.write(`WB_DSP_RAM_BASE_ADDRESS + i, {24'h0,i[7:0]*2}, 4'h1, err);
-         `TB.master_bfm.write(`WB_DSP_RAM_BASE_ADDRESS + i, {16'h0,i[7:0]*3,8'h00}, 4'h2, err);
-         `TB.master_bfm.write(`WB_DSP_RAM_BASE_ADDRESS + i, {8'h0,i[7:0]*4,16'h0}, 4'h4, err);
-         `TB.master_bfm.write(`WB_DSP_RAM_BASE_ADDRESS + i, {i[7:0]*5,24'h0}, 4'h8, err);
+         `TB.master_bfm.write(`WB_DSP_RAM_BASE_ADDRESS + i, {24'h0,i[7:0]*4'd2}, 4'h1, err);
+         `TB.master_bfm.write(`WB_DSP_RAM_BASE_ADDRESS + i, {16'h0,i[7:0]*4'd3,8'h00}, 4'h2, err);
+         `TB.master_bfm.write(`WB_DSP_RAM_BASE_ADDRESS + i, {8'h0,i[7:0]*4'd4,16'h0}, 4'h4, err);
+         `TB.master_bfm.write(`WB_DSP_RAM_BASE_ADDRESS + i, {i[7:0]*4'd5,24'h0}, 4'h8, err);
       end
          
       #1000;

@@ -74,7 +74,6 @@ module wb_dsp_slave_registers (/*AUTOARG*/
      if (wb_rst) begin
         equation_address_reg <= 32'b0;
         control_reg <= 32'b0;
-        slave_reg3 <= 32'b0;        
      end else begin
         if (wb_cyc_i & wb_stb_i & wb_we_i) begin
            case (wb_adr_i[3:0])

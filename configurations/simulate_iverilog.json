@@ -7,17 +7,22 @@
     ],
     "flow_steps": {
     "1" : "clean_up",
-    "2" : "simulation",
-    "3" : "run"
+    "2" : "ram_hack",
+    "3" : "simulation",
+    "4" : "run"
     },
     "flow" : {
     "clean_up" : {
         "executable" : "rm",
-        "arguments" : "-f dump.vcd a.out"
+        "arguments" : "-f dump.vcd a.out hack.vh"
     },
+  "ram_hack":{
+      "executable": "../tools/ram_image_hack.py ",
+      "arguments" : " "
+  },
 	"simulation" : {
 	    "executable": "iverilog",
-	    "arguments" : " -f rtl_sim.f"	
+	    "arguments" : " -f rtl_sim.f +define+ICARUS"	
 	},
 	"run" : {
 	    "executable" : "./a.out",

@@ -48,11 +48,11 @@ module wb_dsp_control (/*AUTOARG*/
    wire [dw-1:0]        data_rd;                // From master of wb_master_interface.v
    // End of automatics
    /*AUTOREG*/
-   reg                  start = 0;
-   reg [aw-1:0]         address =0;
-   reg [3:0]            selection =0;
-   reg                  write = 0;
-   reg [dw-1:0]         data_wr =0;
+   reg                  start;
+   reg [aw-1:0]         address;
+   reg [3:0]            selection;
+   reg                  write;
+   reg [dw-1:0]         data_wr;
 
    //
    // Control Register Bits
@@ -93,6 +93,73 @@ module wb_dsp_control (/*AUTOARG*/
                               .selection        (selection[3:0]),
                               .write            (write),
                               .data_wr          (data_wr[dw-1:0]));
+
+
+   parameter STATE_IDLE                 = 4'h0;
+   parameter STATE_ERROR                = 4'h1;
+   parameter STATE_GET_EQUATION_HEADER  = 4'h2;
+   parameter STATE_WAIT_EQUATION_HEADER = 4'h2;
+   parameter STATE_RUN_EQUATION         = 4'h3;
+   parameter STATE_FINISH_EQUATION      = 4'h4;
+
+   reg [3:0]            state;
+   reg [3:0]            next_state;
+
+   always @(posedge wb_clk)
+     if (wb_rst) begin
+        state <= STATE_IDLE;        
+     end else begin
+        state <= next_state;        
+     end
+
+   always @(*)
+     if (wb_rst) begin
+        next_state = STATE_IDLE;
+        start      = 0;
+        address    = 0;
+        selection  = 0;
+        write      = 0;
+        data_wr    = 0;        
+        
+     end else begin
+        case (next_state)
+          STATE_IDLE: begin
+             start      = 0;
+             address    = 0;
+             selection  = 0;
+             write      = 0;
+             data_wr    = 0;        
+                          
+             if (start_equation) begin
+                next_state = STATE_GET_EQUATION_HEADER;
+             end else begin
+                next_state = STATE_IDLE;
+             end
+          end
+          
+          STATE_GET_EQUATION_HEADER:begin
+             
+          end
+          
+         STATE_ERROR: begin
+            next_state = STATE_IDLE;            
+         end
+          
+          default:begin
+             next_state = STATE_IDLE;            
+          end
+        endcase // case (next_state)        
+     end
    
+`ifdef SIM
+   reg [32*8-1:0] state_name;
+   always @(*)
+     case (state)
+       STATE_IDLE: state_name         = "STATE_IDLE";
+       STATE_ERROR: state_name        = "STATE_ERROR";       
+       default: state_name            = "DEFAULT";
+     endcase // case (state)
+   
+`endif   
    
 endmodule // wb_dsp_control

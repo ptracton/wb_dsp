@@ -100,9 +100,11 @@ module testbench (/*AUTOARG*/ ) ;
    //
    // SRAM
    //
-  
+
+`include "hack.vh"
+   
    wb_ram #(.depth(4096),
-            .memfile(`RAM_IMAGE))
+            .memfile(ram_image))
    wb_ram0 (
             // Outputs
             .wb_dat_o(wb_s2m_wb_ram0_dat), 
@@ -122,5 +124,5 @@ module testbench (/*AUTOARG*/ ) ;
             .wb_bte_i(wb_m2s_wb_ram0_bte)
             ) ;
 
-   
+
 endmodule // testbench

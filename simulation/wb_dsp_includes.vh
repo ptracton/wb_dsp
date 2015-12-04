@@ -14,9 +14,9 @@
 `define DUT         `TB.dut
 
 
-`define TEST_CASE test_case
+`define TEST_CASE       test_case
 `define SIMULATION_NAME `TEST_CASE.simulation_name
-`define RAM_IMAGE       `TEST_CASE.ram_image   
+//`define RAM_IMAGE       `TEST_CASE.ram_image  
 `define NUMBER_OF_TESTS `TEST_CASE.number_of_tests
 
 `define WB_DSP_RAM_BASE_ADDRESS     32'h1000_0000

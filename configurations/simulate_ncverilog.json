@@ -7,14 +7,19 @@
     ],
     "flow_steps": {
         "1" : "clean_up",
-        "2" : "prepare",
-        "3" : "simulation"
+        "2" : "ram_hack",
+        "3" : "prepare",
+        "4" : "simulation"
     },
     "flow" : {
         "clean_up" : {
             "executable" : "rm",
-            "arguments" : "-f dump.vcd a.out"
+            "arguments" : "-f dump.vcd a.out hack.vh"
         },
+        "ram_hack":{
+            "executable": "../tools/ram_image_hack.py ",
+            "arguments" : " "
+        },        
         "prepare" : {
             "executable" : "touch",
             "arguments" : "cds.lib"

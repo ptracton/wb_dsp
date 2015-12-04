@@ -67,7 +67,7 @@ if __name__ == "__main__":
                         required = True,
                         action="store")    
     
-
+    print (os.environ['PATH'])
     args = parser.parse_args()
     if args.debug:
         print(args)
@@ -95,13 +95,15 @@ if __name__ == "__main__":
         print("Running Step: %s " % step)
         executable = json_data['flow'][flow_steps[step]]['executable']
         arguments = json_data['flow'][flow_steps[step]]['arguments']
-        executable = which(executable)
+        #executable = which(executable)
         print(executable)
         if (arguments == None):
             command = executable
         else:
             if flow_steps[step] == "simulation":
                 command = executable + " " + args.simulation + " " + arguments
+            elif flow_steps[step] == "ram_hack":
+                command = executable + " --simulation " + args.simulation 
             else:
                 command = executable + " " + arguments
 
