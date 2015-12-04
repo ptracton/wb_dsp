@@ -9,6 +9,7 @@
 // Status          : Unknown, Use with caution!
 
 `include "timescale.v"
+`include "wb_dsp_includes.vh"
 
 module testbench (/*AUTOARG*/ ) ;
 
@@ -99,8 +100,9 @@ module testbench (/*AUTOARG*/ ) ;
    //
    // SRAM
    //
-   
-   wb_ram #(.depth(4096))
+  
+   wb_ram #(.depth(4096),
+            .memfile(`RAM_IMAGE))
    wb_ram0 (
             // Outputs
             .wb_dat_o(wb_s2m_wb_ram0_dat), 

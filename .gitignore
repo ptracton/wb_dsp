@@ -35,3 +35,12 @@
 *.log
 *.jou
 *.str
+
+# Simulation
+*.vcd
+*.simvision
+INCA_libs
+*.shm
+
+# Emacs
+*~

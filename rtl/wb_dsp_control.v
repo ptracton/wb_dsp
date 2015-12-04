@@ -7,12 +7,16 @@
 // Last Modified On: Wed Dec  2 13:02:02 2015
 // Update Count    : 0
 // Status          : Unknown, Use with caution!
+
+`include "wb_dsp_slave_registers_include.vh"
+
 module wb_dsp_control (/*AUTOARG*/
    // Outputs
    wb_adr_o, wb_dat_o, wb_sel_o, wb_we_o, wb_cyc_o, wb_stb_o,
-   wb_cti_o, wb_bte_o,
+   wb_cti_o, wb_bte_o, status_reg,
    // Inputs
-   wb_clk, wb_rst, wb_dat_i, wb_ack_i, wb_err_i, wb_rty_i
+   wb_clk, wb_rst, wb_dat_i, wb_ack_i, wb_err_i, wb_rty_i,
+   equation_address_reg, control_reg
    ) ;
 
    parameter dw = 32;
@@ -34,6 +38,10 @@ module wb_dsp_control (/*AUTOARG*/
    input                wb_err_i;
    input                wb_rty_i;
    
+   input [dw-1:0]       equation_address_reg;
+   input [dw-1:0]       control_reg;
+   output wire [dw-1:0] status_reg;
+   
    /*AUTOWIRE*/
    // Beginning of automatic wires (for undeclared instantiated-module outputs)
    wire                 active;                 // From master of wb_master_interface.v
@@ -45,7 +53,22 @@ module wb_dsp_control (/*AUTOARG*/
    reg [3:0]            selection =0;
    reg                  write = 0;
    reg [dw-1:0]         data_wr =0;
-         
+
+   //
+   // Control Register Bits
+   //
+   wire                 start_equation = control_reg[`CONTROL_REG_START_EQUATION];
+   wire                 stop_equation  = control_reg[`CONTROL_REG_STOP_EQUATION];
+   wire [7:0]           equation       = control_reg[`CONTROL_EQUATION_EQUATION];
+   
+   
+   //
+   // Status Register Bits
+   //
+   assign status_reg[`STATUS_REG_ACTIVE] = active;
+   assign status_reg[31:1] = 0;
+      
+   
    wb_master_interface master(/*AUTOINST*/
                               // Outputs
                               .wb_adr_o         (wb_adr_o[aw-1:0]),

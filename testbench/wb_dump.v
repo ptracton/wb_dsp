@@ -13,14 +13,20 @@
 
 module dump;
 
+   reg [(64*8)-1:0] test_name;
    
    initial
      begin
+        test_name = `SIMULATION_NAME;
+        
 `ifdef NCVERILOG
-        $shm_open("test.shm",0); 
-        $shm_probe(`TB,"AC");        
+        //$shm_open("test.shm",0);
+        $shm_open({test_name,".shm"}, 0);
+        $shm_probe(test_case,"AC");
+        $shm_probe(test_tasks,"AC");        
+        $shm_probe(`TB,"MAC");        
 `else	
-	      $dumpfile("dump.vcd");
+	      $dumpfile({test_name,".vcd"});
 	      $dumpvars(0, `TB);
 `endif
 	      

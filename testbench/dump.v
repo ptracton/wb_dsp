@@ -6,13 +6,13 @@ module dump;
    initial
      begin
 `ifdef NCVERILOG
-	$shm_open("test.shm");
-	$shm_probe(testbench, "MAC");
+	      $shm_open("test.shm");
+	      $shm_probe(testbench, "MAC");
 `else	
-	$dumpfile("dump.vcd");
-	$dumpvars(0, testbench_testing_wb_slave);
+	      $dumpfile("dump.vcd");
+	      $dumpvars(0, testbench_testing_wb_slave);
 `endif
-	
+	      
      end // initial begin
    
    

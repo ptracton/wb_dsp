@@ -1,5 +1,6 @@
 +incdir+../testbench
 +incdir+../simulation
++incdir+../rtl      
 +incdir+../cores/orpsoc-cores/cores/wb_bfm/wb_bfm-0/
 +incdir+../cores/orpsoc-cores/cores/verilog_utils/
 +incdir+../cores/orpsoc-cores/cores/wb_common/      
@@ -14,6 +15,7 @@
 ../rtl/wb_dsp_top.v
 ../rtl/wb_master_interface.v      
 ../testbench/testbench.v
+../testbench/test_tasks.v
 ../testbench/arbiter.v
 ../testbench/wb_dsp_testbench_intercon.v
 ../testbench/wb_dump.v
