@@ -7,19 +7,19 @@
     ],
     "flow_steps": {
 	      "1" : "clean",
-        "2" : "build",
-        "3" : "simulation"
+        "2" : "simulation",
+        "3" : "running"
     },
     "flow" : {
 	      "clean" :{
 	          "executable" : "rm",
 	          "arguments" : "-f dump.vcd  fuse.log  fuse.xmsgs  fuseRelaunch.cmd  isim  isim.log  isim.wdb  simulation.exe "
 	      },
-	      "build" :{
+	      "simulation" :{
 	          "executable" : "fuse",
-            "arguments" : "work.glbl work.testbench -L unisims_ver -L unimacro_ver -L xilinxcorelib_ver -prj isim_rtl_sim.f -o simulation.exe"
+            "arguments" : "work.glbl work.testbench -L unisims_ver -L unimacro_ver -L xilinxcorelib_ver -prj rtl_isim.prj -o simulation.exe"
 	      },
-	      "simulation" : {
+	      "running" : {
 	          "executable": "simulation.exe",
 	          "arguments" : "-tclbatch simulation.tcl"	
 	      },

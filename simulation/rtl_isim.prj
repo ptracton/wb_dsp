@@ -1,0 +1,21 @@
+
+verilog work ../rtl/xilinx/glbl.v
+verilog work ../rtl/syscon.v -d SIM
+verilog work ../rtl/wb_dsp.v
+verilog work ../rtl/wb_dsp_control.v
+verilog work ../rtl/wb_dsp_slave_registers.v
+verilog work ../rtl/wb_dsp_top.v
+verilog work ../rtl/wb_master_interface.v
+verilog work ../testbench/test_tasks.v
+verilog work ../testbench/testbench.v  -i ../testbench -d SIM
+verilog work ../testbench/arbiter.v
+verilog work ../testbench/wb_dsp_testbench_intercon.v
+verilog work ../testbench/wb_dump.v
+verilog work ../cores/orpsoc-cores/cores/wb_intercon/wb_mux.v -i ../cores/orpsoc-cores/cores/verilog_utils/ 
+verilog work ../cores/orpsoc-cores/cores/wb_intercon/wb_arbiter.v -i ../cores/orpsoc-cores/cores/verilog_utils/
+verilog work ../cores/orpsoc-cores/cores/wb_intercon/wb_data_resize.v      
+verilog work ../cores/orpsoc-cores/cores/wb_bfm/wb_bfm-0/wb_bfm_master.v
+verilog work ../cores/orpsoc-cores/cores/wb_ram/rtl/verilog/wb_ram.v  -i ../cores/orpsoc-cores/cores/wb_common/ 
+verilog work ../cores/orpsoc-cores/cores/wb_ram/rtl/verilog/wb_ram_generic.v      
+
+verilog work ../simulation/simple_slave_00.v
