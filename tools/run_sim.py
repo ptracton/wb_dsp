@@ -78,8 +78,10 @@ if __name__ == "__main__":
         json_file = "../configurations/simulate_ncverilog.json"
     if args.modelsim:
         json_file = "../configurations/simulate_modelsim.json"
-    if args.isim or args.xsim:
+    if args.isim:
         json_file = "../configurations/simulate_isim.json"
+    if args.xsim:
+        json_file = "../configurations/simulate_xsim.json"
 
     try:
         f = open(json_file, "r")

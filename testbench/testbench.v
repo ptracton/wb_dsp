@@ -124,5 +124,16 @@ module testbench (/*AUTOARG*/ ) ;
             .wb_bte_i(wb_m2s_wb_ram0_bte)
             ) ;
 
+   //
+   // Tasks used to help test cases
+   //
+   test_tasks test_tasks();
+   
+
+   
+   //
+   // The actual test cases that are being tested
+   //
+   test_case test_case();
 
 endmodule // testbench

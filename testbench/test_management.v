@@ -20,11 +20,4 @@ end
       #150 reset <= 1'b0;            
    end
    
-   //
-   // Do not let a test bench just run forever.
-   //
-   initial begin
-      #50000000;
-      $display("TEST CASE TIMEOUT @ %d", $time);      
-      `TEST_FAILED <= 1'b1;      
-   end
+

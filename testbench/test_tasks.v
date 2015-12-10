@@ -30,6 +30,15 @@ module test_tasks (/*AUTOARG*/ ) ;
       #10 $finish;      
    end
 
+   //
+   // Do not let a test bench just run forever.
+   //
+   initial begin
+      #50000000;
+      $display("TEST CASE TIMEOUT @ %d", $time);      
+      test_failed <= 1'b1;      
+   end
+   
    /****************************************************************************
     TASK: all_tests_completed
     PARAMETERS:      

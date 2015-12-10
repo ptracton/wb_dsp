@@ -22,8 +22,6 @@ module dump;
 `ifdef NCVERILOG
         //$shm_open("test.shm",0);
         $shm_open({test_name,".shm"}, 0);
-        $shm_probe(test_case,"AC");
-        $shm_probe(test_tasks,"AC");        
         $shm_probe(`TB,"MAC");        
 `else	
 	      $dumpfile({test_name,".vcd"});
