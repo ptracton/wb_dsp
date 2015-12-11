@@ -15,7 +15,7 @@
     "flow" : {
 	      "clean" :{
 	          "executable" : "rm",
-	          "arguments" : "-rf xsim.dir xvlog* xelab.pb webtalk*"
+	          "arguments" : "-rf xsim.dir xvlog* xelab.pb webtalk* xsim.dir/ xvlog.pb *.wdb"
 	      },
         "ram_hack":{
             "executable": "../tools/ram_image_hack.py ",

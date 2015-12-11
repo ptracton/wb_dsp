@@ -6,12 +6,17 @@
         "icarus"
     ],
     "flow_steps": {
-	"1" : "simulation"
+        "1":"clean",
+	    "2" : "sim"
     },
     "flow" : {
-	"simulation" : {
+        "clean":{
+            "executable":"rm",
+            "arguments":" -rf *~ modelsim_logfile.txt vsim.wlf work/ "
+        },
+	"sim" : {
 	    "executable": "vsim",
-        "arguments" : " -c -do modelsim_rtl_sim.f -l modelsim_logfile.txt"
+        "arguments" : " -c -do rtl_modelsim.f -l modelsim_logfile.txt"
 	},
 	"run" : {
 	    "executable" : "./a.out",
