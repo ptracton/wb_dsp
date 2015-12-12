@@ -18,11 +18,11 @@
     },
   "ram_hack":{
       "executable": "../tools/ram_image_hack.py ",
-      "arguments" : " "
+      "arguments" : " --simulation $simulation"
   },
 	"simulation" : {
 	    "executable": "iverilog",
-	    "arguments" : " -f rtl_sim.f +define+ICARUS"	
+	    "arguments" : " -f rtl_sim.f $simulation +define+ICARUS "	
 	},
 	"run" : {
 	    "executable" : "./a.out",

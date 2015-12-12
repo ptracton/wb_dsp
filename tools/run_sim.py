@@ -13,7 +13,7 @@ import shlex
 import subprocess
 import sys
 import argparse
-
+import string
 
 def which(program):
     """
@@ -96,18 +96,14 @@ if __name__ == "__main__":
     for step in sorted(flow_steps.keys()):
         print("Running Step: %s " % step)
         executable = json_data['flow'][flow_steps[step]]['executable']
-        arguments = json_data['flow'][flow_steps[step]]['arguments']
+        arguments = string.Template(json_data['flow'][flow_steps[step]]['arguments'])
+        arguments_str = arguments.safe_substitute(simulation=args.simulation)
         #executable = which(executable)
         print(executable)
         if (arguments == None):
             command = executable
-        else:
-            if flow_steps[step] == "simulation":
-                command = executable + " " + args.simulation + " " + arguments
-            elif flow_steps[step] == "ram_hack":
-                command = executable + " --simulation " + args.simulation 
-            else:
-                command = executable + " " + arguments
+        else:         
+            command = executable + " " + arguments_str
 
         print(command)
         command = shlex.split(command)

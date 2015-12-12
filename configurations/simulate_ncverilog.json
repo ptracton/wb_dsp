@@ -18,7 +18,7 @@
         },
         "ram_hack":{
             "executable": "../tools/ram_image_hack.py ",
-            "arguments" : " "
+            "arguments" : " --simulation $simulation"
         },        
         "prepare" : {
             "executable" : "touch",
@@ -26,7 +26,7 @@
         },
         "simulation" : {
             "executable": "ncverilog",
-            "arguments" : " -64bit -v93 +access+rwc -clean -cdslib cds.lib -f rtl_sim.f -timescale 1ns/1ns +define+NCVERILOG"
+            "arguments" : " -64bit -v93 +access+rwc -clean -cdslib cds.lib -f rtl_sim.f -timescale 1ns/1ns +define+NCVERILOG $simulation"
         },
         "run" : {
             "executable" : "./a.out",

@@ -41,6 +41,10 @@
 *.simvision
 INCA_libs
 *.shm
+*.wdb
+*.pb
+*.cmd
+*.xmsgs
 
 # Emacs
 *~
