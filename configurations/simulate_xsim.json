@@ -9,8 +9,9 @@
 	      "1" : "clean",
         "2" : "ram_hack",
         "3" : "parse",
-        "4" : "elaborate",
-        "5" : "xsimulation"
+        "4" : "test_case",
+        "5" : "elaborate",
+        "6" : "xsimulation"
     },
     "flow" : {
 	      "clean" :{
@@ -19,12 +20,16 @@
 	      },
         "ram_hack":{
             "executable": "../tools/ram_image_hack.py ",
-            "arguments" : " "
+            "arguments" : " --simulation $simulation"
         },        
 	      "parse" :{
 	          "executable" : "xvlog",
             "arguments" : "-prj rtl_xsim.prj"
 	      },
+	      "test_case" :{
+	          "executable" : "xvlog",
+            "arguments" : " $simulation"
+	      },        
 	      "elaborate" :{
 	          "executable" : "xelab",
             "arguments" : "-prj rtl_xsim.prj -debug all  --timescale 1ns/1ns -L unisims_ver -L unimacro_ver work.testbench"
