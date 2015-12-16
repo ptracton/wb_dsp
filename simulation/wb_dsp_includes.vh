@@ -11,7 +11,8 @@
 `define TB          testbench
 `define WB_RST      `TB.wb_rst
 `define WB_CLK      `TB.wb_clk
-`define DUT         `TB.dut
+`define DSP         `TB.dsp
+`define DAQ         `TB.daq
 
 
 `define TEST_CASE       `TB.test_case
@@ -19,12 +20,15 @@
 //`define RAM_IMAGE       `TEST_CASE.ram_image  
 `define NUMBER_OF_TESTS `TEST_CASE.number_of_tests
 
-`define WB_DSP_RAM_BASE_ADDRESS     32'h1000_0000
+`define WB_DSP_RAM_BASE_ADDRESS     32'h9100_0000
 
-`define WB_DSP_BASE_ADDRESS         32'h5000_0000
+`define WB_DSP_BASE_ADDRESS         32'h9000_0000
 `define WB_DSP_EQUATION_ADDRESS_REG `WB_DSP_BASE_ADDRESS + 0
 `define WB_DSP_CONTROL_REG          `WB_DSP_BASE_ADDRESS + 4
 `define WB_DSP_STATUS_REG           `WB_DSP_BASE_ADDRESS + 8
+
+`define WB_DAQ_BASE_ADDRESS        32'h9010_0000
+`define WB_DAQ_SLAVE_REG           `WB_DAQ_BASE_ADDRESS + 0
 
 `define TEST_TASKS  `TB.test_tasks
 `define TEST_PASSED `TEST_TASKS.test_passed

@@ -3,42 +3,42 @@
 module wb_intercon
    (input         wb_clk_i,
     input         wb_rst_i,
-    input  [31:0] wb_bfm_adr_i,
-    input  [31:0] wb_bfm_dat_i,
-    input   [3:0] wb_bfm_sel_i,
-    input         wb_bfm_we_i,
-    input         wb_bfm_cyc_i,
-    input         wb_bfm_stb_i,
-    input   [2:0] wb_bfm_cti_i,
-    input   [1:0] wb_bfm_bte_i,
-    output [31:0] wb_bfm_dat_o,
-    output        wb_bfm_ack_o,
-    output        wb_bfm_err_o,
-    output        wb_bfm_rty_o,
-    input  [31:0] wb_dsp_master_adr_i,
-    input  [31:0] wb_dsp_master_dat_i,
-    input   [3:0] wb_dsp_master_sel_i,
-    input         wb_dsp_master_we_i,
-    input         wb_dsp_master_cyc_i,
-    input         wb_dsp_master_stb_i,
-    input   [2:0] wb_dsp_master_cti_i,
-    input   [1:0] wb_dsp_master_bte_i,
-    output [31:0] wb_dsp_master_dat_o,
-    output        wb_dsp_master_ack_o,
-    output        wb_dsp_master_err_o,
-    output        wb_dsp_master_rty_o,
-    output [31:0] wb_wb_ram0_adr_o,
-    output [31:0] wb_wb_ram0_dat_o,
-    output  [3:0] wb_wb_ram0_sel_o,
-    output        wb_wb_ram0_we_o,
-    output        wb_wb_ram0_cyc_o,
-    output        wb_wb_ram0_stb_o,
-    output  [2:0] wb_wb_ram0_cti_o,
-    output  [1:0] wb_wb_ram0_bte_o,
-    input  [31:0] wb_wb_ram0_dat_i,
-    input         wb_wb_ram0_ack_i,
-    input         wb_wb_ram0_err_i,
-    input         wb_wb_ram0_rty_i,
+    input  [31:0] wb_cpu_master_adr_i,
+    input  [31:0] wb_cpu_master_dat_i,
+    input   [3:0] wb_cpu_master_sel_i,
+    input         wb_cpu_master_we_i,
+    input         wb_cpu_master_cyc_i,
+    input         wb_cpu_master_stb_i,
+    input   [2:0] wb_cpu_master_cti_i,
+    input   [1:0] wb_cpu_master_bte_i,
+    output [31:0] wb_cpu_master_dat_o,
+    output        wb_cpu_master_ack_o,
+    output        wb_cpu_master_err_o,
+    output        wb_cpu_master_rty_o,
+    input  [31:0] wb_wb_daq_master_adr_i,
+    input  [31:0] wb_wb_daq_master_dat_i,
+    input   [3:0] wb_wb_daq_master_sel_i,
+    input         wb_wb_daq_master_we_i,
+    input         wb_wb_daq_master_cyc_i,
+    input         wb_wb_daq_master_stb_i,
+    input   [2:0] wb_wb_daq_master_cti_i,
+    input   [1:0] wb_wb_daq_master_bte_i,
+    output [31:0] wb_wb_daq_master_dat_o,
+    output        wb_wb_daq_master_ack_o,
+    output        wb_wb_daq_master_err_o,
+    output        wb_wb_daq_master_rty_o,
+    input  [31:0] wb_wb_dsp_master_adr_i,
+    input  [31:0] wb_wb_dsp_master_dat_i,
+    input   [3:0] wb_wb_dsp_master_sel_i,
+    input         wb_wb_dsp_master_we_i,
+    input         wb_wb_dsp_master_cyc_i,
+    input         wb_wb_dsp_master_stb_i,
+    input   [2:0] wb_wb_dsp_master_cti_i,
+    input   [1:0] wb_wb_dsp_master_bte_i,
+    output [31:0] wb_wb_dsp_master_dat_o,
+    output        wb_wb_dsp_master_ack_o,
+    output        wb_wb_dsp_master_err_o,
+    output        wb_wb_dsp_master_rty_o,
     output [31:0] wb_wb_dsp_slave_adr_o,
     output [31:0] wb_wb_dsp_slave_dat_o,
     output  [3:0] wb_wb_dsp_slave_sel_o,
@@ -50,168 +50,254 @@ module wb_intercon
     input  [31:0] wb_wb_dsp_slave_dat_i,
     input         wb_wb_dsp_slave_ack_i,
     input         wb_wb_dsp_slave_err_i,
-    input         wb_wb_dsp_slave_rty_i);
+    input         wb_wb_dsp_slave_rty_i,
+    output [31:0] wb_wb_daq_slave_adr_o,
+    output [31:0] wb_wb_daq_slave_dat_o,
+    output  [3:0] wb_wb_daq_slave_sel_o,
+    output        wb_wb_daq_slave_we_o,
+    output        wb_wb_daq_slave_cyc_o,
+    output        wb_wb_daq_slave_stb_o,
+    output  [2:0] wb_wb_daq_slave_cti_o,
+    output  [1:0] wb_wb_daq_slave_bte_o,
+    input  [31:0] wb_wb_daq_slave_dat_i,
+    input         wb_wb_daq_slave_ack_i,
+    input         wb_wb_daq_slave_err_i,
+    input         wb_wb_daq_slave_rty_i,
+    output [31:0] wb_wb_ram0_adr_o,
+    output [31:0] wb_wb_ram0_dat_o,
+    output  [3:0] wb_wb_ram0_sel_o,
+    output        wb_wb_ram0_we_o,
+    output        wb_wb_ram0_cyc_o,
+    output        wb_wb_ram0_stb_o,
+    output  [2:0] wb_wb_ram0_cti_o,
+    output  [1:0] wb_wb_ram0_bte_o,
+    input  [31:0] wb_wb_ram0_dat_i,
+    input         wb_wb_ram0_ack_i,
+    input         wb_wb_ram0_err_i,
+    input         wb_wb_ram0_rty_i);
 
-wire [31:0] wb_m2s_bfm_wb_ram0_adr;
-wire [31:0] wb_m2s_bfm_wb_ram0_dat;
-wire  [3:0] wb_m2s_bfm_wb_ram0_sel;
-wire        wb_m2s_bfm_wb_ram0_we;
-wire        wb_m2s_bfm_wb_ram0_cyc;
-wire        wb_m2s_bfm_wb_ram0_stb;
-wire  [2:0] wb_m2s_bfm_wb_ram0_cti;
-wire  [1:0] wb_m2s_bfm_wb_ram0_bte;
-wire [31:0] wb_s2m_bfm_wb_ram0_dat;
-wire        wb_s2m_bfm_wb_ram0_ack;
-wire        wb_s2m_bfm_wb_ram0_err;
-wire        wb_s2m_bfm_wb_ram0_rty;
-wire [31:0] wb_m2s_bfm_wb_dsp_slave_adr;
-wire [31:0] wb_m2s_bfm_wb_dsp_slave_dat;
-wire  [3:0] wb_m2s_bfm_wb_dsp_slave_sel;
-wire        wb_m2s_bfm_wb_dsp_slave_we;
-wire        wb_m2s_bfm_wb_dsp_slave_cyc;
-wire        wb_m2s_bfm_wb_dsp_slave_stb;
-wire  [2:0] wb_m2s_bfm_wb_dsp_slave_cti;
-wire  [1:0] wb_m2s_bfm_wb_dsp_slave_bte;
-wire [31:0] wb_s2m_bfm_wb_dsp_slave_dat;
-wire        wb_s2m_bfm_wb_dsp_slave_ack;
-wire        wb_s2m_bfm_wb_dsp_slave_err;
-wire        wb_s2m_bfm_wb_dsp_slave_rty;
-wire [31:0] wb_m2s_dsp_master_wb_ram0_adr;
-wire [31:0] wb_m2s_dsp_master_wb_ram0_dat;
-wire  [3:0] wb_m2s_dsp_master_wb_ram0_sel;
-wire        wb_m2s_dsp_master_wb_ram0_we;
-wire        wb_m2s_dsp_master_wb_ram0_cyc;
-wire        wb_m2s_dsp_master_wb_ram0_stb;
-wire  [2:0] wb_m2s_dsp_master_wb_ram0_cti;
-wire  [1:0] wb_m2s_dsp_master_wb_ram0_bte;
-wire [31:0] wb_s2m_dsp_master_wb_ram0_dat;
-wire        wb_s2m_dsp_master_wb_ram0_ack;
-wire        wb_s2m_dsp_master_wb_ram0_err;
-wire        wb_s2m_dsp_master_wb_ram0_rty;
-wire [31:0] wb_m2s_dsp_master_wb_dsp_slave_adr;
-wire [31:0] wb_m2s_dsp_master_wb_dsp_slave_dat;
-wire  [3:0] wb_m2s_dsp_master_wb_dsp_slave_sel;
-wire        wb_m2s_dsp_master_wb_dsp_slave_we;
-wire        wb_m2s_dsp_master_wb_dsp_slave_cyc;
-wire        wb_m2s_dsp_master_wb_dsp_slave_stb;
-wire  [2:0] wb_m2s_dsp_master_wb_dsp_slave_cti;
-wire  [1:0] wb_m2s_dsp_master_wb_dsp_slave_bte;
-wire [31:0] wb_s2m_dsp_master_wb_dsp_slave_dat;
-wire        wb_s2m_dsp_master_wb_dsp_slave_ack;
-wire        wb_s2m_dsp_master_wb_dsp_slave_err;
-wire        wb_s2m_dsp_master_wb_dsp_slave_rty;
+wire [31:0] wb_m2s_cpu_master_wb_dsp_slave_adr;
+wire [31:0] wb_m2s_cpu_master_wb_dsp_slave_dat;
+wire  [3:0] wb_m2s_cpu_master_wb_dsp_slave_sel;
+wire        wb_m2s_cpu_master_wb_dsp_slave_we;
+wire        wb_m2s_cpu_master_wb_dsp_slave_cyc;
+wire        wb_m2s_cpu_master_wb_dsp_slave_stb;
+wire  [2:0] wb_m2s_cpu_master_wb_dsp_slave_cti;
+wire  [1:0] wb_m2s_cpu_master_wb_dsp_slave_bte;
+wire [31:0] wb_s2m_cpu_master_wb_dsp_slave_dat;
+wire        wb_s2m_cpu_master_wb_dsp_slave_ack;
+wire        wb_s2m_cpu_master_wb_dsp_slave_err;
+wire        wb_s2m_cpu_master_wb_dsp_slave_rty;
+wire [31:0] wb_m2s_cpu_master_wb_daq_slave_adr;
+wire [31:0] wb_m2s_cpu_master_wb_daq_slave_dat;
+wire  [3:0] wb_m2s_cpu_master_wb_daq_slave_sel;
+wire        wb_m2s_cpu_master_wb_daq_slave_we;
+wire        wb_m2s_cpu_master_wb_daq_slave_cyc;
+wire        wb_m2s_cpu_master_wb_daq_slave_stb;
+wire  [2:0] wb_m2s_cpu_master_wb_daq_slave_cti;
+wire  [1:0] wb_m2s_cpu_master_wb_daq_slave_bte;
+wire [31:0] wb_s2m_cpu_master_wb_daq_slave_dat;
+wire        wb_s2m_cpu_master_wb_daq_slave_ack;
+wire        wb_s2m_cpu_master_wb_daq_slave_err;
+wire        wb_s2m_cpu_master_wb_daq_slave_rty;
+wire [31:0] wb_m2s_cpu_master_wb_ram0_adr;
+wire [31:0] wb_m2s_cpu_master_wb_ram0_dat;
+wire  [3:0] wb_m2s_cpu_master_wb_ram0_sel;
+wire        wb_m2s_cpu_master_wb_ram0_we;
+wire        wb_m2s_cpu_master_wb_ram0_cyc;
+wire        wb_m2s_cpu_master_wb_ram0_stb;
+wire  [2:0] wb_m2s_cpu_master_wb_ram0_cti;
+wire  [1:0] wb_m2s_cpu_master_wb_ram0_bte;
+wire [31:0] wb_s2m_cpu_master_wb_ram0_dat;
+wire        wb_s2m_cpu_master_wb_ram0_ack;
+wire        wb_s2m_cpu_master_wb_ram0_err;
+wire        wb_s2m_cpu_master_wb_ram0_rty;
+wire [31:0] wb_m2s_wb_daq_master_wb_ram0_adr;
+wire [31:0] wb_m2s_wb_daq_master_wb_ram0_dat;
+wire  [3:0] wb_m2s_wb_daq_master_wb_ram0_sel;
+wire        wb_m2s_wb_daq_master_wb_ram0_we;
+wire        wb_m2s_wb_daq_master_wb_ram0_cyc;
+wire        wb_m2s_wb_daq_master_wb_ram0_stb;
+wire  [2:0] wb_m2s_wb_daq_master_wb_ram0_cti;
+wire  [1:0] wb_m2s_wb_daq_master_wb_ram0_bte;
+wire [31:0] wb_s2m_wb_daq_master_wb_ram0_dat;
+wire        wb_s2m_wb_daq_master_wb_ram0_ack;
+wire        wb_s2m_wb_daq_master_wb_ram0_err;
+wire        wb_s2m_wb_daq_master_wb_ram0_rty;
+wire [31:0] wb_m2s_wb_daq_master_wb_dsp_slave_adr;
+wire [31:0] wb_m2s_wb_daq_master_wb_dsp_slave_dat;
+wire  [3:0] wb_m2s_wb_daq_master_wb_dsp_slave_sel;
+wire        wb_m2s_wb_daq_master_wb_dsp_slave_we;
+wire        wb_m2s_wb_daq_master_wb_dsp_slave_cyc;
+wire        wb_m2s_wb_daq_master_wb_dsp_slave_stb;
+wire  [2:0] wb_m2s_wb_daq_master_wb_dsp_slave_cti;
+wire  [1:0] wb_m2s_wb_daq_master_wb_dsp_slave_bte;
+wire [31:0] wb_s2m_wb_daq_master_wb_dsp_slave_dat;
+wire        wb_s2m_wb_daq_master_wb_dsp_slave_ack;
+wire        wb_s2m_wb_daq_master_wb_dsp_slave_err;
+wire        wb_s2m_wb_daq_master_wb_dsp_slave_rty;
+wire [31:0] wb_m2s_wb_daq_master_wb_daq_slave_adr;
+wire [31:0] wb_m2s_wb_daq_master_wb_daq_slave_dat;
+wire  [3:0] wb_m2s_wb_daq_master_wb_daq_slave_sel;
+wire        wb_m2s_wb_daq_master_wb_daq_slave_we;
+wire        wb_m2s_wb_daq_master_wb_daq_slave_cyc;
+wire        wb_m2s_wb_daq_master_wb_daq_slave_stb;
+wire  [2:0] wb_m2s_wb_daq_master_wb_daq_slave_cti;
+wire  [1:0] wb_m2s_wb_daq_master_wb_daq_slave_bte;
+wire [31:0] wb_s2m_wb_daq_master_wb_daq_slave_dat;
+wire        wb_s2m_wb_daq_master_wb_daq_slave_ack;
+wire        wb_s2m_wb_daq_master_wb_daq_slave_err;
+wire        wb_s2m_wb_daq_master_wb_daq_slave_rty;
+wire [31:0] wb_m2s_wb_dsp_master_wb_ram0_adr;
+wire [31:0] wb_m2s_wb_dsp_master_wb_ram0_dat;
+wire  [3:0] wb_m2s_wb_dsp_master_wb_ram0_sel;
+wire        wb_m2s_wb_dsp_master_wb_ram0_we;
+wire        wb_m2s_wb_dsp_master_wb_ram0_cyc;
+wire        wb_m2s_wb_dsp_master_wb_ram0_stb;
+wire  [2:0] wb_m2s_wb_dsp_master_wb_ram0_cti;
+wire  [1:0] wb_m2s_wb_dsp_master_wb_ram0_bte;
+wire [31:0] wb_s2m_wb_dsp_master_wb_ram0_dat;
+wire        wb_s2m_wb_dsp_master_wb_ram0_ack;
+wire        wb_s2m_wb_dsp_master_wb_ram0_err;
+wire        wb_s2m_wb_dsp_master_wb_ram0_rty;
+wire [31:0] wb_m2s_wb_dsp_master_wb_dsp_slave_adr;
+wire [31:0] wb_m2s_wb_dsp_master_wb_dsp_slave_dat;
+wire  [3:0] wb_m2s_wb_dsp_master_wb_dsp_slave_sel;
+wire        wb_m2s_wb_dsp_master_wb_dsp_slave_we;
+wire        wb_m2s_wb_dsp_master_wb_dsp_slave_cyc;
+wire        wb_m2s_wb_dsp_master_wb_dsp_slave_stb;
+wire  [2:0] wb_m2s_wb_dsp_master_wb_dsp_slave_cti;
+wire  [1:0] wb_m2s_wb_dsp_master_wb_dsp_slave_bte;
+wire [31:0] wb_s2m_wb_dsp_master_wb_dsp_slave_dat;
+wire        wb_s2m_wb_dsp_master_wb_dsp_slave_ack;
+wire        wb_s2m_wb_dsp_master_wb_dsp_slave_err;
+wire        wb_s2m_wb_dsp_master_wb_dsp_slave_rty;
+wire [31:0] wb_m2s_wb_dsp_master_wb_daq_slave_adr;
+wire [31:0] wb_m2s_wb_dsp_master_wb_daq_slave_dat;
+wire  [3:0] wb_m2s_wb_dsp_master_wb_daq_slave_sel;
+wire        wb_m2s_wb_dsp_master_wb_daq_slave_we;
+wire        wb_m2s_wb_dsp_master_wb_daq_slave_cyc;
+wire        wb_m2s_wb_dsp_master_wb_daq_slave_stb;
+wire  [2:0] wb_m2s_wb_dsp_master_wb_daq_slave_cti;
+wire  [1:0] wb_m2s_wb_dsp_master_wb_daq_slave_bte;
+wire [31:0] wb_s2m_wb_dsp_master_wb_daq_slave_dat;
+wire        wb_s2m_wb_dsp_master_wb_daq_slave_ack;
+wire        wb_s2m_wb_dsp_master_wb_daq_slave_err;
+wire        wb_s2m_wb_dsp_master_wb_daq_slave_rty;
 
 wb_mux
-  #(.num_slaves (2),
-    .MATCH_ADDR ({32'h10000000, 32'h50000000}),
-    .MATCH_MASK ({32'hfffff000, 32'hffffff00}))
- wb_mux_bfm
+  #(.num_slaves (3),
+    .MATCH_ADDR ({32'h90000000, 32'h90100000, 32'h91000000}),
+    .MATCH_MASK ({32'hffffffe0, 32'hffffffe0, 32'hfffff000}))
+ wb_mux_cpu_master
    (.wb_clk_i  (wb_clk_i),
     .wb_rst_i  (wb_rst_i),
-    .wbm_adr_i (wb_bfm_adr_i),
-    .wbm_dat_i (wb_bfm_dat_i),
-    .wbm_sel_i (wb_bfm_sel_i),
-    .wbm_we_i  (wb_bfm_we_i),
-    .wbm_cyc_i (wb_bfm_cyc_i),
-    .wbm_stb_i (wb_bfm_stb_i),
-    .wbm_cti_i (wb_bfm_cti_i),
-    .wbm_bte_i (wb_bfm_bte_i),
-    .wbm_dat_o (wb_bfm_dat_o),
-    .wbm_ack_o (wb_bfm_ack_o),
-    .wbm_err_o (wb_bfm_err_o),
-    .wbm_rty_o (wb_bfm_rty_o),
-    .wbs_adr_o ({wb_m2s_bfm_wb_ram0_adr, wb_m2s_bfm_wb_dsp_slave_adr}),
-    .wbs_dat_o ({wb_m2s_bfm_wb_ram0_dat, wb_m2s_bfm_wb_dsp_slave_dat}),
-    .wbs_sel_o ({wb_m2s_bfm_wb_ram0_sel, wb_m2s_bfm_wb_dsp_slave_sel}),
-    .wbs_we_o  ({wb_m2s_bfm_wb_ram0_we, wb_m2s_bfm_wb_dsp_slave_we}),
-    .wbs_cyc_o ({wb_m2s_bfm_wb_ram0_cyc, wb_m2s_bfm_wb_dsp_slave_cyc}),
-    .wbs_stb_o ({wb_m2s_bfm_wb_ram0_stb, wb_m2s_bfm_wb_dsp_slave_stb}),
-    .wbs_cti_o ({wb_m2s_bfm_wb_ram0_cti, wb_m2s_bfm_wb_dsp_slave_cti}),
-    .wbs_bte_o ({wb_m2s_bfm_wb_ram0_bte, wb_m2s_bfm_wb_dsp_slave_bte}),
-    .wbs_dat_i ({wb_s2m_bfm_wb_ram0_dat, wb_s2m_bfm_wb_dsp_slave_dat}),
-    .wbs_ack_i ({wb_s2m_bfm_wb_ram0_ack, wb_s2m_bfm_wb_dsp_slave_ack}),
-    .wbs_err_i ({wb_s2m_bfm_wb_ram0_err, wb_s2m_bfm_wb_dsp_slave_err}),
-    .wbs_rty_i ({wb_s2m_bfm_wb_ram0_rty, wb_s2m_bfm_wb_dsp_slave_rty}));
+    .wbm_adr_i (wb_cpu_master_adr_i),
+    .wbm_dat_i (wb_cpu_master_dat_i),
+    .wbm_sel_i (wb_cpu_master_sel_i),
+    .wbm_we_i  (wb_cpu_master_we_i),
+    .wbm_cyc_i (wb_cpu_master_cyc_i),
+    .wbm_stb_i (wb_cpu_master_stb_i),
+    .wbm_cti_i (wb_cpu_master_cti_i),
+    .wbm_bte_i (wb_cpu_master_bte_i),
+    .wbm_dat_o (wb_cpu_master_dat_o),
+    .wbm_ack_o (wb_cpu_master_ack_o),
+    .wbm_err_o (wb_cpu_master_err_o),
+    .wbm_rty_o (wb_cpu_master_rty_o),
+    .wbs_adr_o ({wb_m2s_cpu_master_wb_dsp_slave_adr, wb_m2s_cpu_master_wb_daq_slave_adr, wb_m2s_cpu_master_wb_ram0_adr}),
+    .wbs_dat_o ({wb_m2s_cpu_master_wb_dsp_slave_dat, wb_m2s_cpu_master_wb_daq_slave_dat, wb_m2s_cpu_master_wb_ram0_dat}),
+    .wbs_sel_o ({wb_m2s_cpu_master_wb_dsp_slave_sel, wb_m2s_cpu_master_wb_daq_slave_sel, wb_m2s_cpu_master_wb_ram0_sel}),
+    .wbs_we_o  ({wb_m2s_cpu_master_wb_dsp_slave_we, wb_m2s_cpu_master_wb_daq_slave_we, wb_m2s_cpu_master_wb_ram0_we}),
+    .wbs_cyc_o ({wb_m2s_cpu_master_wb_dsp_slave_cyc, wb_m2s_cpu_master_wb_daq_slave_cyc, wb_m2s_cpu_master_wb_ram0_cyc}),
+    .wbs_stb_o ({wb_m2s_cpu_master_wb_dsp_slave_stb, wb_m2s_cpu_master_wb_daq_slave_stb, wb_m2s_cpu_master_wb_ram0_stb}),
+    .wbs_cti_o ({wb_m2s_cpu_master_wb_dsp_slave_cti, wb_m2s_cpu_master_wb_daq_slave_cti, wb_m2s_cpu_master_wb_ram0_cti}),
+    .wbs_bte_o ({wb_m2s_cpu_master_wb_dsp_slave_bte, wb_m2s_cpu_master_wb_daq_slave_bte, wb_m2s_cpu_master_wb_ram0_bte}),
+    .wbs_dat_i ({wb_s2m_cpu_master_wb_dsp_slave_dat, wb_s2m_cpu_master_wb_daq_slave_dat, wb_s2m_cpu_master_wb_ram0_dat}),
+    .wbs_ack_i ({wb_s2m_cpu_master_wb_dsp_slave_ack, wb_s2m_cpu_master_wb_daq_slave_ack, wb_s2m_cpu_master_wb_ram0_ack}),
+    .wbs_err_i ({wb_s2m_cpu_master_wb_dsp_slave_err, wb_s2m_cpu_master_wb_daq_slave_err, wb_s2m_cpu_master_wb_ram0_err}),
+    .wbs_rty_i ({wb_s2m_cpu_master_wb_dsp_slave_rty, wb_s2m_cpu_master_wb_daq_slave_rty, wb_s2m_cpu_master_wb_ram0_rty}));
 
 wb_mux
-  #(.num_slaves (2),
-    .MATCH_ADDR ({32'h10000000, 32'h50000000}),
-    .MATCH_MASK ({32'hfffff000, 32'hffffff00}))
- wb_mux_dsp_master
+  #(.num_slaves (3),
+    .MATCH_ADDR ({32'h91000000, 32'h90000000, 32'h90100000}),
+    .MATCH_MASK ({32'hfffff000, 32'hffffffe0, 32'hffffffe0}))
+ wb_mux_wb_daq_master
    (.wb_clk_i  (wb_clk_i),
     .wb_rst_i  (wb_rst_i),
-    .wbm_adr_i (wb_dsp_master_adr_i),
-    .wbm_dat_i (wb_dsp_master_dat_i),
-    .wbm_sel_i (wb_dsp_master_sel_i),
-    .wbm_we_i  (wb_dsp_master_we_i),
-    .wbm_cyc_i (wb_dsp_master_cyc_i),
-    .wbm_stb_i (wb_dsp_master_stb_i),
-    .wbm_cti_i (wb_dsp_master_cti_i),
-    .wbm_bte_i (wb_dsp_master_bte_i),
-    .wbm_dat_o (wb_dsp_master_dat_o),
-    .wbm_ack_o (wb_dsp_master_ack_o),
-    .wbm_err_o (wb_dsp_master_err_o),
-    .wbm_rty_o (wb_dsp_master_rty_o),
-    .wbs_adr_o ({wb_m2s_dsp_master_wb_ram0_adr, wb_m2s_dsp_master_wb_dsp_slave_adr}),
-    .wbs_dat_o ({wb_m2s_dsp_master_wb_ram0_dat, wb_m2s_dsp_master_wb_dsp_slave_dat}),
-    .wbs_sel_o ({wb_m2s_dsp_master_wb_ram0_sel, wb_m2s_dsp_master_wb_dsp_slave_sel}),
-    .wbs_we_o  ({wb_m2s_dsp_master_wb_ram0_we, wb_m2s_dsp_master_wb_dsp_slave_we}),
-    .wbs_cyc_o ({wb_m2s_dsp_master_wb_ram0_cyc, wb_m2s_dsp_master_wb_dsp_slave_cyc}),
-    .wbs_stb_o ({wb_m2s_dsp_master_wb_ram0_stb, wb_m2s_dsp_master_wb_dsp_slave_stb}),
-    .wbs_cti_o ({wb_m2s_dsp_master_wb_ram0_cti, wb_m2s_dsp_master_wb_dsp_slave_cti}),
-    .wbs_bte_o ({wb_m2s_dsp_master_wb_ram0_bte, wb_m2s_dsp_master_wb_dsp_slave_bte}),
-    .wbs_dat_i ({wb_s2m_dsp_master_wb_ram0_dat, wb_s2m_dsp_master_wb_dsp_slave_dat}),
-    .wbs_ack_i ({wb_s2m_dsp_master_wb_ram0_ack, wb_s2m_dsp_master_wb_dsp_slave_ack}),
-    .wbs_err_i ({wb_s2m_dsp_master_wb_ram0_err, wb_s2m_dsp_master_wb_dsp_slave_err}),
-    .wbs_rty_i ({wb_s2m_dsp_master_wb_ram0_rty, wb_s2m_dsp_master_wb_dsp_slave_rty}));
+    .wbm_adr_i (wb_wb_daq_master_adr_i),
+    .wbm_dat_i (wb_wb_daq_master_dat_i),
+    .wbm_sel_i (wb_wb_daq_master_sel_i),
+    .wbm_we_i  (wb_wb_daq_master_we_i),
+    .wbm_cyc_i (wb_wb_daq_master_cyc_i),
+    .wbm_stb_i (wb_wb_daq_master_stb_i),
+    .wbm_cti_i (wb_wb_daq_master_cti_i),
+    .wbm_bte_i (wb_wb_daq_master_bte_i),
+    .wbm_dat_o (wb_wb_daq_master_dat_o),
+    .wbm_ack_o (wb_wb_daq_master_ack_o),
+    .wbm_err_o (wb_wb_daq_master_err_o),
+    .wbm_rty_o (wb_wb_daq_master_rty_o),
+    .wbs_adr_o ({wb_m2s_wb_daq_master_wb_ram0_adr, wb_m2s_wb_daq_master_wb_dsp_slave_adr, wb_m2s_wb_daq_master_wb_daq_slave_adr}),
+    .wbs_dat_o ({wb_m2s_wb_daq_master_wb_ram0_dat, wb_m2s_wb_daq_master_wb_dsp_slave_dat, wb_m2s_wb_daq_master_wb_daq_slave_dat}),
+    .wbs_sel_o ({wb_m2s_wb_daq_master_wb_ram0_sel, wb_m2s_wb_daq_master_wb_dsp_slave_sel, wb_m2s_wb_daq_master_wb_daq_slave_sel}),
+    .wbs_we_o  ({wb_m2s_wb_daq_master_wb_ram0_we, wb_m2s_wb_daq_master_wb_dsp_slave_we, wb_m2s_wb_daq_master_wb_daq_slave_we}),
+    .wbs_cyc_o ({wb_m2s_wb_daq_master_wb_ram0_cyc, wb_m2s_wb_daq_master_wb_dsp_slave_cyc, wb_m2s_wb_daq_master_wb_daq_slave_cyc}),
+    .wbs_stb_o ({wb_m2s_wb_daq_master_wb_ram0_stb, wb_m2s_wb_daq_master_wb_dsp_slave_stb, wb_m2s_wb_daq_master_wb_daq_slave_stb}),
+    .wbs_cti_o ({wb_m2s_wb_daq_master_wb_ram0_cti, wb_m2s_wb_daq_master_wb_dsp_slave_cti, wb_m2s_wb_daq_master_wb_daq_slave_cti}),
+    .wbs_bte_o ({wb_m2s_wb_daq_master_wb_ram0_bte, wb_m2s_wb_daq_master_wb_dsp_slave_bte, wb_m2s_wb_daq_master_wb_daq_slave_bte}),
+    .wbs_dat_i ({wb_s2m_wb_daq_master_wb_ram0_dat, wb_s2m_wb_daq_master_wb_dsp_slave_dat, wb_s2m_wb_daq_master_wb_daq_slave_dat}),
+    .wbs_ack_i ({wb_s2m_wb_daq_master_wb_ram0_ack, wb_s2m_wb_daq_master_wb_dsp_slave_ack, wb_s2m_wb_daq_master_wb_daq_slave_ack}),
+    .wbs_err_i ({wb_s2m_wb_daq_master_wb_ram0_err, wb_s2m_wb_daq_master_wb_dsp_slave_err, wb_s2m_wb_daq_master_wb_daq_slave_err}),
+    .wbs_rty_i ({wb_s2m_wb_daq_master_wb_ram0_rty, wb_s2m_wb_daq_master_wb_dsp_slave_rty, wb_s2m_wb_daq_master_wb_daq_slave_rty}));
 
-wb_arbiter
-  #(.num_masters (2))
- wb_arbiter_wb_ram0
+wb_mux
+  #(.num_slaves (3),
+    .MATCH_ADDR ({32'h91000000, 32'h90000000, 32'h90100000}),
+    .MATCH_MASK ({32'hfffff000, 32'hffffffe0, 32'hffffffe0}))
+ wb_mux_wb_dsp_master
    (.wb_clk_i  (wb_clk_i),
     .wb_rst_i  (wb_rst_i),
-    .wbm_adr_i ({wb_m2s_bfm_wb_ram0_adr, wb_m2s_dsp_master_wb_ram0_adr}),
-    .wbm_dat_i ({wb_m2s_bfm_wb_ram0_dat, wb_m2s_dsp_master_wb_ram0_dat}),
-    .wbm_sel_i ({wb_m2s_bfm_wb_ram0_sel, wb_m2s_dsp_master_wb_ram0_sel}),
-    .wbm_we_i  ({wb_m2s_bfm_wb_ram0_we, wb_m2s_dsp_master_wb_ram0_we}),
-    .wbm_cyc_i ({wb_m2s_bfm_wb_ram0_cyc, wb_m2s_dsp_master_wb_ram0_cyc}),
-    .wbm_stb_i ({wb_m2s_bfm_wb_ram0_stb, wb_m2s_dsp_master_wb_ram0_stb}),
-    .wbm_cti_i ({wb_m2s_bfm_wb_ram0_cti, wb_m2s_dsp_master_wb_ram0_cti}),
-    .wbm_bte_i ({wb_m2s_bfm_wb_ram0_bte, wb_m2s_dsp_master_wb_ram0_bte}),
-    .wbm_dat_o ({wb_s2m_bfm_wb_ram0_dat, wb_s2m_dsp_master_wb_ram0_dat}),
-    .wbm_ack_o ({wb_s2m_bfm_wb_ram0_ack, wb_s2m_dsp_master_wb_ram0_ack}),
-    .wbm_err_o ({wb_s2m_bfm_wb_ram0_err, wb_s2m_dsp_master_wb_ram0_err}),
-    .wbm_rty_o ({wb_s2m_bfm_wb_ram0_rty, wb_s2m_dsp_master_wb_ram0_rty}),
-    .wbs_adr_o (wb_wb_ram0_adr_o),
-    .wbs_dat_o (wb_wb_ram0_dat_o),
-    .wbs_sel_o (wb_wb_ram0_sel_o),
-    .wbs_we_o  (wb_wb_ram0_we_o),
-    .wbs_cyc_o (wb_wb_ram0_cyc_o),
-    .wbs_stb_o (wb_wb_ram0_stb_o),
-    .wbs_cti_o (wb_wb_ram0_cti_o),
-    .wbs_bte_o (wb_wb_ram0_bte_o),
-    .wbs_dat_i (wb_wb_ram0_dat_i),
-    .wbs_ack_i (wb_wb_ram0_ack_i),
-    .wbs_err_i (wb_wb_ram0_err_i),
-    .wbs_rty_i (wb_wb_ram0_rty_i));
+    .wbm_adr_i (wb_wb_dsp_master_adr_i),
+    .wbm_dat_i (wb_wb_dsp_master_dat_i),
+    .wbm_sel_i (wb_wb_dsp_master_sel_i),
+    .wbm_we_i  (wb_wb_dsp_master_we_i),
+    .wbm_cyc_i (wb_wb_dsp_master_cyc_i),
+    .wbm_stb_i (wb_wb_dsp_master_stb_i),
+    .wbm_cti_i (wb_wb_dsp_master_cti_i),
+    .wbm_bte_i (wb_wb_dsp_master_bte_i),
+    .wbm_dat_o (wb_wb_dsp_master_dat_o),
+    .wbm_ack_o (wb_wb_dsp_master_ack_o),
+    .wbm_err_o (wb_wb_dsp_master_err_o),
+    .wbm_rty_o (wb_wb_dsp_master_rty_o),
+    .wbs_adr_o ({wb_m2s_wb_dsp_master_wb_ram0_adr, wb_m2s_wb_dsp_master_wb_dsp_slave_adr, wb_m2s_wb_dsp_master_wb_daq_slave_adr}),
+    .wbs_dat_o ({wb_m2s_wb_dsp_master_wb_ram0_dat, wb_m2s_wb_dsp_master_wb_dsp_slave_dat, wb_m2s_wb_dsp_master_wb_daq_slave_dat}),
+    .wbs_sel_o ({wb_m2s_wb_dsp_master_wb_ram0_sel, wb_m2s_wb_dsp_master_wb_dsp_slave_sel, wb_m2s_wb_dsp_master_wb_daq_slave_sel}),
+    .wbs_we_o  ({wb_m2s_wb_dsp_master_wb_ram0_we, wb_m2s_wb_dsp_master_wb_dsp_slave_we, wb_m2s_wb_dsp_master_wb_daq_slave_we}),
+    .wbs_cyc_o ({wb_m2s_wb_dsp_master_wb_ram0_cyc, wb_m2s_wb_dsp_master_wb_dsp_slave_cyc, wb_m2s_wb_dsp_master_wb_daq_slave_cyc}),
+    .wbs_stb_o ({wb_m2s_wb_dsp_master_wb_ram0_stb, wb_m2s_wb_dsp_master_wb_dsp_slave_stb, wb_m2s_wb_dsp_master_wb_daq_slave_stb}),
+    .wbs_cti_o ({wb_m2s_wb_dsp_master_wb_ram0_cti, wb_m2s_wb_dsp_master_wb_dsp_slave_cti, wb_m2s_wb_dsp_master_wb_daq_slave_cti}),
+    .wbs_bte_o ({wb_m2s_wb_dsp_master_wb_ram0_bte, wb_m2s_wb_dsp_master_wb_dsp_slave_bte, wb_m2s_wb_dsp_master_wb_daq_slave_bte}),
+    .wbs_dat_i ({wb_s2m_wb_dsp_master_wb_ram0_dat, wb_s2m_wb_dsp_master_wb_dsp_slave_dat, wb_s2m_wb_dsp_master_wb_daq_slave_dat}),
+    .wbs_ack_i ({wb_s2m_wb_dsp_master_wb_ram0_ack, wb_s2m_wb_dsp_master_wb_dsp_slave_ack, wb_s2m_wb_dsp_master_wb_daq_slave_ack}),
+    .wbs_err_i ({wb_s2m_wb_dsp_master_wb_ram0_err, wb_s2m_wb_dsp_master_wb_dsp_slave_err, wb_s2m_wb_dsp_master_wb_daq_slave_err}),
+    .wbs_rty_i ({wb_s2m_wb_dsp_master_wb_ram0_rty, wb_s2m_wb_dsp_master_wb_dsp_slave_rty, wb_s2m_wb_dsp_master_wb_daq_slave_rty}));
 
 wb_arbiter
-  #(.num_masters (2))
+  #(.num_masters (3))
  wb_arbiter_wb_dsp_slave
    (.wb_clk_i  (wb_clk_i),
     .wb_rst_i  (wb_rst_i),
-    .wbm_adr_i ({wb_m2s_bfm_wb_dsp_slave_adr, wb_m2s_dsp_master_wb_dsp_slave_adr}),
-    .wbm_dat_i ({wb_m2s_bfm_wb_dsp_slave_dat, wb_m2s_dsp_master_wb_dsp_slave_dat}),
-    .wbm_sel_i ({wb_m2s_bfm_wb_dsp_slave_sel, wb_m2s_dsp_master_wb_dsp_slave_sel}),
-    .wbm_we_i  ({wb_m2s_bfm_wb_dsp_slave_we, wb_m2s_dsp_master_wb_dsp_slave_we}),
-    .wbm_cyc_i ({wb_m2s_bfm_wb_dsp_slave_cyc, wb_m2s_dsp_master_wb_dsp_slave_cyc}),
-    .wbm_stb_i ({wb_m2s_bfm_wb_dsp_slave_stb, wb_m2s_dsp_master_wb_dsp_slave_stb}),
-    .wbm_cti_i ({wb_m2s_bfm_wb_dsp_slave_cti, wb_m2s_dsp_master_wb_dsp_slave_cti}),
-    .wbm_bte_i ({wb_m2s_bfm_wb_dsp_slave_bte, wb_m2s_dsp_master_wb_dsp_slave_bte}),
-    .wbm_dat_o ({wb_s2m_bfm_wb_dsp_slave_dat, wb_s2m_dsp_master_wb_dsp_slave_dat}),
-    .wbm_ack_o ({wb_s2m_bfm_wb_dsp_slave_ack, wb_s2m_dsp_master_wb_dsp_slave_ack}),
-    .wbm_err_o ({wb_s2m_bfm_wb_dsp_slave_err, wb_s2m_dsp_master_wb_dsp_slave_err}),
-    .wbm_rty_o ({wb_s2m_bfm_wb_dsp_slave_rty, wb_s2m_dsp_master_wb_dsp_slave_rty}),
+    .wbm_adr_i ({wb_m2s_cpu_master_wb_dsp_slave_adr, wb_m2s_wb_daq_master_wb_dsp_slave_adr, wb_m2s_wb_dsp_master_wb_dsp_slave_adr}),
+    .wbm_dat_i ({wb_m2s_cpu_master_wb_dsp_slave_dat, wb_m2s_wb_daq_master_wb_dsp_slave_dat, wb_m2s_wb_dsp_master_wb_dsp_slave_dat}),
+    .wbm_sel_i ({wb_m2s_cpu_master_wb_dsp_slave_sel, wb_m2s_wb_daq_master_wb_dsp_slave_sel, wb_m2s_wb_dsp_master_wb_dsp_slave_sel}),
+    .wbm_we_i  ({wb_m2s_cpu_master_wb_dsp_slave_we, wb_m2s_wb_daq_master_wb_dsp_slave_we, wb_m2s_wb_dsp_master_wb_dsp_slave_we}),
+    .wbm_cyc_i ({wb_m2s_cpu_master_wb_dsp_slave_cyc, wb_m2s_wb_daq_master_wb_dsp_slave_cyc, wb_m2s_wb_dsp_master_wb_dsp_slave_cyc}),
+    .wbm_stb_i ({wb_m2s_cpu_master_wb_dsp_slave_stb, wb_m2s_wb_daq_master_wb_dsp_slave_stb, wb_m2s_wb_dsp_master_wb_dsp_slave_stb}),
+    .wbm_cti_i ({wb_m2s_cpu_master_wb_dsp_slave_cti, wb_m2s_wb_daq_master_wb_dsp_slave_cti, wb_m2s_wb_dsp_master_wb_dsp_slave_cti}),
+    .wbm_bte_i ({wb_m2s_cpu_master_wb_dsp_slave_bte, wb_m2s_wb_daq_master_wb_dsp_slave_bte, wb_m2s_wb_dsp_master_wb_dsp_slave_bte}),
+    .wbm_dat_o ({wb_s2m_cpu_master_wb_dsp_slave_dat, wb_s2m_wb_daq_master_wb_dsp_slave_dat, wb_s2m_wb_dsp_master_wb_dsp_slave_dat}),
+    .wbm_ack_o ({wb_s2m_cpu_master_wb_dsp_slave_ack, wb_s2m_wb_daq_master_wb_dsp_slave_ack, wb_s2m_wb_dsp_master_wb_dsp_slave_ack}),
+    .wbm_err_o ({wb_s2m_cpu_master_wb_dsp_slave_err, wb_s2m_wb_daq_master_wb_dsp_slave_err, wb_s2m_wb_dsp_master_wb_dsp_slave_err}),
+    .wbm_rty_o ({wb_s2m_cpu_master_wb_dsp_slave_rty, wb_s2m_wb_daq_master_wb_dsp_slave_rty, wb_s2m_wb_dsp_master_wb_dsp_slave_rty}),
     .wbs_adr_o (wb_wb_dsp_slave_adr_o),
     .wbs_dat_o (wb_wb_dsp_slave_dat_o),
     .wbs_sel_o (wb_wb_dsp_slave_sel_o),
@@ -224,5 +310,65 @@ wb_arbiter
     .wbs_ack_i (wb_wb_dsp_slave_ack_i),
     .wbs_err_i (wb_wb_dsp_slave_err_i),
     .wbs_rty_i (wb_wb_dsp_slave_rty_i));
+
+wb_arbiter
+  #(.num_masters (3))
+ wb_arbiter_wb_daq_slave
+   (.wb_clk_i  (wb_clk_i),
+    .wb_rst_i  (wb_rst_i),
+    .wbm_adr_i ({wb_m2s_cpu_master_wb_daq_slave_adr, wb_m2s_wb_daq_master_wb_daq_slave_adr, wb_m2s_wb_dsp_master_wb_daq_slave_adr}),
+    .wbm_dat_i ({wb_m2s_cpu_master_wb_daq_slave_dat, wb_m2s_wb_daq_master_wb_daq_slave_dat, wb_m2s_wb_dsp_master_wb_daq_slave_dat}),
+    .wbm_sel_i ({wb_m2s_cpu_master_wb_daq_slave_sel, wb_m2s_wb_daq_master_wb_daq_slave_sel, wb_m2s_wb_dsp_master_wb_daq_slave_sel}),
+    .wbm_we_i  ({wb_m2s_cpu_master_wb_daq_slave_we, wb_m2s_wb_daq_master_wb_daq_slave_we, wb_m2s_wb_dsp_master_wb_daq_slave_we}),
+    .wbm_cyc_i ({wb_m2s_cpu_master_wb_daq_slave_cyc, wb_m2s_wb_daq_master_wb_daq_slave_cyc, wb_m2s_wb_dsp_master_wb_daq_slave_cyc}),
+    .wbm_stb_i ({wb_m2s_cpu_master_wb_daq_slave_stb, wb_m2s_wb_daq_master_wb_daq_slave_stb, wb_m2s_wb_dsp_master_wb_daq_slave_stb}),
+    .wbm_cti_i ({wb_m2s_cpu_master_wb_daq_slave_cti, wb_m2s_wb_daq_master_wb_daq_slave_cti, wb_m2s_wb_dsp_master_wb_daq_slave_cti}),
+    .wbm_bte_i ({wb_m2s_cpu_master_wb_daq_slave_bte, wb_m2s_wb_daq_master_wb_daq_slave_bte, wb_m2s_wb_dsp_master_wb_daq_slave_bte}),
+    .wbm_dat_o ({wb_s2m_cpu_master_wb_daq_slave_dat, wb_s2m_wb_daq_master_wb_daq_slave_dat, wb_s2m_wb_dsp_master_wb_daq_slave_dat}),
+    .wbm_ack_o ({wb_s2m_cpu_master_wb_daq_slave_ack, wb_s2m_wb_daq_master_wb_daq_slave_ack, wb_s2m_wb_dsp_master_wb_daq_slave_ack}),
+    .wbm_err_o ({wb_s2m_cpu_master_wb_daq_slave_err, wb_s2m_wb_daq_master_wb_daq_slave_err, wb_s2m_wb_dsp_master_wb_daq_slave_err}),
+    .wbm_rty_o ({wb_s2m_cpu_master_wb_daq_slave_rty, wb_s2m_wb_daq_master_wb_daq_slave_rty, wb_s2m_wb_dsp_master_wb_daq_slave_rty}),
+    .wbs_adr_o (wb_wb_daq_slave_adr_o),
+    .wbs_dat_o (wb_wb_daq_slave_dat_o),
+    .wbs_sel_o (wb_wb_daq_slave_sel_o),
+    .wbs_we_o  (wb_wb_daq_slave_we_o),
+    .wbs_cyc_o (wb_wb_daq_slave_cyc_o),
+    .wbs_stb_o (wb_wb_daq_slave_stb_o),
+    .wbs_cti_o (wb_wb_daq_slave_cti_o),
+    .wbs_bte_o (wb_wb_daq_slave_bte_o),
+    .wbs_dat_i (wb_wb_daq_slave_dat_i),
+    .wbs_ack_i (wb_wb_daq_slave_ack_i),
+    .wbs_err_i (wb_wb_daq_slave_err_i),
+    .wbs_rty_i (wb_wb_daq_slave_rty_i));
+
+wb_arbiter
+  #(.num_masters (3))
+ wb_arbiter_wb_ram0
+   (.wb_clk_i  (wb_clk_i),
+    .wb_rst_i  (wb_rst_i),
+    .wbm_adr_i ({wb_m2s_cpu_master_wb_ram0_adr, wb_m2s_wb_daq_master_wb_ram0_adr, wb_m2s_wb_dsp_master_wb_ram0_adr}),
+    .wbm_dat_i ({wb_m2s_cpu_master_wb_ram0_dat, wb_m2s_wb_daq_master_wb_ram0_dat, wb_m2s_wb_dsp_master_wb_ram0_dat}),
+    .wbm_sel_i ({wb_m2s_cpu_master_wb_ram0_sel, wb_m2s_wb_daq_master_wb_ram0_sel, wb_m2s_wb_dsp_master_wb_ram0_sel}),
+    .wbm_we_i  ({wb_m2s_cpu_master_wb_ram0_we, wb_m2s_wb_daq_master_wb_ram0_we, wb_m2s_wb_dsp_master_wb_ram0_we}),
+    .wbm_cyc_i ({wb_m2s_cpu_master_wb_ram0_cyc, wb_m2s_wb_daq_master_wb_ram0_cyc, wb_m2s_wb_dsp_master_wb_ram0_cyc}),
+    .wbm_stb_i ({wb_m2s_cpu_master_wb_ram0_stb, wb_m2s_wb_daq_master_wb_ram0_stb, wb_m2s_wb_dsp_master_wb_ram0_stb}),
+    .wbm_cti_i ({wb_m2s_cpu_master_wb_ram0_cti, wb_m2s_wb_daq_master_wb_ram0_cti, wb_m2s_wb_dsp_master_wb_ram0_cti}),
+    .wbm_bte_i ({wb_m2s_cpu_master_wb_ram0_bte, wb_m2s_wb_daq_master_wb_ram0_bte, wb_m2s_wb_dsp_master_wb_ram0_bte}),
+    .wbm_dat_o ({wb_s2m_cpu_master_wb_ram0_dat, wb_s2m_wb_daq_master_wb_ram0_dat, wb_s2m_wb_dsp_master_wb_ram0_dat}),
+    .wbm_ack_o ({wb_s2m_cpu_master_wb_ram0_ack, wb_s2m_wb_daq_master_wb_ram0_ack, wb_s2m_wb_dsp_master_wb_ram0_ack}),
+    .wbm_err_o ({wb_s2m_cpu_master_wb_ram0_err, wb_s2m_wb_daq_master_wb_ram0_err, wb_s2m_wb_dsp_master_wb_ram0_err}),
+    .wbm_rty_o ({wb_s2m_cpu_master_wb_ram0_rty, wb_s2m_wb_daq_master_wb_ram0_rty, wb_s2m_wb_dsp_master_wb_ram0_rty}),
+    .wbs_adr_o (wb_wb_ram0_adr_o),
+    .wbs_dat_o (wb_wb_ram0_dat_o),
+    .wbs_sel_o (wb_wb_ram0_sel_o),
+    .wbs_we_o  (wb_wb_ram0_we_o),
+    .wbs_cyc_o (wb_wb_ram0_cyc_o),
+    .wbs_stb_o (wb_wb_ram0_stb_o),
+    .wbs_cti_o (wb_wb_ram0_cti_o),
+    .wbs_bte_o (wb_wb_ram0_bte_o),
+    .wbs_dat_i (wb_wb_ram0_dat_i),
+    .wbs_ack_i (wb_wb_ram0_ack_i),
+    .wbs_err_i (wb_wb_ram0_err_i),
+    .wbs_rty_i (wb_wb_ram0_rty_i));
 
 endmodule

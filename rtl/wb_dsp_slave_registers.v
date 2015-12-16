@@ -43,29 +43,21 @@ module wb_dsp_slave_registers (/*AUTOARG*/
    output reg [dw-1:0]    slave_reg3;
    output reg             interrupt = 0;
    
-   reg [aw-1:0]           addr_reg;
-   reg [dw-1:0]           data_reg;
-   
    
    always @(posedge wb_clk)
      if (wb_rst) begin
         wb_ack_o <= 1'b0;
         wb_err_o <= 1'b0;
         wb_rty_o <= 1'b0;  
-        addr_reg <= 32'b0;
-        data_reg <= 32'b0;
         
      end else begin
         if (wb_cyc_i & wb_stb_i) begin
-           addr_reg <= wb_adr_i;
-           data_reg <= wb_dat_i;
            wb_ack_o <= 1;           
         end else begin
            wb_ack_o <= 0;           
         end
-           
-        
-     end
+     end // else: !if(wb_rst)
+   
    
    //
    // Register Write Logic
@@ -116,6 +108,7 @@ module wb_dsp_slave_registers (/*AUTOARG*/
              4'hC                        : wb_dat_o <= slave_reg3;
            endcase // case (wb_adr_i[3:0])           
         end
-     end
+     end // else: !if(wb_rst)
+   
    
 endmodule // testing_wb_slave

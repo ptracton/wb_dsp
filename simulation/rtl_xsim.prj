@@ -4,6 +4,9 @@ verilog work ../rtl/wb_dsp.v
 verilog work ../rtl/wb_dsp_control.v
 verilog work ../rtl/wb_dsp_slave_registers.v
 verilog work ../rtl/wb_dsp_top.v
+verilog work ../rtl/wb_daq_bus_master.v
+verilog work ../rtl/wb_daq_slave_registers.v
+verilog work ../rtl/wb_daq_top.v
 verilog work ../rtl/wb_master_interface.v
 verilog work ../testbench/test_tasks.v
 verilog work ../testbench/testbench.v  -i ../testbench -d SIM

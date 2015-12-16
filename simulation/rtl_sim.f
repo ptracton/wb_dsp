@@ -13,6 +13,9 @@
 ../rtl/wb_dsp_control.v
 ../rtl/wb_dsp_slave_registers.v
 ../rtl/wb_dsp_top.v
+../rtl/wb_daq_bus_master.v
+../rtl/wb_daq_slave_registers.v
+../rtl/wb_daq_top.v
 ../rtl/wb_master_interface.v      
 ../testbench/testbench.v
 ../testbench/test_tasks.v
