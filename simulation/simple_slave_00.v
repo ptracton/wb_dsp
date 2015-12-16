@@ -17,7 +17,9 @@ module test_case ();
    // These parameters need to be set for each test case
    //
    parameter simulation_name = "simple_slave_00";
-   parameter ram_image = "simple_slave_00.mem";   
+   parameter ram_image = "simple_slave_00.mem";
+   parameter channel0_adc_image = "simple_slave_00_adc.mem";
+   
    parameter number_of_tests = 1028;
 
    reg  err;

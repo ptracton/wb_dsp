@@ -14,19 +14,21 @@ module wb_daq_top (/*AUTOARG*/
    wb_slave_dat_o, wb_slave_ack_o, wb_slave_err_o, wb_slave_rty_o,
    interrupt,
    // Inputs
-   wb_clk, wb_rst, wb_master_dat_i, wb_master_ack_i, wb_master_err_i,
-   wb_master_rty_i, wb_slave_adr_i, wb_slave_dat_i, wb_slave_sel_i,
-   wb_slave_we_i, wb_slave_cyc_i, wb_slave_stb_i, wb_slave_cti_i,
-   wb_slave_bte_i
+   adc_clk, wb_clk, wb_rst, wb_master_dat_i, wb_master_ack_i,
+   wb_master_err_i, wb_master_rty_i, wb_slave_adr_i, wb_slave_dat_i,
+   wb_slave_sel_i, wb_slave_we_i, wb_slave_cyc_i, wb_slave_stb_i,
+   wb_slave_cti_i, wb_slave_bte_i
    ) ;
    parameter master_dw = 32;
    parameter master_aw = 32;
    parameter slave_dw = 32;
    parameter slave_aw = 8;
+   parameter channel0_adc_image = "";
    
    //
    // Common Interface
    //
+   input                  adc_clk;   
    input                  wb_clk;
    input                  wb_rst;
    
@@ -64,6 +66,8 @@ module wb_daq_top (/*AUTOARG*/
 
    output wire                 interrupt;
    
+   wire [master_dw-1:0]               channel0_data_out;
+   wire                        channel0_start_sram;
    
    wb_daq_slave_registers #(.aw(slave_aw), .dw(slave_dw))
    slave_registers 
@@ -109,5 +113,18 @@ module wb_daq_top (/*AUTOARG*/
               .wb_rty_i             (wb_master_rty_i)
               
               );
+
+   wb_daq_channel #(.dw(32), .adc_dw(8),
+                    .adc_image(channel0_adc_image))
+   channel0(
+            // Outputs
+            .data_out(channel0_data_out), 
+            .start_sram(channel0_start_sram),
+            // Inputs
+            .wb_clk(wb_clk), 
+            .wb_rst(wb_rst), 
+            .adc_clk(adc_clk), 
+            .enable(1'b1)
+            ) ;
    
 endmodule // wb_daq_top

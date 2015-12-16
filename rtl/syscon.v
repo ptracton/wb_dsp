@@ -11,7 +11,7 @@
 `timescale 1ns/1ns
 module syscon (/*AUTOARG*/
    // Outputs
-   wb_clk_o, wb_rst_o,
+   wb_clk_o, wb_rst_o, adc_clk,
    // Inputs
    clk_pad_i, rst_pad_i
    ) ;
@@ -19,12 +19,27 @@ module syscon (/*AUTOARG*/
    input rst_pad_i;
    output wb_clk_o;
    output wb_rst_o;
-
+   output reg adc_clk;
+   
    wire   locked;
    
 `ifdef SIM
    assign wb_clk_o = clk_pad_i;
    assign locked = 1'b1;
+
+   reg [6:0] adc_clk_count;
+   always @(posedge wb_clk_o)
+     if (rst_pad_i) begin
+        adc_clk <= 0;
+        adc_clk_count <= 0;        
+     end else begin
+        adc_clk_count <=  adc_clk_count+1;        
+        if (adc_clk_count == 10) begin
+           adc_clk <= ~adc_clk;
+           adc_clk_count <= 0;           
+        end
+     end
+   
 `else
 `endif
 
@@ -34,14 +49,14 @@ module syscon (/*AUTOARG*/
    // This will keep reset asserted until we get 16 clocks
    // of the PLL/Clock Tile being locked
    //
-   reg [15:0] wb_rst_shr;
+   reg [31:0] wb_rst_shr;
    
    always @(posedge wb_clk_o or posedge rst_pad_i)
 	 if (rst_pad_i)
-	   wb_rst_shr <= 16'hffff;
+	   wb_rst_shr <= 32'hffff_ffff;
 	 else
-	   wb_rst_shr <= {wb_rst_shr[14:0], ~(locked)};
+	   wb_rst_shr <= {wb_rst_shr[30:0], ~(locked)};
    
-   assign wb_rst_o = wb_rst_shr[15];
+   assign wb_rst_o = wb_rst_shr[31];
    
 endmodule // syscon

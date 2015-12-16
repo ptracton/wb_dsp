@@ -25,11 +25,13 @@ module testbench (/*AUTOARG*/ ) ;
    
    wire wb_clk;
    wire wb_rst;
-      
+   wire adc_clk;
+   
    syscon system_controller(
                             // Outputs
                             .wb_clk_o(wb_clk), 
                             .wb_rst_o(wb_rst),
+                            .adc_clk(adc_clk),
                             // Inputs
                             .clk_pad_i(clk), 
                             .rst_pad_i(reset)
@@ -40,6 +42,8 @@ module testbench (/*AUTOARG*/ ) ;
    //
 `include "wb_dsp_testbench_intercon.vh"
 
+`include "hack.vh"
+   
    wire interrupt;
    
    
@@ -81,7 +85,8 @@ module testbench (/*AUTOARG*/ ) ;
    //
    // DSP Module being tested
    //
-   wb_daq_top daq(
+   wb_daq_top #(.channel0_adc_image(channel0_adc_image))
+     daq(
                   // Outputs
                   .interrupt(interrupt),
                   .wb_master_adr_o(wb_m2s_daq_master_adr), 
@@ -97,6 +102,7 @@ module testbench (/*AUTOARG*/ ) ;
                   .wb_slave_err_o(wb_s2m_wb_daq_slave_err),
                   .wb_slave_rty_o(wb_s2m_wb_daq_slave_rty),
                   // Inputs
+                  .adc_clk(adc_clk),
                   .wb_clk(wb_clk), 
                   .wb_rst(wb_rst), 
                   .wb_master_dat_i(wb_s2m_daq_master_dat), 
@@ -135,9 +141,7 @@ module testbench (/*AUTOARG*/ ) ;
    //
    // SRAM
    //
-
-`include "hack.vh"
-   
+ 
    wb_ram #(.depth(4096),
             .memfile(ram_image))
    wb_ram0 (
