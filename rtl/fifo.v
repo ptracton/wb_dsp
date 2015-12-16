@@ -83,9 +83,11 @@ module fifo (/*AUTOARG*/
            end
         end
         if (pop) begin
-           number_samples <= number_samples -1;           
-        end
-     end
+           if (number_samples > 0) begin
+              number_samples <= number_samples -1;
+           end
+        end        
+     end // else: !if(wb_rst)   
 
    //
    // If there are no samples we are empty.
