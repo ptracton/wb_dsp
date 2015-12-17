@@ -43,7 +43,7 @@ if __name__ == "__main__":
         y = re.search('ram_image', x, re.IGNORECASE)
         if y:
             out_file.write(x)
-        z = re.search('channel0_adc_image', x, re.IGNORECASE)
+        z = re.search('_adc_image', x, re.IGNORECASE)
         if z:
             out_file.write(x)
             

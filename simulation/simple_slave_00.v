@@ -19,6 +19,9 @@ module test_case ();
    parameter simulation_name = "simple_slave_00";
    parameter ram_image = "simple_slave_00.mem";
    parameter channel0_adc_image = "simple_slave_00_adc.mem";
+   parameter channel1_adc_image = "simple_slave_00_adc.mem";
+   parameter channel2_adc_image = "simple_slave_00_adc.mem";
+   parameter channel3_adc_image = "simple_slave_00_adc.mem";
    
    parameter number_of_tests = 1028;
 
@@ -35,7 +38,7 @@ module test_case ();
 
       `TB.master_bfm.write(`WB_DSP_EQUATION_ADDRESS_REG, 32'h1122_3344, 4'hF, err);
       `TB.master_bfm.write(`WB_DSP_CONTROL_REG, 32'h5566_7788, 4'hF, err);
-      `TB.master_bfm.write(`WB_DAQ_SLAVE_REG, 32'h5566_7788, 4'hF, err);
+      `TB.master_bfm.write(`WB_DAQ_CONTROL_REG, 32'h5566_7788, 4'hF, err);
 
       `TB.master_bfm.read_burst(`WB_DSP_EQUATION_ADDRESS_REG, data_out, 4'hF, 1, 0, err);
       `TEST_COMPARE("DSP Equation Read", 32'h1122_3344, data_out);
@@ -49,8 +52,8 @@ module test_case ();
       `TEST_COMPARE("DSP Status Read", 32'h0, data_out);      
 
       @(posedge `WB_CLK);
-      `TB.master_bfm.read_burst(`WB_DAQ_SLAVE_REG, data_out, 4'hF, 1, 0, err);
-      `TEST_COMPARE("DAQ Slave Read", 32'h5566_7788, data_out); 
+      `TB.master_bfm.read_burst(`WB_DAQ_CONTROL_REG, data_out, 4'hF, 1, 0, err);
+      `TEST_COMPARE("DAQ Control Read", 32'h5566_7788, data_out); 
 
       repeat(10) @(posedge `WB_CLK);
 

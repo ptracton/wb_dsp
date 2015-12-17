@@ -85,18 +85,22 @@ module testbench (/*AUTOARG*/ ) ;
    //
    // DSP Module being tested
    //
-   wb_daq_top #(.channel0_adc_image(channel0_adc_image))
+   wb_daq_top #(.channel0_adc_image(channel0_adc_image),
+                .channel1_adc_image(channel1_adc_image),
+                .channel2_adc_image(channel2_adc_image),
+                .channel3_adc_image(channel3_adc_image)
+                )
      daq(
                   // Outputs
                   .interrupt(interrupt),
-                  .wb_master_adr_o(wb_m2s_daq_master_adr), 
-                  .wb_master_dat_o(wb_m2s_daq_master_dat), 
-                  .wb_master_sel_o(wb_m2s_daq_master_sel), 
-                  .wb_master_we_o(wb_m2s_daq_master_we),
-                  .wb_master_cyc_o(wb_m2s_daq_master_cyc), 
-                  .wb_master_stb_o(wb_m2s_daq_master_stb), 
-                  .wb_master_cti_o(wb_m2s_daq_master_cti), 
-                  .wb_master_bte_o(wb_m2s_daq_master_bte),
+                  .wb_master_adr_o(wb_m2s_wb_daq_master_adr), 
+                  .wb_master_dat_o(wb_m2s_wb_daq_master_dat), 
+                  .wb_master_sel_o(wb_m2s_wb_daq_master_sel), 
+                  .wb_master_we_o(wb_m2s_wb_daq_master_we),
+                  .wb_master_cyc_o(wb_m2s_wb_daq_master_cyc), 
+                  .wb_master_stb_o(wb_m2s_wb_daq_master_stb), 
+                  .wb_master_cti_o(wb_m2s_wb_daq_master_cti), 
+                  .wb_master_bte_o(wb_m2s_wb_daq_master_bte),
                   .wb_slave_dat_o(wb_s2m_wb_daq_slave_dat), 
                   .wb_slave_ack_o(wb_s2m_wb_daq_slave_ack), 
                   .wb_slave_err_o(wb_s2m_wb_daq_slave_err),
@@ -105,11 +109,11 @@ module testbench (/*AUTOARG*/ ) ;
                   .adc_clk(adc_clk),
                   .wb_clk(wb_clk), 
                   .wb_rst(wb_rst), 
-                  .wb_master_dat_i(wb_s2m_daq_master_dat), 
-                  .wb_master_ack_i(wb_s2m_daq_master_ack), 
-                  .wb_master_err_i(wb_s2m_daq_master_err),
-                  .wb_master_rty_i(wb_s2m_daq_master_rty), 
-                  .wb_slave_adr_i(wb_m2s_wb_daq_slave_adr), 
+                  .wb_master_dat_i(wb_s2m_wb_daq_master_dat), 
+                  .wb_master_ack_i(wb_s2m_wb_daq_master_ack), 
+                  .wb_master_err_i(wb_s2m_wb_daq_master_err),
+                  .wb_master_rty_i(wb_s2m_wb_daq_master_rty), 
+                  .wb_slave_adr_i(wb_m2s_wb_daq_slave_adr[7:0]), 
                   .wb_slave_dat_i(wb_m2s_wb_daq_slave_dat), 
                   .wb_slave_sel_i(wb_m2s_wb_daq_slave_sel), 
                   .wb_slave_we_i(wb_m2s_wb_daq_slave_we),
@@ -153,7 +157,7 @@ module testbench (/*AUTOARG*/ ) ;
             // Inputs
             .wb_clk_i(wb_clk), 
             .wb_rst_i(wb_rst), 
-            .wb_adr_i(wb_m2s_wb_ram0_adr), 
+            .wb_adr_i(wb_m2s_wb_ram0_adr[11:0]), 
             .wb_dat_i(wb_m2s_wb_ram0_dat), 
             .wb_sel_i(wb_m2s_wb_ram0_sel), 
             .wb_we_i(wb_m2s_wb_ram0_we), 

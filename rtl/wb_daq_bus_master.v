@@ -14,7 +14,7 @@ module wb_daq_bus_master (/*AUTOARG*/
    wb_cti_o, wb_bte_o,
    // Inputs
    wb_clk, wb_rst, wb_dat_i, wb_ack_i, wb_err_i, wb_rty_i,
-   control_reg
+   control_reg, start, address, selection, write, data_wr
    ) ;
    parameter dw = 32;
    parameter aw = 32;
@@ -43,11 +43,11 @@ module wb_daq_bus_master (/*AUTOARG*/
    wire [dw-1:0]        data_rd;                // From master of wb_master_interface.v
    // End of automatics
 
-   reg                  start;
-   reg [aw-1:0]         address;
-   reg [3:0]            selection;
-   reg                  write;
-   reg [dw-1:0]         data_wr;
+   input                start;
+   input [aw-1:0]       address;
+   input [3:0]          selection;
+   input                write;
+   input [dw-1:0]       data_wr;
    
    wb_master_interface master(/*AUTOINST*/
                               // Outputs

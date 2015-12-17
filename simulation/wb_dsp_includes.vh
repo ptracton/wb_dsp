@@ -8,6 +8,9 @@
 // Update Count    : 0
 // Status          : Unknown, Use with caution!
 
+
+`include "wb_daq_slave_registers_include.vh"
+
 `define TB          testbench
 `define WB_RST      `TB.wb_rst
 `define WB_CLK      `TB.wb_clk
@@ -28,7 +31,11 @@
 `define WB_DSP_STATUS_REG           `WB_DSP_BASE_ADDRESS + 8
 
 `define WB_DAQ_BASE_ADDRESS        32'h9010_0000
-`define WB_DAQ_SLAVE_REG           `WB_DAQ_BASE_ADDRESS + 0
+`define WB_DAQ_CONTROL_REG         `WB_DAQ_BASE_ADDRESS + `DAQ_CONTROL_REG_OFFSET
+`define WB_DAQ_CHANNEL0_ADDRESS_REG `WB_DAQ_BASE_ADDRESS + `DAQ_CHANNEL0_ADDRESS_OFFSET
+`define WB_DAQ_CHANNEL1_ADDRESS_REG `WB_DAQ_BASE_ADDRESS + `DAQ_CHANNEL1_ADDRESS_OFFSET
+`define WB_DAQ_CHANNEL2_ADDRESS_REG `WB_DAQ_BASE_ADDRESS + `DAQ_CHANNEL2_ADDRESS_OFFSET
+`define WB_DAQ_CHANNEL3_ADDRESS_REG `WB_DAQ_BASE_ADDRESS + `DAQ_CHANNEL3_ADDRESS_OFFSET
 
 `define TEST_TASKS  `TB.test_tasks
 `define TEST_PASSED `TEST_TASKS.test_passed

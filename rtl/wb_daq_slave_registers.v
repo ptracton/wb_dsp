@@ -9,11 +9,13 @@
 // Status          : Unknown, Use with caution!
 
 
-//`include "wb_daq_slave_registers_include.vh"
+`include "wb_daq_slave_registers_include.vh"
 
 module wb_daq_slave_registers (/*AUTOARG*/
    // Outputs
-   wb_dat_o, wb_ack_o, wb_err_o, wb_rty_o, slave_reg, interrupt,
+   wb_dat_o, wb_ack_o, wb_err_o, wb_rty_o, daq_control_reg,
+   daq_channel0_address_reg, daq_channel1_address_reg,
+   daq_channel2_address_reg, daq_channel3_address_reg, interrupt,
    // Inputs
    wb_clk, wb_rst, wb_adr_i, wb_dat_i, wb_sel_i, wb_we_i, wb_cyc_i,
    wb_stb_i, wb_cti_i, wb_bte_i
@@ -37,7 +39,12 @@ module wb_daq_slave_registers (/*AUTOARG*/
    output reg             wb_err_o;
    output reg             wb_rty_o;
 
-   output reg [dw-1:0]    slave_reg;   
+   output reg [dw-1:0]    daq_control_reg;
+   output reg [dw-1:0]    daq_channel0_address_reg;
+   output reg [dw-1:0]    daq_channel1_address_reg;
+   output reg [dw-1:0]    daq_channel2_address_reg;
+   output reg [dw-1:0]    daq_channel3_address_reg;
+   
    output reg             interrupt = 0;
    
    always @(posedge wb_clk)
@@ -59,18 +66,45 @@ module wb_daq_slave_registers (/*AUTOARG*/
    //
    always @(posedge wb_clk)
      if (wb_rst) begin
-        slave_reg <= 0;
-        
+        daq_control_reg <= 0;
+        daq_channel0_address_reg <= 0;
+        daq_channel1_address_reg <= 0;
+        daq_channel2_address_reg <= 0;
+        daq_channel3_address_reg <= 0;                
      end else begin
         if (wb_cyc_i & wb_stb_i & wb_we_i) begin
-           case (wb_adr_i[3:0])                         
-             4'h0:begin
-                slave_reg[7:0]   <= wb_sel_i[0] ? wb_dat_i[7:0]   : slave_reg[7:0];                
-                slave_reg[15:8]  <= wb_sel_i[1] ? wb_dat_i[15:8]  : slave_reg[15:8];                
-                slave_reg[23:16] <= wb_sel_i[2] ? wb_dat_i[23:16] : slave_reg[23:16]; 
-                slave_reg[31:24] <= wb_sel_i[3] ? wb_dat_i[31:24] : slave_reg[31:24];               
-             end 
-           endcase // case (wb_adr_i[3:0])
+           case (wb_adr_i)                         
+             `DAQ_CONTROL_REG_OFFSET:begin
+                daq_control_reg[7:0]   <= wb_sel_i[0] ? wb_dat_i[7:0]   : daq_control_reg[7:0];                
+                daq_control_reg[15:8]  <= wb_sel_i[1] ? wb_dat_i[15:8]  : daq_control_reg[15:8];                
+                daq_control_reg[23:16] <= wb_sel_i[2] ? wb_dat_i[23:16] : daq_control_reg[23:16]; 
+                daq_control_reg[31:24] <= wb_sel_i[3] ? wb_dat_i[31:24] : daq_control_reg[31:24];               
+             end
+             `DAQ_CHANNEL0_ADDRESS_OFFSET: begin
+                daq_channel0_address_reg[7:0]   <= wb_sel_i[0] ? wb_dat_i[7:0]   : daq_channel0_address_reg[7:0];                
+                daq_channel0_address_reg[15:8]  <= wb_sel_i[1] ? wb_dat_i[15:8]  : daq_channel0_address_reg[15:8];                
+                daq_channel0_address_reg[23:16] <= wb_sel_i[2] ? wb_dat_i[23:16] : daq_channel0_address_reg[23:16]; 
+                daq_channel0_address_reg[31:24] <= wb_sel_i[3] ? wb_dat_i[31:24] : daq_channel0_address_reg[31:24];               
+             end
+             `DAQ_CHANNEL1_ADDRESS_OFFSET: begin
+                daq_channel1_address_reg[7:0]   <= wb_sel_i[0] ? wb_dat_i[7:0]   : daq_channel1_address_reg[7:0];                
+                daq_channel1_address_reg[15:8]  <= wb_sel_i[1] ? wb_dat_i[15:8]  : daq_channel1_address_reg[15:8];                
+                daq_channel1_address_reg[23:16] <= wb_sel_i[2] ? wb_dat_i[23:16] : daq_channel1_address_reg[23:16]; 
+                daq_channel1_address_reg[31:24] <= wb_sel_i[3] ? wb_dat_i[31:24] : daq_channel1_address_reg[31:24];               
+             end
+             `DAQ_CHANNEL2_ADDRESS_OFFSET: begin
+                daq_channel2_address_reg[7:0]   <= wb_sel_i[0] ? wb_dat_i[7:0]   : daq_channel2_address_reg[7:0];                
+                daq_channel2_address_reg[15:8]  <= wb_sel_i[1] ? wb_dat_i[15:8]  : daq_channel2_address_reg[15:8];                
+                daq_channel2_address_reg[23:16] <= wb_sel_i[2] ? wb_dat_i[23:16] : daq_channel2_address_reg[23:16]; 
+                daq_channel2_address_reg[31:24] <= wb_sel_i[3] ? wb_dat_i[31:24] : daq_channel2_address_reg[31:24];               
+             end
+             `DAQ_CHANNEL3_ADDRESS_OFFSET: begin
+                daq_channel3_address_reg[7:0]   <= wb_sel_i[0] ? wb_dat_i[7:0]   : daq_channel3_address_reg[7:0];                
+                daq_channel3_address_reg[15:8]  <= wb_sel_i[1] ? wb_dat_i[15:8]  : daq_channel3_address_reg[15:8];                
+                daq_channel3_address_reg[23:16] <= wb_sel_i[2] ? wb_dat_i[23:16] : daq_channel3_address_reg[23:16]; 
+                daq_channel3_address_reg[31:24] <= wb_sel_i[3] ? wb_dat_i[31:24] : daq_channel3_address_reg[31:24];               
+             end             
+           endcase // case (wb_adr_i)           
         end // if (wb_cyc_i & wb_stb_i & wb_we_i)        
      end // else: !if(wb_rst)   
 
@@ -83,7 +117,12 @@ module wb_daq_slave_registers (/*AUTOARG*/
      end else begin
         if (wb_cyc_i & wb_stb_i & ~wb_we_i) begin
            case (wb_adr_i[3:0])
-             4'h0                        : wb_dat_o <= slave_reg;
+             `DAQ_CONTROL_REG_OFFSET : wb_dat_o <= daq_control_reg;
+             `DAQ_CHANNEL0_ADDRESS_OFFSET : wb_dat_o <= daq_channel0_address_reg;
+             `DAQ_CHANNEL1_ADDRESS_OFFSET : wb_dat_o <= daq_channel1_address_reg;
+             `DAQ_CHANNEL2_ADDRESS_OFFSET : wb_dat_o <= daq_channel2_address_reg;
+             `DAQ_CHANNEL3_ADDRESS_OFFSET : wb_dat_o <= daq_channel3_address_reg;
+             default: wb_dat_o <= 0;             
            endcase // case (wb_adr_i[3:0])           
         end
      end // else: !if(wb_rst)
