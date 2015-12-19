@@ -146,7 +146,7 @@ module testbench (/*AUTOARG*/ ) ;
    // SRAM
    //
  
-   wb_ram #(.depth(4096),
+   wb_ram #(.depth(8192),
             .memfile(ram_image))
    wb_ram0 (
             // Outputs
@@ -157,7 +157,7 @@ module testbench (/*AUTOARG*/ ) ;
             // Inputs
             .wb_clk_i(wb_clk), 
             .wb_rst_i(wb_rst), 
-            .wb_adr_i(wb_m2s_wb_ram0_adr[11:0]), 
+            .wb_adr_i(wb_m2s_wb_ram0_adr[12:0]), 
             .wb_dat_i(wb_m2s_wb_ram0_dat), 
             .wb_sel_i(wb_m2s_wb_ram0_sel), 
             .wb_we_i(wb_m2s_wb_ram0_we), 

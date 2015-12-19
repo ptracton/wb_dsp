@@ -42,14 +42,14 @@ module test_case (/*AUTOARG*/ ) ;
       // Set Channel 0 Address register to 0x100, this is location of
       // vector structure
       //
-      `TB.master_bfm.write(`WB_DAQ_CHANNEL0_ADDRESS_REG, 32'h0000_0100, 4'hF, err);
+      `TB.master_bfm.write(`WB_DAQ_CHANNEL0_ADDRESS_REG, `WB_DSP_RAM_BASE_ADDRESS+1024, 4'hF, err);
 
       //
       // Enable ADC Channel 0
       //
       `TB.master_bfm.write(`WB_DAQ_CONTROL_REG, 32'h0000_0001, 4'hF, err);
       
-      #10000;
+      #250000;
       `TEST_COMPLETE;    
    end
    

@@ -33,13 +33,13 @@ module fifo_to_sram (/*AUTOARG*/
         sram_data_out <= 0;      
         sram_start <= 0;        
      end else begin
-        if (!empty) begin
+        if (!empty && !pop) begin
            pop <= 1;       
            sram_data_out <= fifo_data_in;
            sram_start <= 1;           
         end else begin
            pop <= 0;
-           sram_data_out <= 0;
+           //sram_data_out <= 0;
            sram_start <= 0;           
         end
      end // else: !if(wb_rst)   

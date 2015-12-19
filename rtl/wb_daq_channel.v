@@ -29,7 +29,10 @@ module wb_daq_channel (/*AUTOARG*/
 
    wire [adc_dw-1:0]   adc_data_out;   
    wire                adc_data_ready;
-   
+
+   //
+   // Get data from hardware or wherever else it my come from
+   //   
    adc #(.dw(adc_dw), .adc_image(adc_image))
    adc0(
         // Outputs
@@ -44,7 +47,11 @@ module wb_daq_channel (/*AUTOARG*/
 
    wire [dw-1:0]       aggregate_data_out;   
    wire                fifo_push;
-   
+
+   //
+   // Aggregate the data into 32 bits wide.  This way the FIFO has data ready
+   // to push out to SRAM
+   //
    wb_daq_data_aggregation #(.dw(dw), .adc_dw(adc_dw))
      aggregate(
                // Outputs
@@ -63,7 +70,10 @@ module wb_daq_channel (/*AUTOARG*/
    wire                fifo_empty;
    wire                fifo_full;
    wire [7:0]          fifo_number_samples;
-   
+
+   //
+   // FIFO for holding the aggregated data,  
+   //
    fifo #(.dw(dw), .depth(16))
    fifo0(
          // Outputs
@@ -79,6 +89,11 @@ module wb_daq_channel (/*AUTOARG*/
          .data_in(aggregate_data_out)
          ) ;
 
+
+   //
+   // Once there are enough samples in the FIFO, pull data from FIFO
+   // and move to state machine to write to SRAM
+   //
    fifo_to_sram fifo_to_sram0(
                               // Outputs
                               .pop(fifo_pop),

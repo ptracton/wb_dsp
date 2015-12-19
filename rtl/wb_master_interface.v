@@ -24,14 +24,14 @@ module wb_master_interface (/*AUTOARG*/
 
    input 		wb_clk;
    input 		wb_rst;
-   output reg [aw-1:0] wb_adr_o=0;
-   output reg [dw-1:0] wb_dat_o=0;
-   output reg [3:0]    wb_sel_o=0;
-   output reg          wb_we_o=0;
-   output reg          wb_cyc_o=0;
-   output reg          wb_stb_o=0;
-   output reg [2:0]    wb_cti_o=0;
-   output reg [1:0]    wb_bte_o=0;
+   output reg [aw-1:0] wb_adr_o;
+   output reg [dw-1:0] wb_dat_o;
+   output reg [3:0]    wb_sel_o;
+   output reg          wb_we_o ;
+   output reg          wb_cyc_o;
+   output reg          wb_stb_o;
+   output reg [2:0]    wb_cti_o;
+   output reg [1:0]    wb_bte_o;
    input [dw-1:0]      wb_dat_i;
    input               wb_ack_i;
    input               wb_err_i;
@@ -52,17 +52,7 @@ module wb_master_interface (/*AUTOARG*/
    parameter STATE_WAIT_ACK     = 2'h1;
    parameter STATE_ERROR        = 2'h3;
 
-
-   reg [aw-1:0]        adr_o;
-   reg [dw-1:0]        dat_o;
-   reg [3:0]           sel_o;
-   reg                 we_o;
-   reg                 cyc_o;
-   reg                 stb_o;
-   reg [2:0]           cti_o;
-   reg [1:0]           bte_o;
-
-   
+  
    always @(posedge wb_clk)
      if (wb_rst) begin
         state <= STATE_IDLE;
@@ -70,8 +60,6 @@ module wb_master_interface (/*AUTOARG*/
          state <= next_state;
      end
    
-
-
    always @(*)
      if (wb_rst) begin
         next_state = STATE_IDLE;

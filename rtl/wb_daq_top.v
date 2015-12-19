@@ -89,6 +89,10 @@ module wb_daq_top (/*AUTOARG*/
 
    wire [master_dw-1:0]                bus_master_address;
 
+   wire [3:0] grant;
+   wire       active;
+   wire [1:0] select;
+                   
    assign bus_master_address = (select == 2'b00) ? daq_channel0_address:
                                (select == 2'b01) ? daq_channel1_address:
                                (select == 2'b10) ? daq_channel2_address:
@@ -215,11 +219,6 @@ module wb_daq_top (/*AUTOARG*/
                          channel2_start_sram,
                          channel1_start_sram,
                          channel0_start_sram};
-   wire [3:0] grant;
-   wire       active;
-   wire [1:0] select;
-   
-              
    arbiter
   #(.NUM_PORTS(4))
    channel_arbiter
