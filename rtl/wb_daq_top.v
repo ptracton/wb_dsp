@@ -87,6 +87,16 @@ module wb_daq_top (/*AUTOARG*/
    wire [master_dw-1:0]                daq_channel2_address;
    wire [master_dw-1:0]                daq_channel3_address;
 
+   wire [master_dw-1:0]                daq_channel0_control;
+   wire [master_dw-1:0]                daq_channel1_control;
+   wire [master_dw-1:0]                daq_channel2_control;
+   wire [master_dw-1:0]                daq_channel3_control;
+
+   wire [master_dw-1:0]                daq_channel0_status;
+   wire [master_dw-1:0]                daq_channel1_status;
+   wire [master_dw-1:0]                daq_channel2_status;
+   wire [master_dw-1:0]                daq_channel3_status;
+   
    wire [master_dw-1:0]                bus_master_address;
 
    wire [3:0] grant;
@@ -115,6 +125,10 @@ module wb_daq_top (/*AUTOARG*/
       .daq_channel1_address_reg         (daq_channel1_address),
       .daq_channel2_address_reg         (daq_channel2_address), 
       .daq_channel3_address_reg         (daq_channel3_address),
+      .daq_channel0_control_reg         (daq_channel0_control), 
+      .daq_channel1_control_reg         (daq_channel1_control),
+      .daq_channel2_control_reg         (daq_channel2_control), 
+      .daq_channel3_control_reg         (daq_channel3_control),  
       .interrupt                        (interrupt),
       .wb_dat_o                         (wb_slave_dat_o[slave_dw-1:0]),
       .wb_ack_o                         (wb_slave_ack_o),
@@ -171,8 +185,10 @@ module wb_daq_top (/*AUTOARG*/
             // Inputs
             .wb_clk(wb_clk), 
             .wb_rst(wb_rst), 
-            .adc_clk(adc_clk), 
-            .enable(daq_control[0])
+            .adc_clk(adc_clk),
+            .control(daq_channel0_control),
+            .status(daq_channel0_status),
+            .master_enable(daq_control[0])
             );
 
 
@@ -185,8 +201,10 @@ module wb_daq_top (/*AUTOARG*/
             // Inputs
             .wb_clk(wb_clk), 
             .wb_rst(wb_rst), 
-            .adc_clk(adc_clk), 
-            .enable(daq_control[1])
+            .adc_clk(adc_clk),
+            .control(daq_channel1_control),
+            .status(daq_channel1_status),
+            .master_enable(daq_control[1])
             );
 
    wb_daq_channel #(.dw(32), .adc_dw(8),
@@ -198,8 +216,10 @@ module wb_daq_top (/*AUTOARG*/
             // Inputs
             .wb_clk(wb_clk), 
             .wb_rst(wb_rst), 
-            .adc_clk(adc_clk), 
-            .enable(daq_control[2])
+            .adc_clk(adc_clk),
+            .control(daq_channel2_control),
+            .status(daq_channel2_status),
+            .master_enable(daq_control[2])
             );
 
    wb_daq_channel #(.dw(32), .adc_dw(8),
@@ -211,8 +231,10 @@ module wb_daq_top (/*AUTOARG*/
             // Inputs
             .wb_clk(wb_clk), 
             .wb_rst(wb_rst), 
-            .adc_clk(adc_clk), 
-            .enable(daq_control[3])
+            .adc_clk(adc_clk),
+            .control(daq_channel3_control),
+            .status(daq_channel3_status),
+            .master_enable(daq_control[3])
             );   
 
    wire [3:0] request = {channel2_start_sram,

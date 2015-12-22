@@ -84,11 +84,11 @@ module test_tasks (/*AUTOARG*/ ) ;
             `TEST_FAILED <= 1'b1;            
          end else begin
             if (expected !== measured) begin
-               test_case_fail <= 1;
-               $display("EXP: 0x%h\tMeasure:0x%h", expected, measured);
+               test_case_fail <= 1;               
+               //$display("EXP: 0x%h\tMeasure:0x%h", expected, measured);
                #1 display_results(display_string, expected, measured);
             end else begin
-               test_case_fail <= 0;
+               test_case_fail <= 0;               
                #1 display_results(display_string, expected, measured);
             end
          end
@@ -117,7 +117,7 @@ module test_tasks (/*AUTOARG*/ ) ;
       begin
          if (test_case_fail) begin
             pass_fail = "\033[1;31mFAIL\033[0m";
-            //`TEST_FAILED <= 1;         
+            `TEST_FAILED <= 1;         
          end else begin
             pass_fail = "\033[1;32mPASS\033[0m";
          end

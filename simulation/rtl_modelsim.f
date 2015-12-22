@@ -7,6 +7,15 @@ vlog ../rtl/wb_dsp_control.v +incdir+../rtl/
 vlog ../rtl/wb_dsp_slave_registers.v +incdir+../rtl/
 vlog ../rtl/wb_dsp_top.v
 vlog ../rtl/wb_master_interface.v
+vlog ../rtl/wb_daq_bus_master.v +incdir+../rtl/
+vlog ../rtl/wb_daq_slave_registers.v +incdir+../rtl/
+vlog ../rtl/wb_daq_top.v
+vlog ../rtl/wb_master_interface.v
+vlog ../rtl/wb_daq_data_aggregation.v
+vlog ../rtl/wb_daq_channel.v
+vlog ../rtl/fifo.v
+vlog ../rtl/fifo_to_sram.v
+vlog ../behavioral/adc/adc.v      
 vlog ../testbench/test_tasks.v -timescale 1ns/1ns
 vlog ../testbench/testbench.v  +incdir+../testbench +define+SIM
 vlog ../testbench/arbiter.v

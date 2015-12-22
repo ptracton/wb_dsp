@@ -188,7 +188,7 @@ wire        wb_s2m_wb_dsp_master_wb_daq_slave_rty;
 wb_mux
   #(.num_slaves (3),
     .MATCH_ADDR ({32'h90000000, 32'h90100000, 32'h91000000}),
-    .MATCH_MASK ({32'hffffffe0, 32'hffffffe0, 32'hffffe000}))
+    .MATCH_MASK ({32'hfffffc00, 32'hfffffc00, 32'hffffe000}))
  wb_mux_cpu_master
    (.wb_clk_i  (wb_clk_i),
     .wb_rst_i  (wb_rst_i),
@@ -220,7 +220,7 @@ wb_mux
 wb_mux
   #(.num_slaves (3),
     .MATCH_ADDR ({32'h91000000, 32'h90000000, 32'h90100000}),
-    .MATCH_MASK ({32'hffffe000, 32'hffffffe0, 32'hffffffe0}))
+    .MATCH_MASK ({32'hffffe000, 32'hfffffc00, 32'hfffffc00}))
  wb_mux_wb_daq_master
    (.wb_clk_i  (wb_clk_i),
     .wb_rst_i  (wb_rst_i),
@@ -252,7 +252,7 @@ wb_mux
 wb_mux
   #(.num_slaves (3),
     .MATCH_ADDR ({32'h91000000, 32'h90000000, 32'h90100000}),
-    .MATCH_MASK ({32'hffffe000, 32'hffffffe0, 32'hffffffe0}))
+    .MATCH_MASK ({32'hffffe000, 32'hfffffc00, 32'hfffffc00}))
  wb_mux_wb_dsp_master
    (.wb_clk_i  (wb_clk_i),
     .wb_rst_i  (wb_rst_i),

@@ -9,9 +9,9 @@
 // Status          : Unknown, Use with caution!
 module wb_daq_channel (/*AUTOARG*/
    // Outputs
-   data_out, start_sram,
+   status, data_out, start_sram,
    // Inputs
-   wb_clk, wb_rst, adc_clk, enable
+   wb_clk, wb_rst, adc_clk, master_enable, control
    ) ;
 
 
@@ -22,7 +22,9 @@ module wb_daq_channel (/*AUTOARG*/
    input wb_clk;
    input wb_rst;
    input adc_clk;
-   input enable;
+   input master_enable;   
+   input [dw-1:0] control;
+   output wire [dw-1:0] status;   
    output wire [dw-1:0] data_out;
    output wire         start_sram;
    

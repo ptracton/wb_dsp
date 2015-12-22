@@ -7,6 +7,11 @@ verilog work ../rtl/wb_dsp_top.v
 verilog work ../rtl/wb_daq_bus_master.v
 verilog work ../rtl/wb_daq_slave_registers.v
 verilog work ../rtl/wb_daq_top.v
+verilog work ../rtl/wb_daq_data_aggregation.v
+verilog work ../rtl/wb_daq_channel.v
+verilog work ../rtl/fifo.v
+verilog work ../rtl/fifo_to_sram.v
+verilog work ../behavioral/adc/adc.v
 verilog work ../rtl/wb_master_interface.v
 verilog work ../testbench/test_tasks.v
 verilog work ../testbench/testbench.v  -i ../testbench -d SIM
