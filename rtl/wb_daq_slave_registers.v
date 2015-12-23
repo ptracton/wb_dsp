@@ -39,9 +39,9 @@ module wb_daq_slave_registers (/*AUTOARG*/
    input [2:0]            wb_cti_i;
    input [1:0]            wb_bte_i;
    output reg [dw-1:0]    wb_dat_o;
-   output wire            wb_ack_o;
-   output wire            wb_err_o;
-   output wire            wb_rty_o;
+   output reg             wb_ack_o;
+   output reg             wb_err_o;
+   output reg             wb_rty_o;
 
    output reg [dw-1:0]    daq_control_reg;
    output reg [dw-1:0]    daq_channel0_address_reg;
@@ -62,11 +62,14 @@ module wb_daq_slave_registers (/*AUTOARG*/
    output reg             interrupt = 0;
 
 
+
+/* -----\/----- EXCLUDED -----\/-----
    assign wb_ack_o = wb_cyc_i & wb_stb_i;
    assign wb_err_o = 0;
    assign wb_rty_o = 0;
+ -----/\----- EXCLUDED -----/\----- */
+
    
-/* -----\/----- EXCLUDED -----\/-----
    always @(posedge wb_clk)
      if (wb_rst) begin
         wb_ack_o <= 1'b0;
@@ -80,7 +83,6 @@ module wb_daq_slave_registers (/*AUTOARG*/
            wb_ack_o <= 0;           
         end
      end // else: !if(wb_rst)
- -----/\----- EXCLUDED -----/\----- */
 
    //
    // Register Write Logic
@@ -165,7 +167,7 @@ module wb_daq_slave_registers (/*AUTOARG*/
         wb_dat_o <= 32'b0;        
      end else begin
         if (wb_cyc_i & wb_stb_i & ~wb_we_i) begin
-           case (wb_adr_i[3:0])
+           case (wb_adr_i[7:0])
              `DAQ_CONTROL_REG_OFFSET : wb_dat_o <= daq_control_reg;
              `DAQ_CHANNEL0_ADDRESS_OFFSET : wb_dat_o <= daq_channel0_address_reg;
              `DAQ_CHANNEL1_ADDRESS_OFFSET : wb_dat_o <= daq_channel1_address_reg;

@@ -40,9 +40,9 @@ module test_case ();
       `TB.master_bfm.write(`WB_DSP_CONTROL_REG, 32'h5566_7788, 4'hF, err);
       `TB.master_bfm.write(`WB_DAQ_CONTROL_REG, 32'h99AA_BBCC, 4'hF, err);
       `TB.master_bfm.write(`WB_DAQ_CHANNEL0_CONTROL_REG, 32'h1234_5678, 4'hF, err);
-      //`TB.master_bfm.write(`WB_DAQ_CHANNEL1_CONTROL_REG, 32'h9ABC_DEF0, 4'hF, err);
-      //`TB.master_bfm.write(`WB_DAQ_CHANNEL2_CONTROL_REG, 32'hA5B6_C7D8, 4'hF, err);
-      //`TB.master_bfm.write(`WB_DAQ_CHANNEL3_CONTROL_REG, 32'hE9FA_DEAD, 4'hF, err);
+      `TB.master_bfm.write(`WB_DAQ_CHANNEL1_CONTROL_REG, 32'h9ABC_DEF0, 4'hF, err);
+      `TB.master_bfm.write(`WB_DAQ_CHANNEL2_CONTROL_REG, 32'hA5B6_C7D8, 4'hF, err);
+      `TB.master_bfm.write(`WB_DAQ_CHANNEL3_CONTROL_REG, 32'hE9FA_DEAD, 4'hF, err);
 
       `TB.master_bfm.read_burst(`WB_DSP_EQUATION_ADDRESS_REG, data_out, 4'hF, 1, 0, err);
       `TEST_COMPARE("DSP Equation Read", 32'h1122_3344, data_out);
@@ -51,19 +51,22 @@ module test_case ();
       `TB.master_bfm.read_burst(`WB_DSP_CONTROL_REG, data_out, 4'hF, 1, 0, err);
       `TEST_COMPARE("DSP Control Read", 32'h5566_7788, data_out);
 
+
       @(posedge `WB_CLK);
       `TB.master_bfm.read_burst(`WB_DSP_STATUS_REG, data_out, 4'hF, 1, 0, err);
       `TEST_COMPARE("DSP Status Read", 32'h0, data_out);      
 
+
+
       @(posedge `WB_CLK);
       `TB.master_bfm.read_burst(`WB_DAQ_CONTROL_REG, data_out, 4'hF, 1, 0, err);
-      `TEST_COMPARE("DAQ Control Read", 32'h99AA_BBCC, data_out);
+      #3 `TEST_COMPARE("DAQ Control Read", 32'h99AA_BBCC, data_out);
+
 
       @(posedge `WB_CLK);
       `TB.master_bfm.read_burst(`WB_DAQ_CHANNEL0_CONTROL_REG, data_out, 4'hF, 1, 0, err);
-      `TEST_COMPARE("DAQ CH0 Control Read", 32'h99AA_BBCC, data_out); 
+      `TEST_COMPARE("DAQ CH0 Control Read", 32'h1234_5678, data_out); 
 
-/* -----\/----- EXCLUDED -----\/-----
       @(posedge `WB_CLK);
       `TB.master_bfm.read_burst(`WB_DAQ_CHANNEL1_CONTROL_REG, data_out, 4'hF, 1, 0, err);
       `TEST_COMPARE("DAQ CH1 Control Read", 32'h9ABC_DEF0, data_out); 
@@ -75,8 +78,6 @@ module test_case ();
       @(posedge `WB_CLK);
       `TB.master_bfm.read_burst(`WB_DAQ_CHANNEL3_CONTROL_REG, data_out, 4'hF, 1, 0, err);
       `TEST_COMPARE("DAQ CH3 Control Read", 32'hE9FA_DEAD, data_out); 
- -----/\----- EXCLUDED -----/\----- */
-      
 
       repeat(10) @(posedge `WB_CLK);
 

@@ -27,7 +27,7 @@ module test_tasks (/*AUTOARG*/ ) ;
    always @(posedge test_failed) begin
       $display("--------------------------------------------------------------------------------------------");
       $display("\n\033[1;31m***** TEST FAILED *****\033[0m @ %d\n", $time);
-      #10 $finish;      
+      #100 $finish;      
    end
 
    //

@@ -43,6 +43,14 @@ module wb_dsp_slave_registers (/*AUTOARG*/
    output reg [dw-1:0]    slave_reg3;
    output reg             interrupt = 0;
    
+
+/* -----\/----- EXCLUDED -----\/-----
+
+   assign wb_ack_o = wb_cyc_i & wb_stb_i;
+   assign wb_err_o = 0;
+   assign wb_rty_o = 0;
+ -----/\----- EXCLUDED -----/\----- */
+
    
    always @(posedge wb_clk)
      if (wb_rst) begin
@@ -57,7 +65,6 @@ module wb_dsp_slave_registers (/*AUTOARG*/
            wb_ack_o <= 0;           
         end
      end // else: !if(wb_rst)
-   
    
    //
    // Register Write Logic
