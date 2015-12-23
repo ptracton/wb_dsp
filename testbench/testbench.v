@@ -31,10 +31,17 @@ module testbench (/*AUTOARG*/ ) ;
                             // Outputs
                             .wb_clk_o(wb_clk), 
                             .wb_rst_o(wb_rst),
-                            .adc_clk(adc_clk),
+                            .adc0_clk(adc0_clk),
+                            .adc1_clk(adc1_clk),
+                            .adc2_clk(adc2_clk),
+                            .adc3_clk(adc3_clk),
                             // Inputs
                             .clk_pad_i(clk), 
-                            .rst_pad_i(reset)
+                            .rst_pad_i(reset),
+                            .adc0_clk_speed_select(adc0_clk_speed_select), 
+                            .adc1_clk_speed_select(adc1_clk_speed_select),
+                            .adc2_clk_speed_select(adc2_clk_speed_select), 
+                            .adc3_clk_speed_select(adc3_clk_speed_select)
                             ) ;
    
    //
@@ -45,6 +52,10 @@ module testbench (/*AUTOARG*/ ) ;
 `include "hack.vh"
    
    wire interrupt;
+   wire [2:0] adc0_clk_speed_select;
+   wire [2:0] adc1_clk_speed_select;
+   wire [2:0] adc2_clk_speed_select;
+   wire [2:0] adc3_clk_speed_select;
    
    
    //
@@ -83,7 +94,7 @@ module testbench (/*AUTOARG*/ ) ;
                   ) ;
 
    //
-   // DSP Module being tested
+   // DAQ Module being tested
    //
    wb_daq_top #(.channel0_adc_image(channel0_adc_image),
                 .channel1_adc_image(channel1_adc_image),
@@ -105,8 +116,16 @@ module testbench (/*AUTOARG*/ ) ;
                   .wb_slave_ack_o(wb_s2m_wb_daq_slave_ack), 
                   .wb_slave_err_o(wb_s2m_wb_daq_slave_err),
                   .wb_slave_rty_o(wb_s2m_wb_daq_slave_rty),
-                  // Inputs
-                  .adc_clk(adc_clk),
+                  .adc0_clk_speed_select(adc0_clk_speed_select), 
+                  .adc1_clk_speed_select(adc1_clk_speed_select),
+                  .adc2_clk_speed_select(adc2_clk_speed_select), 
+                  .adc3_clk_speed_select(adc3_clk_speed_select),
+         
+                  // Inputs         
+                  .adc0_clk(adc0_clk),
+                  .adc1_clk(adc1_clk),
+                  .adc2_clk(adc2_clk),
+                  .adc3_clk(adc3_clk),         
                   .wb_clk(wb_clk), 
                   .wb_rst(wb_rst), 
                   .wb_master_dat_i(wb_s2m_wb_daq_master_dat), 

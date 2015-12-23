@@ -94,10 +94,10 @@ module wb_daq_slave_registers (/*AUTOARG*/
         daq_channel1_address_reg <= 0;
         daq_channel2_address_reg <= 0;
         daq_channel3_address_reg <= 0;
-        daq_channel0_control_reg <= 0;
-        daq_channel1_control_reg <= 0;
-        daq_channel2_control_reg <= 0;
-        daq_channel3_control_reg <= 0;                
+        daq_channel0_control_reg <= 32'h0000_000C;
+        daq_channel1_control_reg <= 32'h0000_000C;
+        daq_channel2_control_reg <= 32'h0000_000C;
+        daq_channel3_control_reg <= 32'h0000_000C;                
      end else begin
         if (wb_cyc_i & wb_stb_i & wb_we_i) begin
            case (wb_adr_i)                         

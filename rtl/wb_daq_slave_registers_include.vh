@@ -17,6 +17,20 @@
 `define DAQ_CHANNEL3_STATUS_OFFSET  8'h48
 
 /**
+ DAQ Channel Control Register Bits
+ **/
+`define DAQ_CHANNEL_ENABLE_OFFSET         0
+`define DAQ_CHANNEL_SIGNED_OFFSET         1
+`define DAQ_CHANNEL_ADC_CLK_SPEED_OFFSET  2  // 3 bits wide
+`define DAQ_CHANNEL_ADC_DATA_WIDTH_OFFSET 5  // 3 bits wide
+`define DAQ_CHANNEL_DECIMATOR_SELECT      8  // 2 bits wide
+`define DAQ_CHANNEL_FIFO_SAMPLES          10 // 6 bits wide
+
+`define DAQ_CHANNEL_ENABLE 1 << `DAQ_CHANNEL_ENABLE_OFFSET
+`define DAQ_CHANNEL_SIGNED 1 << `DAQ_CHANNEL_SIGNED_OFFSET
+
+
+/**
  Vector Structure
  **/
 `define VECTOR_CONTROL_OFFSET        8'h00

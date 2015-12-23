@@ -12,12 +12,13 @@ module wb_daq_top (/*AUTOARG*/
    wb_master_adr_o, wb_master_dat_o, wb_master_sel_o, wb_master_we_o,
    wb_master_cyc_o, wb_master_stb_o, wb_master_cti_o, wb_master_bte_o,
    wb_slave_dat_o, wb_slave_ack_o, wb_slave_err_o, wb_slave_rty_o,
-   interrupt,
+   interrupt, adc0_clk_speed_select, adc1_clk_speed_select,
+   adc2_clk_speed_select, adc3_clk_speed_select,
    // Inputs
-   adc_clk, wb_clk, wb_rst, wb_master_dat_i, wb_master_ack_i,
-   wb_master_err_i, wb_master_rty_i, wb_slave_adr_i, wb_slave_dat_i,
-   wb_slave_sel_i, wb_slave_we_i, wb_slave_cyc_i, wb_slave_stb_i,
-   wb_slave_cti_i, wb_slave_bte_i
+   adc0_clk, adc1_clk, adc2_clk, adc3_clk, wb_clk, wb_rst,
+   wb_master_dat_i, wb_master_ack_i, wb_master_err_i, wb_master_rty_i,
+   wb_slave_adr_i, wb_slave_dat_i, wb_slave_sel_i, wb_slave_we_i,
+   wb_slave_cyc_i, wb_slave_stb_i, wb_slave_cti_i, wb_slave_bte_i
    ) ;
    parameter master_dw = 32;
    parameter master_aw = 32;
@@ -31,7 +32,10 @@ module wb_daq_top (/*AUTOARG*/
    //
    // Common Interface
    //
-   input                  adc_clk;   
+   input                  adc0_clk;
+   input                  adc1_clk;
+   input                  adc2_clk;
+   input                  adc3_clk;   
    input                  wb_clk;
    input                  wb_rst;
    
@@ -69,6 +73,19 @@ module wb_daq_top (/*AUTOARG*/
 
    output wire                 interrupt;
    
+   output wire [2:0]           adc0_clk_speed_select;   
+   output wire [2:0]           adc1_clk_speed_select;   
+   output wire [2:0]           adc2_clk_speed_select;   
+   output wire [2:0]           adc3_clk_speed_select;
+
+   assign adc0_clk_speed_select = daq_channel0_control[4:2];   
+   assign adc1_clk_speed_select = daq_channel1_control[4:2];
+   assign adc2_clk_speed_select = daq_channel2_control[4:2];   
+   assign adc3_clk_speed_select = daq_channel3_control[4:2];
+
+
+   
+   
    wire [master_dw-1:0]        channel0_data_out;
    wire                        channel0_start_sram;
 
@@ -92,6 +109,7 @@ module wb_daq_top (/*AUTOARG*/
    wire [master_dw-1:0]                daq_channel2_control;
    wire [master_dw-1:0]                daq_channel3_control;
 
+   
    wire [master_dw-1:0]                daq_channel0_status;
    wire [master_dw-1:0]                daq_channel1_status;
    wire [master_dw-1:0]                daq_channel2_status;
@@ -185,7 +203,7 @@ module wb_daq_top (/*AUTOARG*/
             // Inputs
             .wb_clk(wb_clk), 
             .wb_rst(wb_rst), 
-            .adc_clk(adc_clk),
+            .adc_clk(adc0_clk),
             .control(daq_channel0_control),
             .status(daq_channel0_status),
             .master_enable(daq_control[0])
@@ -201,7 +219,7 @@ module wb_daq_top (/*AUTOARG*/
             // Inputs
             .wb_clk(wb_clk), 
             .wb_rst(wb_rst), 
-            .adc_clk(adc_clk),
+            .adc_clk(adc1_clk),
             .control(daq_channel1_control),
             .status(daq_channel1_status),
             .master_enable(daq_control[1])
@@ -216,7 +234,7 @@ module wb_daq_top (/*AUTOARG*/
             // Inputs
             .wb_clk(wb_clk), 
             .wb_rst(wb_rst), 
-            .adc_clk(adc_clk),
+            .adc_clk(adc2_clk),
             .control(daq_channel2_control),
             .status(daq_channel2_status),
             .master_enable(daq_control[2])
@@ -231,7 +249,7 @@ module wb_daq_top (/*AUTOARG*/
             // Inputs
             .wb_clk(wb_clk), 
             .wb_rst(wb_rst), 
-            .adc_clk(adc_clk),
+            .adc_clk(adc3_clk),
             .control(daq_channel3_control),
             .status(daq_channel3_status),
             .master_enable(daq_control[3])

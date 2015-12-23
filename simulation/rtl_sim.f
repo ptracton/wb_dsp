@@ -9,6 +9,7 @@
       
 
 ../rtl/syscon.v
+../rtl/adc_clk_gen.v
 ../rtl/wb_dsp.v
 ../rtl/wb_dsp_control.v
 ../rtl/wb_dsp_slave_registers.v
