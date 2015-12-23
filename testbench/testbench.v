@@ -26,6 +26,10 @@ module testbench (/*AUTOARG*/ ) ;
    wire wb_clk;
    wire wb_rst;
    wire adc_clk;
+   wire [2:0] adc0_clk_speed_select;
+   wire [2:0] adc1_clk_speed_select;
+   wire [2:0] adc2_clk_speed_select;
+   wire [2:0] adc3_clk_speed_select;
    
    syscon system_controller(
                             // Outputs
@@ -52,10 +56,6 @@ module testbench (/*AUTOARG*/ ) ;
 `include "hack.vh"
    
    wire interrupt;
-   wire [2:0] adc0_clk_speed_select;
-   wire [2:0] adc1_clk_speed_select;
-   wire [2:0] adc2_clk_speed_select;
-   wire [2:0] adc3_clk_speed_select;
    
    
    //

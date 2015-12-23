@@ -76,15 +76,7 @@ module wb_daq_top (/*AUTOARG*/
    output wire [2:0]           adc0_clk_speed_select;   
    output wire [2:0]           adc1_clk_speed_select;   
    output wire [2:0]           adc2_clk_speed_select;   
-   output wire [2:0]           adc3_clk_speed_select;
-
-   assign adc0_clk_speed_select = daq_channel0_control[4:2];   
-   assign adc1_clk_speed_select = daq_channel1_control[4:2];
-   assign adc2_clk_speed_select = daq_channel2_control[4:2];   
-   assign adc3_clk_speed_select = daq_channel3_control[4:2];
-
-
-   
+   output wire [2:0]           adc3_clk_speed_select;  
    
    wire [master_dw-1:0]        channel0_data_out;
    wire                        channel0_start_sram;
@@ -120,7 +112,13 @@ module wb_daq_top (/*AUTOARG*/
    wire [3:0] grant;
    wire       active;
    wire [1:0] select;
-                   
+               
+   assign adc0_clk_speed_select = daq_channel0_control[4:2];   
+   assign adc1_clk_speed_select = daq_channel1_control[4:2];
+   assign adc2_clk_speed_select = daq_channel2_control[4:2];   
+   assign adc3_clk_speed_select = daq_channel3_control[4:2];
+
+    
    assign bus_master_address = (select == 2'b00) ? daq_channel0_address:
                                (select == 2'b01) ? daq_channel1_address:
                                (select == 2'b10) ? daq_channel2_address:
