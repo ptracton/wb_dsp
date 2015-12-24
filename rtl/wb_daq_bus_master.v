@@ -13,10 +13,10 @@
 module wb_daq_bus_master (/*AUTOARG*/
    // Outputs
    wb_adr_o, wb_dat_o, wb_sel_o, wb_we_o, wb_cyc_o, wb_stb_o,
-   wb_cti_o, wb_bte_o,
+   wb_cti_o, wb_bte_o, data_done,
    // Inputs
    wb_clk, wb_rst, wb_dat_i, wb_ack_i, wb_err_i, wb_rty_i,
-   control_reg, start, address, selection, write, data_wr
+   control_reg, start, fifo_empty, address, selection, write, data_wr
    ) ;
    parameter dw = 32;
    parameter aw = 32;
@@ -46,6 +46,8 @@ module wb_daq_bus_master (/*AUTOARG*/
    // End of automatics
 
    input                start;
+   output reg           data_done; 
+   input                fifo_empty;   
    input [aw-1:0]       address;
    input [3:0]          selection;
    input                write;
@@ -130,7 +132,7 @@ module wb_daq_bus_master (/*AUTOARG*/
         start_ptr    = 0;  
         hold_data_wr = 0;
         base_address = 0;        
-        
+        data_done    = 0;        
      end else begin
         case (state)
           STATE_IDLE: begin
@@ -144,7 +146,8 @@ module wb_daq_bus_master (/*AUTOARG*/
              end_ptr      = 0;
              start_ptr    = 0;
              hold_data_wr = 0;
-             base_address = 0;             
+             base_address = 0;
+             data_done    = 0;             
              if (start) begin
                 base_address = address;                
                 next_state =  STATE_FETCH_WR_PTR;
@@ -209,7 +212,7 @@ module wb_daq_bus_master (/*AUTOARG*/
 
           STATE_WRITE_DATA:begin
              sm_address = wr_ptr;
-             sm_data_wr = hold_data_wr;             
+             sm_data_wr = data_wr;             
              sm_selection = 4'hF;
              sm_write = 1;
              sm_start = 1;
@@ -221,16 +224,23 @@ module wb_daq_bus_master (/*AUTOARG*/
              if (active) begin
                 next_state = STATE_WRITE_DATA_DONE;                
              end else begin
-                next_state = STATE_UPDATE_WR_PTR;                
+                next_state = STATE_UPDATE_WR_PTR;
+                wr_ptr = wr_ptr + 4; 
+                data_done = 1;                
              end
           end
 
           STATE_UPDATE_WR_PTR: begin
-             wr_ptr = wr_ptr + 4;
+             data_done = 0; 
+            
              if (wr_ptr > end_ptr) begin
                 wr_ptr = start_ptr;                
              end
-             next_state = STATE_WRITE_WR_PTR;             
+             if (! fifo_empty) begin
+                next_state = STATE_WRITE_DATA;                
+             end else begin
+                next_state = STATE_WRITE_WR_PTR;
+             end
           end
 
           STATE_WRITE_WR_PTR:begin
@@ -261,18 +271,18 @@ module wb_daq_bus_master (/*AUTOARG*/
    reg [32*8-1:0] state_name;
    always @(*)
      case (state)
-       STATE_IDLE: state_name                  = "STATE_IDLE";
-       STATE_FETCH_WR_PTR: state_name          = "STATE FETCH WR PTR";
-       STATE_FETCH_WR_PTR_DONE: state_name     = "STATE FETCH WR PTR DONE";
-       STATE_FETCH_START_PTR:state_name        = "STATE FETCH START PTR";
-       STATE_FETCH_START_PTR_DONE:state_name   = "STATE FETCH START PTR DONE";
-       STATE_FETCH_END_PTR:state_name          = "STATE FETCH END PTR";
-       STATE_FETCH_END_PTR_DONE:state_name     = "STATE FETCH END PTR DONE";
-       STATE_UPDATE_WR_PTR:state_name          = "STATE UPDATE WR PTR";       
-       STATE_WRITE_DATA:state_name             = "STATE WRITE DATA";       
-       STATE_WRITE_DATA_DONE:state_name        = "STATE WRITE DATA DONE";
-       STATE_WRITE_WR_PTR:state_name           = "STATE WRITE WR PTR";       
-       STATE_WRITE_WR_PTR_DONE:state_name      = "STATE WRITE WR PTR DONE";
+       STATE_IDLE: state_name                  = "IDLE";
+       STATE_FETCH_WR_PTR: state_name          = "FETCH WR PTR";
+       STATE_FETCH_WR_PTR_DONE: state_name     = "FETCH WR PTR DONE";
+       STATE_FETCH_START_PTR:state_name        = "FETCH START PTR";
+       STATE_FETCH_START_PTR_DONE:state_name   = "FETCH START PTR DONE";
+       STATE_FETCH_END_PTR:state_name          = "FETCH END PTR";
+       STATE_FETCH_END_PTR_DONE:state_name     = "FETCH END PTR DONE";
+       STATE_UPDATE_WR_PTR:state_name          = "UPDATE WR PTR";       
+       STATE_WRITE_DATA:state_name             = "WRITE DATA";       
+       STATE_WRITE_DATA_DONE:state_name        = "WRITE DATA DONE";
+       STATE_WRITE_WR_PTR:state_name           = "WRITE WR PTR";       
+       STATE_WRITE_WR_PTR_DONE:state_name      = "WRITE WR PTR DONE";
 
        default: state_name                     = "DEFAULT";
      endcase // case (state)

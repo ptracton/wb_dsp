@@ -3,17 +3,17 @@
 00000000
 
 @80       // Channel 1
-00000000  // Control 
+0000DEAD  // Control 
 00000000  // Status
 91000600  // Start Address
 91000700  // End Address
-91000604  // Read Pointer
-91000608  // Write Pointer, memory location 386
+91000600  // Read Pointer
+91000600  // Write Pointer, memory location 386
 00000000
 00000000
 
 @100      // Channel 0
-00000000  // Control 
+0000BEEF  // Control 
 00000000  // Status
 91000800  // Start Address
 91000900  // End Address

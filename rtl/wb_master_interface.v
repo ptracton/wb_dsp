@@ -42,8 +42,8 @@ module wb_master_interface (/*AUTOARG*/
    input [3:0]         selection;
    input               write;   
    input [dw-1:0]      data_wr;
-   output reg [dw-1:0] data_rd=0;
-   output reg          active=0;
+   output reg [dw-1:0] data_rd;
+   output reg          active;
    
    
    reg [1:0]           state;
@@ -130,9 +130,9 @@ module wb_master_interface (/*AUTOARG*/
    reg [32*8-1:0] state_name;
    always @(*)
      case (state)
-       STATE_IDLE: state_name         = "STATE_IDLE";
-       STATE_WAIT_ACK: state_name     = "STATE_WAIT ACK";
-       STATE_ERROR:state_name         = "STATE ERROR";       
+       STATE_IDLE: state_name         = "IDLE";
+       STATE_WAIT_ACK: state_name     = "WAIT ACK";
+       STATE_ERROR:state_name         = "ERROR";       
        default: state_name            = "DEFAULT";
      endcase // case (state)
    

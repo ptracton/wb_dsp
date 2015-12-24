@@ -9,9 +9,10 @@
 // Status          : Unknown, Use with caution!
 module wb_daq_channel (/*AUTOARG*/
    // Outputs
-   status, data_out, start_sram,
+   status, data_out, start_sram, fifo_empty,
    // Inputs
-   wb_clk, wb_rst, adc_clk, master_enable, control, grant
+   wb_clk, wb_rst, adc_clk, master_enable, control, data_done,
+   fifo_number_samples_terminal, grant
    ) ;
 
 
@@ -24,9 +25,12 @@ module wb_daq_channel (/*AUTOARG*/
    input adc_clk;
    input master_enable;   
    input [dw-1:0] control;
+   input          data_done;   
+   input [5:0]    fifo_number_samples_terminal;   
    output wire [dw-1:0] status;   
    output wire [dw-1:0] data_out;
    output wire         start_sram;
+   output wire         fifo_empty;
    input               grant;
    
 
@@ -72,7 +76,6 @@ module wb_daq_channel (/*AUTOARG*/
                ) ;
 
    wire [dw-1:0]       fifo_data_out;   
-   wire                fifo_empty;
    wire                fifo_full;
    wire [7:0]          fifo_number_samples;
 
@@ -107,6 +110,9 @@ module wb_daq_channel (/*AUTOARG*/
                               // Inputs
                               .wb_clk(wb_clk), 
                               .wb_rst(wb_rst),
+                              .data_done(data_done),
+                              .fifo_number_samples(fifo_number_samples),
+                              .fifo_number_samples_terminal(fifo_number_samples_terminal),
                               .grant(grant),
                               .empty(fifo_empty),
                               .full(fifo_full),

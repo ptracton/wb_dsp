@@ -118,7 +118,22 @@ module wb_daq_top (/*AUTOARG*/
    assign adc2_clk_speed_select = daq_channel2_control[4:2];   
    assign adc3_clk_speed_select = daq_channel3_control[4:2];
 
-    
+
+   wire [2:0] adc0_data_width =  daq_channel0_control[7:5];
+   wire [2:0] adc1_data_width =  daq_channel1_control[7:5];
+   wire [2:0] adc2_data_width =  daq_channel2_control[7:5];
+   wire [2:0] adc3_data_width =  daq_channel3_control[7:5];
+
+   wire [1:0] adc0_decimator_select = daq_channel0_control[9:8];
+   wire [1:0] adc1_decimator_select = daq_channel1_control[9:8];
+   wire [1:0] adc2_decimator_select = daq_channel2_control[9:8];
+   wire [1:0] adc3_decimator_select = daq_channel3_control[9:8];
+   
+   wire [5:0] adc0_fifo_samples_count = daq_channel0_control[15:10];
+   wire [5:0] adc1_fifo_samples_count = daq_channel1_control[15:10];
+   wire [5:0] adc2_fifo_samples_count = daq_channel2_control[15:10];
+   wire [5:0] adc3_fifo_samples_count = daq_channel3_control[15:10];
+   
    assign bus_master_address = (select == 2'b00) ? daq_channel0_address:
                                (select == 2'b01) ? daq_channel1_address:
                                (select == 2'b10) ? daq_channel2_address:
@@ -130,7 +145,24 @@ module wb_daq_top (/*AUTOARG*/
                                (select == 2'b10) ? channel2_data_out:
                                (select == 2'b11) ? channel3_data_out: 32'h0;
                                
-                               
+   wire                                bus_master_fifo_empty;
+   wire                                channel0_fifo_empty;
+   wire                                channel1_fifo_empty;
+   wire                                channel2_fifo_empty;
+   wire                                channel3_fifo_empty;
+   
+   assign bus_master_fifo_empty = (select == 2'b00) ? channel0_fifo_empty:
+                                  (select == 2'b01) ? channel1_fifo_empty:
+                                  (select == 2'b10) ? channel2_fifo_empty:
+                                  (select == 2'b11) ? channel3_fifo_empty: 1;
+
+   wire                                bus_master_data_done;
+   
+   assign channel0_data_done = (select == 2'b00) ? bus_master_data_done: 0;
+   assign channel1_data_done = (select == 2'b01) ? bus_master_data_done: 0;
+   assign channel2_data_done = (select == 2'b10) ? bus_master_data_done: 0;
+   assign channel3_data_done = (select == 2'b11) ? bus_master_data_done: 0;
+   
    
    wb_daq_slave_registers #(.aw(slave_aw), .dw(slave_dw))
    slave_registers 
@@ -175,15 +207,17 @@ module wb_daq_top (/*AUTOARG*/
               .wb_stb_o             (wb_master_stb_o),
               .wb_cti_o             (wb_master_cti_o[2:0]),
               .wb_bte_o             (wb_master_bte_o[1:0]),
+              .data_done            (bus_master_data_done),
               
               // Inputs
               .wb_clk               (wb_clk),
-              .wb_rst               (wb_rst),
+              .wb_rst               (wb_rst),              
               .wb_dat_i             (wb_master_dat_i[master_dw-1:0]),
               .wb_ack_i             (wb_master_ack_i),
               .wb_err_i             (wb_master_err_i),
               .wb_rty_i             (wb_master_rty_i),
 
+              .fifo_empty           (bus_master_fifo_empty),
               .control_reg          (daq_control), 
               .start                (active), 
               .address              (bus_master_address), 
@@ -198,9 +232,13 @@ module wb_daq_top (/*AUTOARG*/
             // Outputs
             .data_out(channel0_data_out), 
             .start_sram(channel0_start_sram),
+            .fifo_empty(channel0_fifo_empty),
+            
             // Inputs
             .wb_clk(wb_clk), 
             .wb_rst(wb_rst),
+            .fifo_number_samples_terminal(adc0_fifo_samples_count),
+            .data_done(channel0_data_done),
             .grant(grant[0]),
             .adc_clk(adc0_clk),
             .control(daq_channel0_control),
@@ -215,9 +253,13 @@ module wb_daq_top (/*AUTOARG*/
             // Outputs
             .data_out(channel1_data_out), 
             .start_sram(channel1_start_sram),
+            .fifo_empty(channel1_fifo_empty),
+            
             // Inputs
             .wb_clk(wb_clk), 
             .wb_rst(wb_rst),
+            .fifo_number_samples_terminal(adc1_fifo_samples_count),
+            .data_done(channel1_data_done),
             .grant(grant[1]),
             .adc_clk(adc1_clk),
             .control(daq_channel1_control),
@@ -231,9 +273,13 @@ module wb_daq_top (/*AUTOARG*/
             // Outputs
             .data_out(channel2_data_out), 
             .start_sram(channel2_start_sram),
+            .fifo_empty(channel2_fifo_empty),
+            
             // Inputs
             .wb_clk(wb_clk), 
             .wb_rst(wb_rst),
+            .fifo_number_samples_terminal(adc2_fifo_samples_count),
+            .data_done(channel2_data_done),
             .grant(grant[2]), 
             .adc_clk(adc2_clk),
             .control(daq_channel2_control),
@@ -247,9 +293,13 @@ module wb_daq_top (/*AUTOARG*/
             // Outputs
             .data_out(channel3_data_out), 
             .start_sram(channel3_start_sram),
+            .fifo_empty(channel3_fifo_empty),
+            
             // Inputs
             .wb_clk(wb_clk), 
             .wb_rst(wb_rst),
+            .fifo_number_samples_terminal(adc3_fifo_samples_count),
+            .data_done(channel3_data_done),
             .grant(grant[3]),
             .adc_clk(adc3_clk),
             .control(daq_channel3_control),
