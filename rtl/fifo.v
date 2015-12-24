@@ -44,7 +44,7 @@ module fifo (/*AUTOARG*/
         if (push) begin
            memory[wr_ptr] <= data_in;
            wr_ptr <= wr_ptr + 1;
-           if (wr_ptr > depth-1) begin
+           if (wr_ptr >= depth-1) begin
               wr_ptr <= 0;              
            end 
         end
@@ -63,7 +63,7 @@ module fifo (/*AUTOARG*/
      end else begin
         if (pop) begin
            rd_ptr <= rd_ptr + 1;
-           if (rd_ptr > depth-1) begin
+           if (rd_ptr >= depth-1) begin
               rd_ptr <= 0;              
            end
         end
