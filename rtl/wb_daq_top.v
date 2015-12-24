@@ -200,7 +200,8 @@ module wb_daq_top (/*AUTOARG*/
             .start_sram(channel0_start_sram),
             // Inputs
             .wb_clk(wb_clk), 
-            .wb_rst(wb_rst), 
+            .wb_rst(wb_rst),
+            .grant(grant[0]),
             .adc_clk(adc0_clk),
             .control(daq_channel0_control),
             .status(daq_channel0_status),
@@ -216,11 +217,12 @@ module wb_daq_top (/*AUTOARG*/
             .start_sram(channel1_start_sram),
             // Inputs
             .wb_clk(wb_clk), 
-            .wb_rst(wb_rst), 
+            .wb_rst(wb_rst),
+            .grant(grant[1]),
             .adc_clk(adc1_clk),
             .control(daq_channel1_control),
             .status(daq_channel1_status),
-            .master_enable(daq_control[1])
+            .master_enable(daq_control[0])
             );
 
    wb_daq_channel #(.dw(32), .adc_dw(8),
@@ -231,11 +233,12 @@ module wb_daq_top (/*AUTOARG*/
             .start_sram(channel2_start_sram),
             // Inputs
             .wb_clk(wb_clk), 
-            .wb_rst(wb_rst), 
+            .wb_rst(wb_rst),
+            .grant(grant[2]), 
             .adc_clk(adc2_clk),
             .control(daq_channel2_control),
             .status(daq_channel2_status),
-            .master_enable(daq_control[2])
+            .master_enable(daq_control[0])
             );
 
    wb_daq_channel #(.dw(32), .adc_dw(8),
@@ -246,14 +249,15 @@ module wb_daq_top (/*AUTOARG*/
             .start_sram(channel3_start_sram),
             // Inputs
             .wb_clk(wb_clk), 
-            .wb_rst(wb_rst), 
+            .wb_rst(wb_rst),
+            .grant(grant[3]),
             .adc_clk(adc3_clk),
             .control(daq_channel3_control),
             .status(daq_channel3_status),
-            .master_enable(daq_control[3])
+            .master_enable(daq_control[0])
             );   
 
-   wire [3:0] request = {channel2_start_sram,
+   wire [3:0] request = {channel3_start_sram,
                          channel2_start_sram,
                          channel1_start_sram,
                          channel0_start_sram};

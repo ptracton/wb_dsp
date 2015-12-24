@@ -11,7 +11,7 @@ module wb_daq_channel (/*AUTOARG*/
    // Outputs
    status, data_out, start_sram,
    // Inputs
-   wb_clk, wb_rst, adc_clk, master_enable, control
+   wb_clk, wb_rst, adc_clk, master_enable, control, grant
    ) ;
 
 
@@ -27,11 +27,14 @@ module wb_daq_channel (/*AUTOARG*/
    output wire [dw-1:0] status;   
    output wire [dw-1:0] data_out;
    output wire         start_sram;
+   input               grant;
    
 
    wire [adc_dw-1:0]   adc_data_out;   
    wire                adc_data_ready;
+   wire                enable = master_enable & control[0];
 
+   
    //
    // Get data from hardware or wherever else it my come from
    //   
@@ -104,6 +107,7 @@ module wb_daq_channel (/*AUTOARG*/
                               // Inputs
                               .wb_clk(wb_clk), 
                               .wb_rst(wb_rst),
+                              .grant(grant),
                               .empty(fifo_empty),
                               .full(fifo_full),
                               .fifo_data_in(fifo_data_out)

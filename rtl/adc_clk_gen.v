@@ -28,7 +28,7 @@ module adc_clk_gen (/*AUTOARG*/
         adc_clk_count <= 0;        
      end else begin
         adc_clk_count <=  adc_clk_count+1;        
-        if (adc_clk_count == adc_clk_count_terminal) begin
+        if (adc_clk_count >= adc_clk_count_terminal) begin
            adc_clk <= ~adc_clk;
            adc_clk_count <= 0;           
         end

@@ -21,7 +21,7 @@
 ../rtl/wb_daq_data_aggregation.v
 ../rtl/wb_daq_channel.v
 ../rtl/fifo.v
- ../rtl/fifo_to_sram.v
+../rtl/fifo_to_sram.v
 ../behavioral/adc/adc.v
 ../testbench/testbench.v
 ../testbench/test_tasks.v

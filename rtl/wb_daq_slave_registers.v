@@ -100,7 +100,7 @@ module wb_daq_slave_registers (/*AUTOARG*/
         daq_channel3_control_reg <= 32'h0000_000C;                
      end else begin
         if (wb_cyc_i & wb_stb_i & wb_we_i) begin
-           case (wb_adr_i)                         
+           case (wb_adr_i[7:0])                         
              `DAQ_CONTROL_REG_OFFSET:begin
                 daq_control_reg[7:0]   <= wb_sel_i[0] ? wb_dat_i[7:0]   : daq_control_reg[7:0];                
                 daq_control_reg[15:8]  <= wb_sel_i[1] ? wb_dat_i[15:8]  : daq_control_reg[15:8];                

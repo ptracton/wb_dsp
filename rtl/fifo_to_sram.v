@@ -12,7 +12,7 @@ module fifo_to_sram (/*AUTOARG*/
    // Outputs
    pop, sram_data_out, sram_start,
    // Inputs
-   wb_clk, wb_rst, empty, full, fifo_data_in
+   wb_clk, wb_rst, empty, full, grant, fifo_data_in
    ) ;
 
    parameter dw=32;
@@ -22,6 +22,7 @@ module fifo_to_sram (/*AUTOARG*/
    input wb_rst;
    input empty;
    input full;
+   input grant;   
    output reg pop;
    input [dw-1:0] fifo_data_in;
    output reg [dw-1:0] sram_data_out;
@@ -37,10 +38,11 @@ module fifo_to_sram (/*AUTOARG*/
            pop <= 1;       
            sram_data_out <= fifo_data_in;
            sram_start <= 1;           
-        end else begin
-           pop <= 0;
+        end else if (grant) begin
            //sram_data_out <= 0;
            sram_start <= 0;           
+        end else begin
+           pop <= 0;
         end
      end // else: !if(wb_rst)   
    

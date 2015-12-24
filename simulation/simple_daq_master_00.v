@@ -43,22 +43,21 @@ module test_case (/*AUTOARG*/ ) ;
       // vector structure
       //
       `TB.master_bfm.write(`WB_DAQ_CHANNEL0_ADDRESS_REG, `WB_DSP_RAM_BASE_ADDRESS+1024, 4'hF, err);
-
+      `TB.master_bfm.write(`WB_DAQ_CHANNEL1_ADDRESS_REG, `WB_DSP_RAM_BASE_ADDRESS+512, 4'hF, err);
 
       //
       // Turn on Channels 0 and 1
       //
-      `TB.master_bfm.write(``WB_DAQ_CHANNEL0_CONTROL_REG, 32'h0000_001D, 4'hF, err);
-      `TB.master_bfm.write(``WB_DAQ_CHANNEL1_CONTROL_REG, 32'h0000_0009, 4'hF, err);
-
-      
+      `TB.master_bfm.write(`WB_DAQ_CHANNEL0_CONTROL_REG, 32'h0000_001D, 4'hF, err);
+      `TB.master_bfm.write(`WB_DAQ_CHANNEL1_CONTROL_REG, 32'h0000_0009, 4'hF, err);
       
       //
       // Enable Data Flow
       //
       `TB.master_bfm.write(`WB_DAQ_CONTROL_REG, 32'h0000_0001, 4'hF, err);
+
       
-      #250000;
+      #25000;
       `TEST_COMPLETE;    
    end
    

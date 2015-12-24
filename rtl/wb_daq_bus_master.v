@@ -51,6 +51,7 @@ module wb_daq_bus_master (/*AUTOARG*/
    input                write;
    input [dw-1:0]       data_wr;
 
+   reg [aw-1:0]       base_address;
    reg                sm_start;
    reg [aw-1:0]       sm_address;
    reg [3:0]          sm_selection;
@@ -127,7 +128,8 @@ module wb_daq_bus_master (/*AUTOARG*/
         wr_ptr       = 0;
         end_ptr      = 0;
         start_ptr    = 0;  
-        hold_data_wr =0;
+        hold_data_wr = 0;
+        base_address = 0;        
         
      end else begin
         case (state)
@@ -141,8 +143,10 @@ module wb_daq_bus_master (/*AUTOARG*/
              wr_ptr       = 0;
              end_ptr      = 0;
              start_ptr    = 0;
-             hold_data_wr = 0;             
+             hold_data_wr = 0;
+             base_address = 0;             
              if (start) begin
+                base_address = address;                
                 next_state =  STATE_FETCH_WR_PTR;
                 hold_data_wr = data_wr;                
              end else begin
@@ -150,7 +154,7 @@ module wb_daq_bus_master (/*AUTOARG*/
              end          
           end   
           STATE_FETCH_WR_PTR: begin
-              sm_address = address + `VECTOR_WRITE_POINTER_OFFSET;
+             sm_address = base_address + `VECTOR_WRITE_POINTER_OFFSET;
              sm_selection = 4'hF;
              sm_write = 0;
              sm_start = 1;                
@@ -168,7 +172,7 @@ module wb_daq_bus_master (/*AUTOARG*/
           end   
           
           STATE_FETCH_START_PTR: begin
-             sm_address = address + `VECTOR_START_ADDRESS_OFFSET;
+             sm_address = base_address + `VECTOR_START_ADDRESS_OFFSET;
              sm_selection = 4'hF;
              sm_write = 0;
              sm_start = 1;
@@ -186,7 +190,7 @@ module wb_daq_bus_master (/*AUTOARG*/
           end   
 
           STATE_FETCH_END_PTR: begin
-             sm_address = address + `VECTOR_END_ADDRESS_OFFSET;
+             sm_address = base_address + `VECTOR_END_ADDRESS_OFFSET;
              sm_selection = 4'hF;
              sm_write = 0;
              sm_start = 1;
@@ -230,7 +234,7 @@ module wb_daq_bus_master (/*AUTOARG*/
           end
 
           STATE_WRITE_WR_PTR:begin
-             sm_address = address + `VECTOR_WRITE_POINTER_OFFSET;
+             sm_address = base_address + `VECTOR_WRITE_POINTER_OFFSET;
              sm_data_wr = wr_ptr;             
              sm_selection = 4'hF;
              sm_write = 1;
