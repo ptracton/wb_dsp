@@ -8,7 +8,6 @@ from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg
 
 class QtMpl(FigureCanvasQTAgg):
     def __init__(self, parent):
-        
 
         self.fig = matplotlib.figure.Figure()
 
@@ -16,7 +15,7 @@ class QtMpl(FigureCanvasQTAgg):
             mdates.DateFormatter('%m/%d/%Y'))
         self.fig.gca().xaxis.set_major_locator(
             mdates.DayLocator())
-        FigureCanvasQTAgg.__init__(self, self.fig)			
+        FigureCanvasQTAgg.__init__(self, self.fig)
         self.setParent(parent)
 
         self.axes = self.fig.add_subplot(111)
@@ -29,3 +28,14 @@ class QtMpl(FigureCanvasQTAgg):
                                         QtGui.QSizePolicy.Expanding)
         # notify the system of updated policy
         FigureCanvasQTAgg.updateGeometry(self)
+
+    def addLine(self, x, y, title):
+
+        self.axes.plot_date(x, y, label=title, ls='-')
+        self.axes.legend()
+
+        # http://stackoverflow.com/questions/4098131/matplotlib-update-a-plot
+
+        self.fig.canvas.draw()
+        self.fig.autofmt_xdate()
+        return
