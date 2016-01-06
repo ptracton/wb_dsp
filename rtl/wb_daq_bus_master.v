@@ -17,7 +17,7 @@ module wb_daq_bus_master (/*AUTOARG*/
    // Inputs
    wb_clk, wb_rst, wb_dat_i, wb_ack_i, wb_err_i, wb_rty_i,
    control_reg, daq_channel_control, channel_select, start,
-   fifo_empty, address, selection, write, data_wr
+   fifo_empty, address, data_wr
    ) ;
    parameter dw = 32;
    parameter aw = 32;
@@ -52,8 +52,6 @@ module wb_daq_bus_master (/*AUTOARG*/
    output reg           data_done; 
    input                fifo_empty;   
    input [aw-1:0]       address;
-   input [3:0]          selection;
-   input                write;
    input [dw-1:0]       data_wr;
    output reg [3:0]     begin_equation;
    
@@ -93,7 +91,7 @@ module wb_daq_bus_master (/*AUTOARG*/
                               .wb_rty_i         (wb_rty_i),
                               .start            (sm_start),
                               .address          (sm_address[aw-1:0]),
-                              .selection        (selection[3:0]),
+                              .selection        (sm_selection[3:0]),
                               .write            (sm_write),
                               .data_wr          (sm_data_wr[dw-1:0]));
 

@@ -235,8 +235,6 @@ module wb_daq_top (/*AUTOARG*/
               .control_reg          (daq_control), 
               .start                (active), 
               .address              (bus_master_address), 
-              .selection            (4'hF), 
-              .write                (1'b1), 
               .data_wr              (bus_master_data_wr),
               .daq_channel_control  (bus_master_daq_channel_control)
               );

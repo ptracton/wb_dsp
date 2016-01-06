@@ -17,7 +17,9 @@
 `define WB_CLK      `TB.wb_clk
 `define DSP         `TB.dsp
 `define DAQ         `TB.daq
-
+`define RAM         `TB.wb_ram0
+`define RAM0        `RAM.ram0
+`define MEMORY      `RAM0.mem
 
 `define TEST_CASE       `TB.test_case
 `define SIMULATION_NAME `TEST_CASE.simulation_name
