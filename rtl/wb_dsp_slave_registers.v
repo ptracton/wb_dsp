@@ -13,7 +13,7 @@
 module wb_dsp_slave_registers (/*AUTOARG*/
    // Outputs
    wb_dat_o, wb_ack_o, wb_err_o, wb_rty_o, equation_address_reg,
-   control_reg, slave_reg3, interrupt,
+   control_reg, interrupt,
    // Inputs
    wb_clk, wb_rst, wb_adr_i, wb_dat_i, wb_sel_i, wb_we_i, wb_cyc_i,
    wb_stb_i, wb_cti_i, wb_bte_i, status_reg
@@ -40,7 +40,6 @@ module wb_dsp_slave_registers (/*AUTOARG*/
    input [dw-1:0]         status_reg;   
    output reg [dw-1:0]    equation_address_reg;
    output reg [dw-1:0]    control_reg;
-   output reg [dw-1:0]    slave_reg3;
    output reg             interrupt = 0;
    
 
@@ -89,14 +88,7 @@ module wb_dsp_slave_registers (/*AUTOARG*/
                 control_reg[23:16] <= wb_sel_i[2] ? wb_dat_i[23:16] : control_reg[23:16];
                 control_reg[31:24] <= wb_sel_i[3] ? wb_dat_i[31:24] : control_reg[31:24];
              end
-                          
-             4'hC:begin
-                slave_reg3[7:0]   <= wb_sel_i[0] ? wb_dat_i[7:0]   : slave_reg3[7:0];                
-                slave_reg3[15:8]  <= wb_sel_i[1] ? wb_dat_i[15:8]  : slave_reg3[15:8];                
-                slave_reg3[23:16] <= wb_sel_i[2] ? wb_dat_i[23:16] : slave_reg3[23:16]; 
-                slave_reg3[31:24] <= wb_sel_i[3] ? wb_dat_i[31:24] : slave_reg3[31:24];               
-             end 
-           endcase // case (wb_adr_i[3:0])
+           endcase // case (wb_adr_i[3:0])           
         end // if (wb_cyc_i & wb_stb_i & wb_we_i)        
      end // else: !if(wb_rst)
    
@@ -112,7 +104,6 @@ module wb_dsp_slave_registers (/*AUTOARG*/
              `EQUATION_ADDRESS_REG_OFFSET: wb_dat_o <= equation_address_reg;
              `CONTROL_REG_OFFSET         : wb_dat_o <= control_reg;
              `STATUS_REG_OFFSET          : wb_dat_o <= status_reg;
-             4'hC                        : wb_dat_o <= slave_reg3;
            endcase // case (wb_adr_i[3:0])           
         end
      end // else: !if(wb_rst)

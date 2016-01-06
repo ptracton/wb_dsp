@@ -193,7 +193,11 @@ module wb_daq_top (/*AUTOARG*/
       .wb_cyc_i                         (wb_slave_cyc_i),
       .wb_stb_i                         (wb_slave_stb_i),
       .wb_cti_i                         (wb_slave_cti_i[2:0]),
-      .wb_bte_i                         (wb_slave_bte_i[1:0])
+      .wb_bte_i                         (wb_slave_bte_i[1:0]),
+      .daq_channel0_status_reg          (32'b0),
+      .daq_channel1_status_reg          (32'b0),
+      .daq_channel2_status_reg          (32'b0),      
+      .daq_channel3_status_reg          (32'b0)
       );
    
    wb_daq_bus_master #(.aw(master_aw), .dw(master_dw))

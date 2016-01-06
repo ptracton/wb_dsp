@@ -71,7 +71,7 @@ module wb_daq_channel (/*AUTOARG*/
                .wb_clk(wb_clk), 
                .wb_rst(wb_rst), 
                .data_ready(adc_data_ready), 
-               .data_width(0), 
+               .data_width(2'b0), 
                .adc_data_in(adc_data_out)
                ) ;
 
@@ -111,7 +111,7 @@ module wb_daq_channel (/*AUTOARG*/
                               .wb_clk(wb_clk), 
                               .wb_rst(wb_rst),
                               .data_done(data_done),
-                              .fifo_number_samples(fifo_number_samples),
+                              .fifo_number_samples(fifo_number_samples[5:0]),
                               .fifo_number_samples_terminal(fifo_number_samples_terminal),
                               .grant(grant),
                               .empty(fifo_empty),
