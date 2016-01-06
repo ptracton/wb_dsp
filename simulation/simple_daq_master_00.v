@@ -48,8 +48,8 @@ module test_case (/*AUTOARG*/ ) ;
       //
       // Turn on Channels 0 and 1
       //
-      `TB.master_bfm.write(`WB_DAQ_CHANNEL0_CONTROL_REG, 32'h0000_101D, 4'hF, err);
-      `TB.master_bfm.write(`WB_DAQ_CHANNEL1_CONTROL_REG, 32'h0000_2015, 4'hF, err);
+      `TB.master_bfm.write(`WB_DAQ_CHANNEL0_CONTROL_REG, 32'h000A_101D, 4'hF, err);
+      `TB.master_bfm.write(`WB_DAQ_CHANNEL1_CONTROL_REG, 32'h0010_2015, 4'hF, err);
       
       //
       // Enable Data Flow

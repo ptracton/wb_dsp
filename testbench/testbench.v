@@ -56,6 +56,7 @@ module testbench (/*AUTOARG*/ ) ;
 `include "hack.vh"
    
    wire interrupt;
+   wire [3:0]  begin_equation;
    
    
    //
@@ -120,6 +121,7 @@ module testbench (/*AUTOARG*/ ) ;
                   .adc1_clk_speed_select(adc1_clk_speed_select),
                   .adc2_clk_speed_select(adc2_clk_speed_select), 
                   .adc3_clk_speed_select(adc3_clk_speed_select),
+                  .begin_equation(begin_equation),
          
                   // Inputs         
                   .adc0_clk(adc0_clk),
@@ -164,7 +166,8 @@ module testbench (/*AUTOARG*/ ) ;
    //
    // SRAM
    //
- 
+   assign wb_s2m_wb_ram0_rty = 0;
+   
    wb_ram #(.depth(8192),
             .memfile(ram_image))
    wb_ram0 (

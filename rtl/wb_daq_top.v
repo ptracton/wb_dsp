@@ -13,7 +13,7 @@ module wb_daq_top (/*AUTOARG*/
    wb_master_cyc_o, wb_master_stb_o, wb_master_cti_o, wb_master_bte_o,
    wb_slave_dat_o, wb_slave_ack_o, wb_slave_err_o, wb_slave_rty_o,
    interrupt, adc0_clk_speed_select, adc1_clk_speed_select,
-   adc2_clk_speed_select, adc3_clk_speed_select,
+   adc2_clk_speed_select, adc3_clk_speed_select, begin_equation,
    // Inputs
    adc0_clk, adc1_clk, adc2_clk, adc3_clk, wb_clk, wb_rst,
    wb_master_dat_i, wb_master_ack_i, wb_master_err_i, wb_master_rty_i,
@@ -77,6 +77,8 @@ module wb_daq_top (/*AUTOARG*/
    output wire [2:0]           adc1_clk_speed_select;   
    output wire [2:0]           adc2_clk_speed_select;   
    output wire [2:0]           adc3_clk_speed_select;  
+
+   output wire [3:0]           begin_equation;
    
    wire [master_dw-1:0]        channel0_data_out;
    wire                        channel0_start_sram;
@@ -163,6 +165,12 @@ module wb_daq_top (/*AUTOARG*/
    assign channel2_data_done = (select == 2'b10) ? bus_master_data_done: 0;
    assign channel3_data_done = (select == 2'b11) ? bus_master_data_done: 0;
    
+   wire [master_dw-1:0]                bus_master_daq_channel_control;
+   assign bus_master_daq_channel_control = (select == 2'b00) ? daq_channel0_control:
+                                           (select == 2'b01) ? daq_channel1_control:
+                                           (select == 2'b10) ? daq_channel2_control:
+                                           (select == 2'b11) ? daq_channel3_control: 0;
+   
    
    wb_daq_slave_registers #(.aw(slave_aw), .dw(slave_dw))
    slave_registers 
@@ -212,6 +220,8 @@ module wb_daq_top (/*AUTOARG*/
               .wb_cti_o             (wb_master_cti_o[2:0]),
               .wb_bte_o             (wb_master_bte_o[1:0]),
               .data_done            (bus_master_data_done),
+              .begin_equation       (begin_equation),
+              .channel_select       (select),
               
               // Inputs
               .wb_clk               (wb_clk),
@@ -227,7 +237,8 @@ module wb_daq_top (/*AUTOARG*/
               .address              (bus_master_address), 
               .selection            (4'hF), 
               .write                (1'b1), 
-              .data_wr              (bus_master_data_wr)
+              .data_wr              (bus_master_data_wr),
+              .daq_channel_control  (bus_master_daq_channel_control)
               );
 
    wb_daq_channel #(.dw(32), .adc_dw(8),

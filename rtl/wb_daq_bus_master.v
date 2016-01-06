@@ -13,10 +13,11 @@
 module wb_daq_bus_master (/*AUTOARG*/
    // Outputs
    wb_adr_o, wb_dat_o, wb_sel_o, wb_we_o, wb_cyc_o, wb_stb_o,
-   wb_cti_o, wb_bte_o, data_done,
+   wb_cti_o, wb_bte_o, data_done, begin_equation,
    // Inputs
    wb_clk, wb_rst, wb_dat_i, wb_ack_i, wb_err_i, wb_rty_i,
-   control_reg, start, fifo_empty, address, selection, write, data_wr
+   control_reg, daq_channel_control, channel_select, start,
+   fifo_empty, address, selection, write, data_wr
    ) ;
    parameter dw = 32;
    parameter aw = 32;
@@ -37,7 +38,9 @@ module wb_daq_bus_master (/*AUTOARG*/
    input                wb_err_i;
    input                wb_rty_i;
    input [dw-1:0]       control_reg;
-
+   input [dw-1:0]       daq_channel_control;
+   input [1:0]          channel_select;
+   
    /*AUTOREG*/
    /*AUTOWIRE*/
    // Beginning of automatic wires (for undeclared instantiated-module outputs)
@@ -52,7 +55,8 @@ module wb_daq_bus_master (/*AUTOARG*/
    input [3:0]          selection;
    input                write;
    input [dw-1:0]       data_wr;
-
+   output reg [3:0]     begin_equation;
+   
    reg [aw-1:0]       base_address;
    reg                sm_start;
    reg [aw-1:0]       sm_address;
@@ -61,10 +65,12 @@ module wb_daq_bus_master (/*AUTOARG*/
    reg [dw-1:0]       sm_data_wr;
    reg [dw-1:0]       hold_data_wr;
    reg [dw-1:0]       sm_data_rd;
-
+   reg [dw-1:0]       sm_daq_channel_control;
    reg [dw-1:0]       wr_ptr;
    reg [dw-1:0]       start_ptr;
    reg [dw-1:0]       end_ptr;
+   reg [dw-1:0]       sm_status;
+   reg [1:0]          sm_channel_select;
    
    wb_master_interface master(/*AUTOINST*/
                               // Outputs
@@ -87,28 +93,32 @@ module wb_daq_bus_master (/*AUTOARG*/
                               .wb_rty_i         (wb_rty_i),
                               .start            (sm_start),
                               .address          (sm_address[aw-1:0]),
-                              .selection        (sm_selection[3:0]),
+                              .selection        (selection[3:0]),
                               .write            (sm_write),
                               .data_wr          (sm_data_wr[dw-1:0]));
 
 
-   reg [3:0]            state;
-   reg [3:0]            next_state;
+   reg [4:0]            state;
+   reg [4:0]            next_state;
    
-   parameter STATE_IDLE                 = 4'h0;
-   parameter STATE_FETCH_WR_PTR         = 4'h1;
-   parameter STATE_FETCH_WR_PTR_DONE    = 4'h2;
-   parameter STATE_FETCH_START_PTR      = 4'h3;
-   parameter STATE_FETCH_START_PTR_DONE = 4'h4;
-   parameter STATE_FETCH_END_PTR        = 4'h5;
-   parameter STATE_FETCH_END_PTR_DONE   = 4'h6;
-   parameter STATE_WRITE_DATA           = 4'h7;
-   parameter STATE_WRITE_DATA_DONE      = 4'h8;
-   parameter STATE_UPDATE_WR_PTR        = 4'h9;
-   parameter STATE_WRITE_WR_PTR         = 4'hA;
-   parameter STATE_WRITE_WR_PTR_DONE    = 4'hB;      
-   parameter STATE_RETRY                = 4'hE;   
-   parameter STATE_ERROR                = 4'hF;
+   parameter STATE_IDLE                 = 5'h00;
+   parameter STATE_FETCH_WR_PTR         = 5'h01;
+   parameter STATE_FETCH_WR_PTR_DONE    = 5'h02;
+   parameter STATE_FETCH_STATUS         = 5'h03;
+   parameter STATE_FETCH_STATUS_DONE    = 5'h04;   
+   parameter STATE_FETCH_START_PTR      = 5'h05;
+   parameter STATE_FETCH_START_PTR_DONE = 5'h06;
+   parameter STATE_FETCH_END_PTR        = 5'h07;
+   parameter STATE_FETCH_END_PTR_DONE   = 5'h08;
+   parameter STATE_WRITE_DATA           = 5'h09;
+   parameter STATE_WRITE_DATA_DONE      = 5'h0A;
+   parameter STATE_UPDATE_WR_PTR        = 5'h0B;
+   parameter STATE_WRITE_WR_PTR         = 5'h0C;
+   parameter STATE_WRITE_WR_PTR_DONE    = 5'h0D;
+   parameter STATE_WRITE_STATUS         = 5'h0E;
+   parameter STATE_WRITE_STATUS_DONE    = 5'h0F;   
+   parameter STATE_RETRY                = 5'h1E;   
+   parameter STATE_ERROR                = 5'h1F;
    
    
    always @(posedge wb_clk)
@@ -132,7 +142,11 @@ module wb_daq_bus_master (/*AUTOARG*/
         start_ptr    = 0;  
         hold_data_wr = 0;
         base_address = 0;        
-        data_done    = 0;        
+        data_done    = 0;
+        sm_status    = 0;  
+        begin_equation = 0;
+        sm_daq_channel_control = 0; 
+        sm_channel_select = 0;        
      end else begin
         case (state)
           STATE_IDLE: begin
@@ -147,11 +161,17 @@ module wb_daq_bus_master (/*AUTOARG*/
              start_ptr    = 0;
              hold_data_wr = 0;
              base_address = 0;
-             data_done    = 0;             
+             data_done    = 0;
+             sm_status    = 0; 
+             begin_equation = 0;
+             sm_daq_channel_control = 0; 
+             sm_channel_select = 0;               
              if (start) begin
                 base_address = address;                
                 next_state =  STATE_FETCH_WR_PTR;
-                hold_data_wr = data_wr;                
+                hold_data_wr = data_wr;         
+                sm_daq_channel_control = daq_channel_control; 
+                sm_channel_select = channel_select;                       
              end else begin
                 next_state =  STATE_IDLE;                 
              end          
@@ -170,9 +190,27 @@ module wb_daq_bus_master (/*AUTOARG*/
                 next_state =  STATE_FETCH_WR_PTR_DONE;
              end else begin       
                 wr_ptr = data_rd;                
-                next_state = STATE_FETCH_START_PTR;                
+                next_state = STATE_FETCH_STATUS;                
              end             
           end   
+
+          STATE_FETCH_STATUS: begin
+             sm_address = base_address + `VECTOR_STATUS_OFFSET;
+             sm_selection = 4'hF;
+             sm_write = 0;
+             sm_start = 1;
+             next_state = STATE_FETCH_STATUS_DONE;             
+          end
+
+          STATE_FETCH_STATUS_DONE: begin
+             sm_start = 0;             
+             if (active) begin                               
+                next_state =  STATE_FETCH_STATUS_DONE;
+             end else begin       
+                sm_status = data_rd;                
+                next_state = STATE_FETCH_START_PTR;                
+             end             
+          end 
           
           STATE_FETCH_START_PTR: begin
              sm_address = base_address + `VECTOR_START_ADDRESS_OFFSET;
@@ -226,7 +264,8 @@ module wb_daq_bus_master (/*AUTOARG*/
              end else begin
                 next_state = STATE_UPDATE_WR_PTR;
                 wr_ptr = wr_ptr + 4; 
-                data_done = 1;                
+                data_done = 1;  
+                sm_status[31:16] = sm_status[31:16] + 1;              
              end
           end
 
@@ -257,7 +296,33 @@ module wb_daq_bus_master (/*AUTOARG*/
              if (active) begin
                 next_state = STATE_WRITE_WR_PTR_DONE;                
              end else begin
-                next_state = STATE_IDLE;                
+                next_state = STATE_WRITE_STATUS;
+                if (sm_status[31:16] >= sm_daq_channel_control[31:16]) begin
+                   begin_equation = 1;
+                   sm_status [31:16] = 0;
+                   begin_equation[0] = (sm_channel_select == 2'b00);
+                   begin_equation[1] = (sm_channel_select == 2'b01);
+                   begin_equation[2] = (sm_channel_select == 2'b10);
+                   begin_equation[3] = (sm_channel_select == 2'b11);                   
+                end                
+             end
+          end
+
+          STATE_WRITE_STATUS:begin
+             sm_address = base_address + `VECTOR_STATUS_OFFSET;
+             sm_data_wr = sm_status;             
+             sm_selection = 4'hF;
+             sm_write = 1;
+             sm_start = 1;
+             next_state = STATE_WRITE_STATUS_DONE;             
+          end
+
+          STATE_WRITE_STATUS_DONE: begin
+             sm_start = 0;     
+             if (active) begin
+                next_state = STATE_WRITE_STATUS_DONE;                
+             end else begin
+                next_state = STATE_IDLE;                  
              end
           end
           
@@ -274,6 +339,8 @@ module wb_daq_bus_master (/*AUTOARG*/
        STATE_IDLE: state_name                  = "IDLE";
        STATE_FETCH_WR_PTR: state_name          = "FETCH WR PTR";
        STATE_FETCH_WR_PTR_DONE: state_name     = "FETCH WR PTR DONE";
+       STATE_FETCH_STATUS: state_name          = "FETCH STATUS";
+       STATE_FETCH_STATUS_DONE: state_name     = "FETCH STATUS DONE";       
        STATE_FETCH_START_PTR:state_name        = "FETCH START PTR";
        STATE_FETCH_START_PTR_DONE:state_name   = "FETCH START PTR DONE";
        STATE_FETCH_END_PTR:state_name          = "FETCH END PTR";
@@ -283,7 +350,8 @@ module wb_daq_bus_master (/*AUTOARG*/
        STATE_WRITE_DATA_DONE:state_name        = "WRITE DATA DONE";
        STATE_WRITE_WR_PTR:state_name           = "WRITE WR PTR";       
        STATE_WRITE_WR_PTR_DONE:state_name      = "WRITE WR PTR DONE";
-
+       STATE_WRITE_STATUS:state_name           = "WRITE STATUS";       
+       STATE_WRITE_STATUS_DONE:state_name      = "WRITE STATUS DONE";
        default: state_name                     = "DEFAULT";
      endcase // case (state)
    
