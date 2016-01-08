@@ -23,7 +23,7 @@ module test_case ();
    parameter channel2_adc_image = "simple_slave_00_adc.mem";
    parameter channel3_adc_image = "simple_slave_00_adc.mem";
    
-   parameter number_of_tests = 1032;
+   parameter number_of_tests = 1035;
 
    reg  err;
    reg [31:0] data_out;
@@ -36,7 +36,11 @@ module test_case ();
       @(negedge `WB_RST);
       @(posedge `WB_CLK);
 
-      `TB.master_bfm.write(`WB_DSP_EQUATION_ADDRESS_REG, 32'h1122_3344, 4'hF, err);
+      `TB.master_bfm.write(`WB_DSP_EQUATION0_ADDRESS_REG, 32'h1122_3344, 4'hF, err);
+      `TB.master_bfm.write(`WB_DSP_EQUATION1_ADDRESS_REG, 32'h5566_7788, 4'hF, err);
+      `TB.master_bfm.write(`WB_DSP_EQUATION2_ADDRESS_REG, 32'h99aa_bbcc, 4'hF, err);
+      `TB.master_bfm.write(`WB_DSP_EQUATION3_ADDRESS_REG, 32'hddee_ff00, 4'hF, err);
+      
       `TB.master_bfm.write(`WB_DSP_CONTROL_REG, 32'h5566_7788, 4'hF, err);
       `TB.master_bfm.write(`WB_DAQ_CONTROL_REG, 32'h99AA_BBCC, 4'hF, err);
       `TB.master_bfm.write(`WB_DAQ_CHANNEL0_CONTROL_REG, 32'h1234_5678, 4'hF, err);
@@ -44,8 +48,22 @@ module test_case ();
       `TB.master_bfm.write(`WB_DAQ_CHANNEL2_CONTROL_REG, 32'hA5B6_C7D8, 4'hF, err);
       `TB.master_bfm.write(`WB_DAQ_CHANNEL3_CONTROL_REG, 32'hE9FA_DEAD, 4'hF, err);
 
-      `TB.master_bfm.read_burst(`WB_DSP_EQUATION_ADDRESS_REG, data_out, 4'hF, 1, 0, err);
-      `TEST_COMPARE("DSP Equation Read", 32'h1122_3344, data_out);
+      @(posedge `WB_CLK);
+      `TB.master_bfm.read_burst(`WB_DSP_EQUATION0_ADDRESS_REG, data_out, 4'hF, 1, 0, err);
+      `TEST_COMPARE("DSP Equation0 Read", 32'h1122_3344, data_out);
+
+      @(posedge `WB_CLK);
+      `TB.master_bfm.read_burst(`WB_DSP_EQUATION1_ADDRESS_REG, data_out, 4'hF, 1, 0, err);
+      `TEST_COMPARE("DSP Equation1 Read", 32'h5566_7788, data_out);
+
+      @(posedge `WB_CLK);
+      `TB.master_bfm.read_burst(`WB_DSP_EQUATION2_ADDRESS_REG, data_out, 4'hF, 1, 0, err);
+      `TEST_COMPARE("DSP Equation2 Read", 32'h99aa_bbcc, data_out);
+
+      @(posedge `WB_CLK);
+      `TB.master_bfm.read_burst(`WB_DSP_EQUATION3_ADDRESS_REG, data_out, 4'hF, 1, 0, err);
+      `TEST_COMPARE("DSP Equation3 Read", 32'hddee_ff00, data_out);
+
 
       @(posedge `WB_CLK);
       `TB.master_bfm.read_burst(`WB_DSP_CONTROL_REG, data_out, 4'hF, 1, 0, err);
@@ -54,7 +72,7 @@ module test_case ();
 
       @(posedge `WB_CLK);
       `TB.master_bfm.read_burst(`WB_DSP_STATUS_REG, data_out, 4'hF, 1, 0, err);
-      `TEST_COMPARE("DSP Status Read", 32'h0, data_out);      
+      `TEST_COMPARE("DSP Status Read", 32'h1, data_out);      
 
 
 

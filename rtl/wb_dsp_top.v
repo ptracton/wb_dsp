@@ -15,10 +15,10 @@ module wb_dsp_top (/*AUTOARG*/
    wb_master_bte_o, wb_slave_dat_o, wb_slave_ack_o, wb_slave_err_o,
    wb_slave_rty_o,
    // Inputs
-   wb_clk, wb_rst, wb_master_dat_i, wb_master_ack_i, wb_master_err_i,
-   wb_master_rty_i, wb_slave_adr_i, wb_slave_dat_i, wb_slave_sel_i,
-   wb_slave_we_i, wb_slave_cyc_i, wb_slave_stb_i, wb_slave_cti_i,
-   wb_slave_bte_i
+   wb_clk, wb_rst, begin_equation, wb_master_dat_i, wb_master_ack_i,
+   wb_master_err_i, wb_master_rty_i, wb_slave_adr_i, wb_slave_dat_i,
+   wb_slave_sel_i, wb_slave_we_i, wb_slave_cyc_i, wb_slave_stb_i,
+   wb_slave_cti_i, wb_slave_bte_i
    ) ;
 
    parameter master_dw = 32;
@@ -32,6 +32,7 @@ module wb_dsp_top (/*AUTOARG*/
    input                  wb_clk;
    input                  wb_rst;
    output wire            interrupt;
+   input [3:0]            begin_equation;
    
    //
    // Master Interface
@@ -65,7 +66,10 @@ module wb_dsp_top (/*AUTOARG*/
    output wire                wb_slave_err_o;
    output wire                wb_slave_rty_o;
 
-   wire [slave_dw-1:0]        equation_address_reg;
+   wire [slave_dw-1:0]        equation0_address_reg;
+   wire [slave_dw-1:0]        equation1_address_reg;
+   wire [slave_dw-1:0]        equation2_address_reg;
+   wire [slave_dw-1:0]        equation3_address_reg;   
    wire [slave_dw-1:0]        control_reg;
    wire [slave_dw-1:0]        status_reg;
    
@@ -78,7 +82,10 @@ module wb_dsp_top (/*AUTOARG*/
       .wb_ack_o                         (wb_slave_ack_o),
       .wb_err_o                         (wb_slave_err_o),
       .wb_rty_o                         (wb_slave_rty_o),
-      .equation_address_reg             (equation_address_reg[slave_dw-1:0]),
+      .equation0_address_reg (equation0_address_reg[slave_dw-1:0]),
+      .equation1_address_reg (equation1_address_reg[slave_dw-1:0]),
+      .equation2_address_reg (equation2_address_reg[slave_dw-1:0]),
+      .equation3_address_reg (equation3_address_reg[slave_dw-1:0]),      
       .control_reg                      (control_reg[slave_dw-1:0]),
 
       // Inputs
@@ -95,7 +102,7 @@ module wb_dsp_top (/*AUTOARG*/
       .wb_bte_i                         (wb_slave_bte_i[1:0])
       );
    
-   wb_dsp_control #(.aw(master_aw), .dw(master_dw))
+   wb_dsp_equation_sm #(.aw(master_aw), .dw(master_dw))
      control(
              // Outputs
              .wb_adr_o             (wb_master_adr_o[master_aw-1:0]),
@@ -115,8 +122,11 @@ module wb_dsp_top (/*AUTOARG*/
              .wb_ack_i             (wb_master_ack_i),
              .wb_err_i             (wb_master_err_i),
              .wb_rty_i             (wb_master_rty_i),
-             
-             .equation_address_reg (equation_address_reg[slave_dw-1:0]),
+             .begin_equation       (begin_equation),
+             .equation0_address_reg (equation0_address_reg[slave_dw-1:0]),
+             .equation1_address_reg (equation1_address_reg[slave_dw-1:0]),
+             .equation2_address_reg (equation2_address_reg[slave_dw-1:0]),
+             .equation3_address_reg (equation3_address_reg[slave_dw-1:0]),
              .control_reg          (control_reg[slave_dw-1:0])
              );
    

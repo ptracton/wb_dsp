@@ -79,7 +79,8 @@ module testbench (/*AUTOARG*/ ) ;
                   .wb_slave_rty_o(wb_s2m_wb_dsp_slave_rty),
                   // Inputs
                   .wb_clk(wb_clk), 
-                  .wb_rst(wb_rst), 
+                  .wb_rst(wb_rst),
+                  .begin_equation(begin_equation),
                   .wb_master_dat_i(wb_s2m_wb_dsp_master_dat), 
                   .wb_master_ack_i(wb_s2m_wb_dsp_master_ack), 
                   .wb_master_err_i(wb_s2m_wb_dsp_master_err),

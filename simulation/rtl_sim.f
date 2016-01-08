@@ -10,8 +10,7 @@
 
 ../rtl/syscon.v
 ../rtl/adc_clk_gen.v
-../rtl/wb_dsp.v
-../rtl/wb_dsp_control.v
+../rtl/wb_dsp_equation_sm.v
 ../rtl/wb_dsp_slave_registers.v
 ../rtl/wb_dsp_top.v
 ../rtl/wb_daq_bus_master.v
