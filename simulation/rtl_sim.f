@@ -10,7 +10,9 @@
 
 ../rtl/syscon.v
 ../rtl/adc_clk_gen.v
-../rtl/wb_dsp_equation_sm.v
+../rtl/wb_dsp_algorithm_sm.v
+../rtl/wb_dsp_equations_top.v
+../rtl/equation_sum.v
 ../rtl/wb_dsp_slave_registers.v
 ../rtl/wb_dsp_top.v
 ../rtl/wb_daq_bus_master.v

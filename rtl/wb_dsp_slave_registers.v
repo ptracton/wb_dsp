@@ -80,6 +80,15 @@ module wb_dsp_slave_registers (/*AUTOARG*/
         equation3_address_reg <= 32'b0;
         control_reg <= 32'b0;
      end else begin
+
+        //
+        // Self Clearing Bit
+        //          
+        if (control_reg [0] ) begin
+           control_reg[`CONTROL_REG_BEGIN_EQUATION] = 0;           
+        end
+
+        
         if (wb_cyc_i & wb_stb_i & wb_we_i) begin
            case (wb_adr_i[7:0])
              `EQUATION0_ADDRESS_REG_OFFSET: begin

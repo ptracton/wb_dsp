@@ -42,5 +42,6 @@
 	          "executable" : "./a.out",
 	          "arguments"  : " "
 	      }
-    }
+    },
+    "remove_files" : "hack.vh webtalk* work.testbench.wdb xsim* xvlog* xelab*"
 }

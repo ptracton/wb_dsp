@@ -32,5 +32,6 @@
             "executable" : "./a.out",
             "arguments"  : " "
         }
-    }
+    },
+    "remove_files": "INCA_libs/ cds.lib *.shm ncverilog.log"
 }

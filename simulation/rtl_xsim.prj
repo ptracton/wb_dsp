@@ -1,8 +1,7 @@
 
 verilog work ../rtl/syscon.v -d SIM
 verilog work ../rtl/adc_clk_gen.v
-verilog work ../rtl/wb_dsp.v
-verilog work ../rtl/wb_dsp_control.v
+verilog work ../rtl/wb_dsp_equation_sm.v
 verilog work ../rtl/wb_dsp_slave_registers.v
 verilog work ../rtl/wb_dsp_top.v
 verilog work ../rtl/wb_daq_bus_master.v

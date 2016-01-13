@@ -12,21 +12,22 @@
     "4" : "run"
     },
     "flow" : {
-    "clean_up" : {
-        "executable" : "rm",
-        "arguments" : "-f dump.vcd a.out hack.vh"
+        "clean_up" : {
+            "executable" : "rm",
+            "arguments" : "-f dump.vcd a.out hack.vh"
+        },
+        "ram_hack":{
+            "executable": "../tools/ram_image_hack.py ",
+            "arguments" : " --simulation $simulation"
+        },
+	      "simulation" : {
+	          "executable": "iverilog",
+	          "arguments" : " -f rtl_sim.f $simulation +define+ICARUS "	
+	      },
+	      "run" : {
+	          "executable" : "./a.out",
+	          "arguments"  : " "
+	      }
     },
-  "ram_hack":{
-      "executable": "../tools/ram_image_hack.py ",
-      "arguments" : " --simulation $simulation"
-  },
-	"simulation" : {
-	    "executable": "iverilog",
-	    "arguments" : " -f rtl_sim.f $simulation +define+ICARUS "	
-	},
-	"run" : {
-	    "executable" : "./a.out",
-	    "arguments"  : " "
-	}
-    }
+    "remove_files": "hack.vh *.vcd a.out"
 }
