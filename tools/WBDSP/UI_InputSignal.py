@@ -17,14 +17,14 @@ class UI_InputSignal(QtGui.QDialog):
         self.Signal = Signal.Signal()
 
         self.StartTimeLabel = QtGui.QLabel("Start Time:")
-        self.StartTimeInput = QtGui.QLineEdit("-1")
+        self.StartTimeInput = QtGui.QLineEdit("-3")
         self.StartTimeHBox = QtGui.QHBoxLayout()
         self.StartTimeHBox.addWidget(self.StartTimeLabel)
         self.StartTimeHBox.addWidget(self.StartTimeInput)
         vbox.addLayout(self.StartTimeHBox)
 
         self.EndTimeLabel = QtGui.QLabel("End Time:")
-        self.EndTimeInput = QtGui.QLineEdit("1")
+        self.EndTimeInput = QtGui.QLineEdit("3")
         self.EndTimeHBox = QtGui.QHBoxLayout()
         self.EndTimeHBox.addWidget(self.EndTimeLabel)
         self.EndTimeHBox.addWidget(self.EndTimeInput)
@@ -55,7 +55,7 @@ class UI_InputSignal(QtGui.QDialog):
         vbox.addLayout(self.AmplitudeHBox)
 
         self.FrequencyLabel = QtGui.QLabel("Signal Frequency:")
-        self.FrequencyInput = QtGui.QLineEdit("10")
+        self.FrequencyInput = QtGui.QLineEdit("1")
         self.FrequencyHBox = QtGui.QHBoxLayout()
         self.FrequencyHBox.addWidget(self.FrequencyLabel)
         self.FrequencyHBox.addWidget(self.FrequencyInput)

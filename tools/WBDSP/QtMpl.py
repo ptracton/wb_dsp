@@ -13,7 +13,7 @@ class QtMpl(FigureCanvasQTAgg):
         self.list_of_signals = []
         self.list_of_subplots = []
         self.sub_plot_number = 0
-        self.grid_spec = gridspec.GridSpec(4, 1)
+        self.grid_spec = gridspec.GridSpec(5, 1)
         
         #self.fig.gca().xaxis.set_major_formatter(
         #    mdates.DateFormatter('%m/%d/%Y'))
@@ -53,14 +53,15 @@ class QtMpl(FigureCanvasQTAgg):
         
     def addSignal(self, signal):
 
-        print (self.sub_plot_number)
+        #print (self.sub_plot_number)
         
         self.list_of_signals.append(signal)
-        print (len(self.list_of_signals))
+        #print (len(self.list_of_signals))
 
         self.sub_plot_number = self.sub_plot_number + 1
         #self.grid_spec = gridspec.GridSpec(self.sub_plot_number, 1)
         subplot = self.fig.add_subplot(self.grid_spec[self.sub_plot_number])
+        subplot.set_title("Signal %d" % (self.sub_plot_number-1))
         self.list_of_subplots.append(subplot)
         subplot.plot(signal.time, signal.data)
         #self.axes.plot(signal.time, signal.data)
@@ -68,4 +69,10 @@ class QtMpl(FigureCanvasQTAgg):
         return
         
     def removeSignal(self):
+        self.sub_plot_number = self.sub_plot_number - 1
+        remove = self.list_of_subplots[-1]
+        self.list_of_subplots.pop()
+        self.list_of_signals.pop()
+        self.fig.delaxes(remove)
+        self.redraw()
         return

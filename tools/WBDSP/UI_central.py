@@ -9,7 +9,7 @@ import numpy as np
 
 import QtMpl
 import UI_InputSignal
-
+import Signal
 
 class UI_central(QtGui.QDialog):
 
@@ -23,9 +23,24 @@ class UI_central(QtGui.QDialog):
 
         self.InputSignal = UI_InputSignal.UI_InputSignal()
         vbox.addWidget(self.InputSignal)
+
         self.connect(self.InputSignal.GraphPushButton,
                      QtCore.SIGNAL("clicked()"),
                      self.GraphPushButton_Clicked)
+
+        self.connect(self.InputSignal.MixSignalsPushButton,
+                     QtCore.SIGNAL("clicked()"),
+                     self.MixedSignalPushButton_Clicked)
+        
+        self.connect(self.InputSignal.RemovePushButton,
+                     QtCore.SIGNAL("clicked()"),
+                     self.RemovePushButton_Clicked)
+
+        self.connect(self.InputSignal.WriteDataPushButton,
+                     QtCore.SIGNAL("clicked()"),
+                     self.WriteFilePushButton_Clicked)
+
+        
         self.graph = QtMpl.QtMpl(parent=None)
         vbox.addWidget(self.graph)
 
@@ -36,7 +51,7 @@ class UI_central(QtGui.QDialog):
         """
         """
 
-        print ("Clicked")
+        print ("Graph Clicked")
         amplitude = float(self.InputSignal.AmplitudeInput.displayText())
         frequency = float(self.InputSignal.FrequencyInput.displayText())
         sample_frequency = float(self.InputSignal.SampleFrequencyInput.displayText())
@@ -45,15 +60,15 @@ class UI_central(QtGui.QDialog):
         phase     = float(self.InputSignal.PhaseInput.displayText())
         signal    = self.InputSignal.SignalTypeComboBox.currentText()
 
-        print (amplitude)
-        print (frequency)
-        print (phase)
+        #print (amplitude)
+        #print (frequency)
+        #print (phase)
         print (signal)
-        print(sample_frequency)
+        #print(sample_frequency)
 
         self.InputSignal.Signal.amplitude = amplitude
         self.InputSignal.Signal.sample_frequency = sample_frequency
-        self.InputSignal.Signal.frequency = frequency
+        self.InputSignal.Signal.signal_frequency = frequency
         self.InputSignal.Signal.end_time = end_time
         self.InputSignal.Signal.start_time = start_time
         self.InputSignal.Signal.offset = phase
@@ -65,11 +80,31 @@ class UI_central(QtGui.QDialog):
         if (signal == 'square'):
             self.InputSignal.Signal.CreateSquare()
         
-#        fs = 44100
-#        time = np.arange(-.002, .002, 1/fs)
-#        sine_wave = amplitude * np.sin(2 * np.pi * frequency * time + phase)
-        #print (sine_wave)
+        print (len(self.InputSignal.Signal.data))
         print (self.InputSignal.Signal.data)
-        #self.graph.addLine(self.InputSignal.Signal.time, self.InputSignal.Signal.data, "Graph")
         self.graph.addSignal(self.InputSignal.Signal)
+        return
+        
+    def MixedSignalPushButton_Clicked(self):        
+        print ("Mixed Signals Clicked")
+        temp = Signal.Signal(start_time=self.graph.list_of_signals[0].start_time,
+                             end_time = self.graph.list_of_signals[0].end_time,
+                             sample_frequency=self.graph.list_of_signals[0].sample_frequency)
+        temp.CreateSawTooth()
+        print (len(self.graph.list_of_signals))
+        for x in self.graph.list_of_signals:
+            print (len(x.data))
+            print (x.data)
+            temp.data = temp.data + x.data
+            
+        self.graph.addSignal(temp)
+        return
+        
+    def RemovePushButton_Clicked(self):
+        print ("Remove Clicked")
+        self.graph.removeSignal()
+        return
+
+    def WriteFilePushButton_Clicked(self):
+        print ("Write File Push Button Clicked")
         return
