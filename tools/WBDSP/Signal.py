@@ -16,12 +16,12 @@ class Signal:
         self.end_time = end_time
         self.time = np.arange(self.start_time, self.end_time, 1./self.sample_frequency)
         self.data = []
+
         return None
 
     def CreateSinusoid(self):
         self.time = np.arange(self.start_time, self.end_time, 1./self.sample_frequency)
-        self.data = self.amplitude * self.function(2*np.pi*self.signal_frequency*self.time + self.offset)
-        print (self.signal_frequency, self.function, self.time, self.data)
+        self.data = self.amplitude * self.function(2*np.pi*self.signal_frequency*self.time + self.offset)       
         return
 
     def CreateSquare(self, duty_cycle=50):
