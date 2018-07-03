@@ -1,0 +1,54 @@
+#+TITLE:     Parameterized FIFO in Verilog
+#+AUTHOR:    Philip Tracton
+#+EMAIL:     ptracton@gmail.com
+#+OPTIONS: toc:1          only inlcude two levels in TOC
+#+OPTIONS: toc:nil        no default TOC at all
+#+LATEX_HEADER: \setlength{\parindent}{1cm}
+#+LaTex_HEADER: \usepackage{listings}
+
+\maketitle
+\newpage
+ #+TOC: headlines 1
+\newpage
+
+* FIFO Theory
+
+* FIFO Operations
+** Parameters
+- *dw* is the data width.  This is used to size the internal memory of the FIFO and the data_in and data_out parameters.  It should specify the exact size of the data since internally 1 is subtracted to zero the size.  For example set this to 32 for 32 bits and data_in and data_out will be [31:0].
+
+- *depth* is the number of samples stored in the FIFO.  The number_samples output is based on this.
+
+** Signals
+#+CAPTION: FIFO Port Signals
+#+ATTR_LaTeX: align=|c|c|c|c|
+
+|---+----------------+-------------+----------------+---------------------------------------------------|
+|   | *Signal Name*  | *Direction* |         *Size* | *Behavior*                                        |
+| / | <>             | >           |              > | >                                                 |
+|---+----------------+-------------+----------------+---------------------------------------------------|
+|   | wb clk         | Input       |              1 | Clock for synchronous behavior                    |
+|---+----------------+-------------+----------------+---------------------------------------------------|
+|   | wb rst         | Input       |              1 | Synchronous reset                                 |
+|---+----------------+-------------+----------------+---------------------------------------------------|
+|   | push           | Input       |              1 | Signal to write data into FIFO                    |
+|---+----------------+-------------+----------------+---------------------------------------------------|
+|   | pop            | Input       |              1 | Signal to read next data from FIFO                |
+|---+----------------+-------------+----------------+---------------------------------------------------|
+|   | data in        | Input       |             dw | Data that push writes into the FIFO               |
+|---+----------------+-------------+----------------+---------------------------------------------------|
+|   | data out       | Output      |             dw | The current output value of the FIFO              |
+|---+----------------+-------------+----------------+---------------------------------------------------|
+|   | empty          | Output      |              1 | Goes high if there is no data in the FIFO         |
+|---+----------------+-------------+----------------+---------------------------------------------------|
+|   | full           | Output      |              1 | Goes high if the FIFO has all locations populated |
+|---+----------------+-------------+----------------+---------------------------------------------------|
+|   | number samples | Output      | based on depth | The current number of samples in the FIFO         |
+|---+----------------+-------------+----------------+---------------------------------------------------|
+
+** Writing
+** Reading
+
+* FIFO Testing
+** Run Simulations
+

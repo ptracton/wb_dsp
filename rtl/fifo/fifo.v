@@ -8,11 +8,11 @@
 // Update Count    : 0
 // Status          : Unknown, Use with caution!
 module fifo (/*AUTOARG*/
-   // Outputs
-   data_out, empty, full, number_samples,
-   // Inputs
-   wb_clk, wb_rst, push, pop, data_in
-   ) ;
+	     // Outputs
+	     data_out, empty, full, number_samples,
+	     // Inputs
+	     wb_clk, wb_rst, push, pop, data_in
+	     ) ;
    parameter dw = 32;
    parameter depth = 16;
 
@@ -24,12 +24,12 @@ module fifo (/*AUTOARG*/
    output wire [dw-1:0] data_out;
    output wire          empty;
    output wire          full;
-   output reg [7:0]     number_samples;
+   output reg [$clog2(depth):0] 	number_samples;
    
-   reg [7:0]            rd_ptr;
-   reg [7:0]            wr_ptr; 
-   reg [dw-1:0]         memory [0:depth-1];
-   integer              i;
+   reg [$clog2(depth)-1:0] rd_ptr;
+   reg [$clog2(depth)-1:0] wr_ptr; 
+   reg [dw-1:0] 	   memory [0:depth-1];
+   integer 		   i;
 
    //
    // Write data into FIFO memory when there is a push.
