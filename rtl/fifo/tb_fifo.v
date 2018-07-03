@@ -34,7 +34,7 @@ module tb_fifo (/*AUTOARG*/) ;
    // General purpose test support
    //
    test_tasks #("fifo",
-		42) TEST();
+		274) TEST();
    
    
    localparam defaultDW = 32;
@@ -215,23 +215,221 @@ module tb_fifo (/*AUTOARG*/) ;
       //
       @(negedge wb_rst);
 
-      //
-      // Check Initial Conditions
-      //
-      TEST.compare_values("ShortNarrow POR FULL",0,ShortNarrowFull);      
-      TEST.compare_values("ShortNarrow POR Empty",1,ShortNarrowEmpty);
-      TEST.compare_values("ShortNarrow POR DataOut",0,ShortNarrowDataOut);
       
       //
       // Wait for other tests to complete
       //
       @(posedge defaultTestComplete);
 
+      //
+      // Check Initial Conditions
+      //
+      TEST.compare_values("ShortNarrow POR FULL",0,ShortNarrowFull);      
+      TEST.compare_values("ShortNarrow POR Empty",1,ShortNarrowEmpty);
+      TEST.compare_values("ShortNarrow POR DataOut",0,ShortNarrowDataOut);
 
+
+      //
+      // Push FIFO Until Full
+      //
+      for (i=0; i< ShortNarrowDepth; i=i+1) begin
+	 @(posedge wb_clk);
+	 ShortNarrowDataIn <= 8'hFF - i;
+	 ShortNarrowPush <= 1;
+	 @(posedge wb_clk);
+	 ShortNarrowPush <= 0;
+	 TEST.compare_values("ShortNarrow Push Number Samples",i,ShortNarrowNumberSamples);	 
+      end
+
+      #1 TEST.compare_values("ShortNarrow Assert FULL",1,ShortNarrowFull);
+      TEST.compare_values("ShortNarrow Clear Empty",0,ShortNarrowEmpty);
+
+
+      //
+      // Read back values to confirm write and read operations until we are empty
+      //
+      for (i=0; i<ShortNarrowDepth; i=i+1) begin
+	 @(posedge wb_clk);
+	 TEST.compare_values("ShortNarrow Read", 
+			     8'hFF - i, 
+			     ShortNarrowDataOut);
+	 @(posedge wb_clk);
+	 ShortNarrowPop <= 1;
+	 @(posedge wb_clk);
+	 ShortNarrowPop <= 0;
+      end
+
+      #1 TEST.compare_values("ShortNarrow Clear FULL",0,ShortNarrowFull);
+      TEST.compare_values("ShortNarrow Assert Empty",1,ShortNarrowEmpty);
+
+      //
+      // RESET to clear last test
+      //
+      wb_rst = 1;
+      repeat(2) @(posedge wb_clk);
+      wb_rst = 0;
+      
+      //
+      // Reload FIFO and cause a wrap around and check results
+      //
+      for (i=0; i< ShortNarrowDepth*2; i=i+1) begin
+	 @(posedge wb_clk);
+	 ShortNarrowDataIn <= 8'hAA - i;
+	 ShortNarrowPush <= 1;
+	 @(posedge wb_clk);
+	 ShortNarrowPush <= 0;
+      end
+      
+      #1 TEST.compare_values("ShortNarrow Wrap Around Assert FULL",1,ShortNarrowFull);
+      TEST.compare_values("ShortNarrow Wrap Around Clear Empty",0,ShortNarrowEmpty);	 
+      
+      for (i=ShortNarrowDepth; i<ShortNarrowDepth*2; i=i+1) begin
+	 @(posedge wb_clk);
+	 TEST.compare_values("ShortNarrow Wrap Around Read", 
+			     8'hAA - i, 
+			     ShortNarrowDataOut);
+	 @(posedge wb_clk);
+	 ShortNarrowPop <= 1;
+	 @(posedge wb_clk);
+	 ShortNarrowPop <= 0;
+      end      
+      
       //
       // All Done
       //
+      ShortNarrowTestComplete <= 1;
+   end
+
+   localparam LongWideDW = 64;
+   localparam LongWideDepth = 64;
+   
+   wire [LongWideDW-1:0]	LongWideDataOut;	
+   wire			LongWideEmpty;	
+   wire			LongWideFull;	
+   wire [$clog2(LongWideDepth):0] LongWideNumberSamples;
+   
+   reg 			LongWidePush;
+   reg 			LongWidePop;
+   reg [LongWideDW-1:0] 	LongWideDataIn;
+   reg 			LongWideTestComplete;
+   
+   //
+   // LongWide Values FIFO
+   //
+   fifo #(LongWideDW, LongWideDepth) 
+   dutLongWide(
+		  // Outputs
+		  .data_out		(LongWideDataOut),
+		  .empty		(LongWideEmpty),
+		  .full 		(LongWideFull),
+		  .number_samples	(LongWideNumberSamples),
+		  // Inputs
+		  .wb_clk		(wb_clk),
+		  .wb_rst		(wb_rst),
+		  .push	        	(LongWidePush),
+		  .pop			(LongWidePop),
+		  .data_in		(LongWideDataIn));
+   
+   initial begin
+
+      //
+      // Clean up input and test signals
+      //
+      LongWidePush <= 0;
+      LongWidePop <= 0;
+      LongWideDataIn <= 0;
+      LongWideTestComplete <= 0;
+
+      //
+      // Wait for reset to release
+      //
+      @(negedge wb_rst);
+
+      
+      //
+      // Wait for other tests to complete
+      //
+      @(posedge ShortNarrowTestComplete);
+
+      //
+      // Check Initial Conditions
+      //
+      TEST.compare_values("LongWide POR FULL",0,LongWideFull);      
+      TEST.compare_values("LongWide POR Empty",1,LongWideEmpty);
+      TEST.compare_values("LongWide POR DataOut",0,LongWideDataOut);
+
+
+      //
+      // Push FIFO Until Full
+      //
+      for (i=0; i< LongWideDepth; i=i+1) begin
+	 @(posedge wb_clk);
+	 LongWideDataIn <= 64'hdead_beef_C7C7_A5A5 - i;
+	 LongWidePush <= 1;
+	 @(posedge wb_clk);
+	 LongWidePush <= 0;
+	 TEST.compare_values("LongWide Push Number Samples",i,LongWideNumberSamples);	 
+      end
+
+      #1 TEST.compare_values("LongWide Assert FULL",1,LongWideFull);
+      TEST.compare_values("LongWide Clear Empty",0,LongWideEmpty);
+
+
+      //
+      // Read back values to confirm write and read operations until we are empty
+      //
+      for (i=0; i<LongWideDepth; i=i+1) begin
+	 @(posedge wb_clk);
+	 TEST.compare_values("LongWide Read", 
+			     64'hdead_beef_C7C7_A5A5 - i, 
+			     LongWideDataOut);
+	 @(posedge wb_clk);
+	 LongWidePop <= 1;
+	 @(posedge wb_clk);
+	 LongWidePop <= 0;
+      end
+
+      #1 TEST.compare_values("LongWide Clear FULL",0,LongWideFull);
+      TEST.compare_values("LongWide Assert Empty",1,LongWideEmpty);
+
+      //
+      // RESET to clear last test
+      //
+      wb_rst = 1;
+      repeat(2) @(posedge wb_clk);
+      wb_rst = 0;
+      
+      //
+      // Reload FIFO and cause a wrap around and check results
+      //
+      for (i=0; i< LongWideDepth*2; i=i+1) begin
+	 @(posedge wb_clk);
+	 LongWideDataIn <= 8'hAA - i;
+	 LongWidePush <= 1;
+	 @(posedge wb_clk);
+	 LongWidePush <= 0;
+      end
+      
+      #1 TEST.compare_values("LongWide Wrap Around Assert FULL",1,LongWideFull);
+      TEST.compare_values("LongWide Wrap Around Clear Empty",0,LongWideEmpty);	 
+      
+      for (i=LongWideDepth; i<LongWideDepth*2; i=i+1) begin
+	 @(posedge wb_clk);
+	 TEST.compare_values("LongWide Wrap Around Read", 
+			     8'hAA - i, 
+			     LongWideDataOut);
+	 @(posedge wb_clk);
+	 LongWidePop <= 1;
+	 @(posedge wb_clk);
+	 LongWidePop <= 0;
+      end      
+      
+      //
+      // All Done
+      //
+      LongWideTestComplete <= 1;
       TEST.all_tests_completed();
    end
+
      
 endmodule // tb_fifo
