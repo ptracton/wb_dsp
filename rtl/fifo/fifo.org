@@ -48,6 +48,10 @@
 |   | number_samples | Output      | based on depth | The current number of samples in the FIFO |
 |---+----------------+-------------+----------------+-------------------------------------------|
 
+
+** Block Diagram
+[[./fifo.png]]
+
 ** Pushing Data
 
 Pushing data is the act of writing information into the FIFO.  This is a synchronous process.  The data_in can be set up at any time.  It does not get written to the FIFO until the PUSH signal is high and samples on a rising edge of the clock.  At this time the data is then written into the FIFO and the number of samples is incremented.  If the PUSH signal remains high, then data will be written to the FIFO on each clock edge.  If this process fills in the FIFO, the FULL signal is asserted until data is popped out.
@@ -119,6 +123,7 @@ empty & 21{L}9{H} \\
 
 #+end_src
 
+\newpage
 * FIFO Testing
 ** Run Simulations
 Several different simulators were used to verify the RTL.  The test bench is self checking and indicates pass/fail for both individual tests and the overal test run.  
@@ -135,3 +140,8 @@ The run_xcelium.sh will run the simulation with the Cadence Xcelium tools if you
 
 ** Cleaning Up
 - The clean_up.sh script will remove all produced output from any of the simulations or documentation tools
+
+\newpage
+* FIFO Synthesis
+** Yosys
+- There is a run_yosys.sh script that will synthesize the fifo.v file into a fifo_synth.v for Xilinx technology.  This is a new tool that is being learned as this is developed.
