@@ -2,4 +2,4 @@
 
 rm -f a.out dump.vcd
 iverilog -f fifo_sim.f
-./a.out
+./a.out | tee  fifo_iverilog.log

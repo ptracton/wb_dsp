@@ -15,10 +15,13 @@
 \newpage
 
 * FIFO Operations
+
+This is a parameterized FIFO implemented in Verilog.  The width of the data and the depth of the storage are the 2 parameters that can be modified.  This FIFO will wrap around and over write data when full.  The number_samples is the current number of data samples stored.  
+
 ** Parameters
 - *dw* is the data width.  This is used to size the internal memory of the FIFO and the data_in and data_out parameters.  It should specify the exact size of the data since internally 1 is subtracted to zero the size.  For example set this to 32 for 32 bits and data_in and data_out will be [31:0].
 
-- *depth* is the number of samples stored in the FIFO.  The number_samples output is based on this.
+- *depth* is the number of samples stored in the FIFO.  The number_samples output is based on this as it is just [$clog2(depth):0] bits wide.
 
 ** Signals
 
