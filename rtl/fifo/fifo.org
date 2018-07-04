@@ -5,13 +5,14 @@
 #+OPTIONS: toc:nil        no default TOC at all
 #+LATEX_HEADER: \setlength{\parindent}{1cm}
 #+LaTex_HEADER: \usepackage{listings}
+#+LaTex_HEADER: \usepackage{tikz-timing}
+#+LaTex_HEADER: \usepackage{minted}
+#+OPTIONS: ^:nil
 
 \maketitle
 \newpage
  #+TOC: headlines 1
 \newpage
-
-* FIFO Theory
 
 * FIFO Operations
 ** Parameters
@@ -20,35 +21,117 @@
 - *depth* is the number of samples stored in the FIFO.  The number_samples output is based on this.
 
 ** Signals
+
 #+CAPTION: FIFO Port Signals
-#+ATTR_LaTeX: align=|c|c|c|c|
+#+ATTR_LaTeX: :environment longtable :align |c|c|c|p{1cm}|
 
-|---+----------------+-------------+----------------+---------------------------------------------------|
-|   | *Signal Name*  | *Direction* |         *Size* | *Behavior*                                        |
-| / | <>             | >           |              > | >                                                 |
-|---+----------------+-------------+----------------+---------------------------------------------------|
-|   | wb clk         | Input       |              1 | Clock for synchronous behavior                    |
-|---+----------------+-------------+----------------+---------------------------------------------------|
-|   | wb rst         | Input       |              1 | Synchronous reset                                 |
-|---+----------------+-------------+----------------+---------------------------------------------------|
-|   | push           | Input       |              1 | Signal to write data into FIFO                    |
-|---+----------------+-------------+----------------+---------------------------------------------------|
-|   | pop            | Input       |              1 | Signal to read next data from FIFO                |
-|---+----------------+-------------+----------------+---------------------------------------------------|
-|   | data in        | Input       |             dw | Data that push writes into the FIFO               |
-|---+----------------+-------------+----------------+---------------------------------------------------|
-|   | data out       | Output      |             dw | The current output value of the FIFO              |
-|---+----------------+-------------+----------------+---------------------------------------------------|
-|   | empty          | Output      |              1 | Goes high if there is no data in the FIFO         |
-|---+----------------+-------------+----------------+---------------------------------------------------|
-|   | full           | Output      |              1 | Goes high if the FIFO has all locations populated |
-|---+----------------+-------------+----------------+---------------------------------------------------|
-|   | number samples | Output      | based on depth | The current number of samples in the FIFO         |
-|---+----------------+-------------+----------------+---------------------------------------------------|
+|---+----------------+-------------+----------------+-------------------------------------------|
+|   | *Signal Name*  | *Direction* |         *Size* | *Behavior*                                |
+| / | <>             | >           |              > |  >                                        |
+|---+----------------+-------------+----------------+-------------------------------------------|
+|   | wb_clk         | Input       |              1 | Clock for synchronous behavior            |
+|---+----------------+-------------+----------------+-------------------------------------------|
+|   | wb_rst         | Input       |              1 | Synchronous reset                         |
+|---+----------------+-------------+----------------+-------------------------------------------|
+|   | push           | Input       |              1 | Signal to write data into FIFO            |
+|---+----------------+-------------+----------------+-------------------------------------------|
+|   | pop            | Input       |              1 | Signal to read next data from FIFO        |
+|---+----------------+-------------+----------------+-------------------------------------------|
+|   | data_in        | Input       |             dw | Data that push writes into the FIFO       |
+|---+----------------+-------------+----------------+-------------------------------------------|
+|   | data_out       | Output      |             dw | The current output value of the FIFO      |
+|---+----------------+-------------+----------------+-------------------------------------------|
+|   | empty          | Output      |              1 | Goes high if there is no data in the FIFO |
+|---+----------------+-------------+----------------+-------------------------------------------|
+|   | full           | Output      |              1 | Goes high if the FIFO is full             |
+|---+----------------+-------------+----------------+-------------------------------------------|
+|   | number_samples | Output      | based on depth | The current number of samples in the FIFO |
+|---+----------------+-------------+----------------+-------------------------------------------|
 
-** Writing
-** Reading
+** Pushing Data
+
+Pushing data is the act of writing information into the FIFO.  This is a synchronous process.  The data_in can be set up at any time.  It does not get written to the FIFO until the PUSH signal is high and samples on a rising edge of the clock.  At this time the data is then written into the FIFO and the number of samples is incremented.  If the PUSH signal remains high, then data will be written to the FIFO on each clock edge.  If this process fills in the FIFO, the FULL signal is asserted until data is popped out.
+
+
+\begin{tikztimingtable}
+wb rst & 4{L}4{H}22{L}\\
+wb clk & 30{C} \\
+push & 19{L}HH9{L} \\
+data in & 18{Z}4D{DATA}8{Z}\\
+number samples & 21D{0}9D{1} \\
+full & 21{L}9{H} \\
+\end{tikztimingtable}
+
+#+begin_src verilog
+   //
+   // Write data into FIFO memory when there is a push.
+   // Increment the write pointer and wrap around as needed.
+   //
+   always @(posedge wb_clk)
+     if (wb_rst) begin
+        for (i=0; i< depth; i=i+1)
+          memory[i] <= 0;
+        wr_ptr <= 0;  
+     end else begin
+        if (push) begin
+           memory[wr_ptr] <= data_in;
+           wr_ptr <= wr_ptr + 1;
+           if (wr_ptr >= depth-1) begin
+              wr_ptr <= 0;              
+           end 
+        end
+     end // else: !if(wb_rst)  
+#+end_src
+
+
+** Popping Data
+
+Popping data is the process of moving the output to the next value.  The data_out holds the current top of the FIFO and is always available for reading.  Once this data is no longer needed, the POP process will get the next value from the FIFO and make it the data output.  The POP signal operates just like the PUSH signal.  It is synchronous and will execute a POP on each clock edge while high.  The empty signal is asserted once there is no more data in the FIFO.
+
+\begin{tikztimingtable}
+wb rst & 4{L}4{H}22{L}\\
+wb clk & 30{C} \\
+pop & 19{L}HH9{L} \\
+data out & 21D{DATA0}9D{DATA1}\\
+number samples & 21D{1}9D{0} \\
+empty & 21{L}9{H} \\
+\end{tikztimingtable}
+
+#+begin_src verilog
+   //
+   // Always present the next sample to the output.
+   //
+   // If we pop (read) a sample increment and wrap
+   // around the read pointer if needed.
+   //
+   assign data_out = memory[rd_ptr];
+   always @(posedge wb_clk)
+     if (wb_rst) begin
+        rd_ptr <= 0;        
+     end else begin
+        if (pop) begin
+           rd_ptr <= rd_ptr + 1;
+           if (rd_ptr >= depth-1) begin
+              rd_ptr <= 0;              
+           end
+        end
+     end
+
+#+end_src
 
 * FIFO Testing
 ** Run Simulations
+Several different simulators were used to verify the RTL.  The test bench is self checking and indicates pass/fail for both individual tests and the overal test run.  
 
+*** Icarus Verilog
+This is the primary tool since it is free and runs everywhere.  To run the simulation with this tool use run_iverilog.sh
+
+*** Modelsim
+- There is a run_modelsim.sh script that will execute the simulation via the modelsim command line options
+- If the modelsim GUI is started, the modelsim.do file will run and produce the waveforms
+
+*** Xcelium
+The run_xcelium.sh will run the simulation with the Cadence Xcelium tools if you have access to them.
+
+** Cleaning Up
+- The clean_up.sh script will remove all produced output from any of the simulations or documentation tools
