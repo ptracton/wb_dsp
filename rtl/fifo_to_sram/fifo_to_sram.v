@@ -16,8 +16,6 @@ module fifo_to_sram (/*AUTOARG*/
    fifo_number_samples_terminal, data_done, fifo_data_in
    ) ;
 
-   parameter dw=32;
-   
    
    input wb_clk;
    input wb_rst;
@@ -28,8 +26,8 @@ module fifo_to_sram (/*AUTOARG*/
    input [5:0] fifo_number_samples_terminal;
    input       data_done;   
    output wire pop;
-   input [dw-1:0] fifo_data_in;
-   output reg [dw-1:0] sram_data_out;
+   input [31:0] fifo_data_in;
+   output reg [31:0] sram_data_out;
    output reg          sram_start;
 
    reg                 active;
