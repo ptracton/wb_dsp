@@ -132,19 +132,22 @@ empty & 21{L}9{H} \\
 Several different simulators were used to verify the RTL.  The test bench is self checking and indicates pass/fail for both individual tests and the overal test run.  
 
 *** Icarus Verilog
-This is the primary tool since it is free and runs everywhere.  To run the simulation with this tool use run_iverilog.sh
+- This is the primary tool since it is free and runs everywhere.  To run the simulation with this tool use /*make sim*/.  This will produce a dump.vcd that can be viewed with GtkWave and a fifo_iverilog.log
 
 *** Modelsim
-- There is a run_modelsim.sh script that will execute the simulation via the modelsim command line options
+- Use /*make modelsim*/ to execute the simulation via the modelsim command line options
 - If the modelsim GUI is started, the modelsim.do file will run and produce the waveforms
 
 *** Xcelium
-The run_xcelium.sh will run the simulation with the Cadence Xcelium tools if you have access to them.
+- Use /*make xrun*/ run the simulation with the Cadence Xcelium tools if you have access to them.  This will produce a dump.vcd that van be viewed with Simvision.
 
 ** Cleaning Up
-- The clean_up.sh script will remove all produced output from any of the simulations or documentation tools
+- Use /*make clean*/ to remove all produced output from any of the simulations or documentation tools.
+
+** Linting
+- Use /*make lint*/ to use verilator in it's lint-only mode on fifo.v.  It will pass silently.  There is only feedback if there is a problem.
 
 \newpage
 * FIFO Synthesis
 ** Yosys
-- There is a run_yosys.sh script that will synthesize the fifo.v file into a fifo_synth.v for Xilinx technology.  This is a new tool that is being learned as this is developed.
+- Use the command /*make synthesis*/ to synthesize the fifo.v file into a fifo_synth.v for Xilinx technology.  This is a new tool that is being learned as this is developed.  It will silently run and produce both a fifo_xilinx_synthesis.v and a fifo_yosys.log.
