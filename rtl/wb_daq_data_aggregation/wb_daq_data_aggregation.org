@@ -51,7 +51,6 @@ There is an input indicating if the data is expected to be signed.  When asserte
 |   | fifo_push     | Output      |              1 | Push the data_out into the FIFO               |
 |---+---------------+-------------+----------------+-----------------------------------------------|
 
-** Block Diagram
 ** Bus Cycles
 - 8 Bit data is done via 4 writes to the module.  The values in the adc_data_in signal are just for example purposes.  They can take any 8 bit value.
 
@@ -61,10 +60,20 @@ wb clk & 36{C} \\
 data ready & 11{L}2{H}2{L}2{H}2{L}2{H}2{L}2{H}11{L}\\
 adc data in & 11{X}2D{AA}2{X}2D{BB}2{X}2D{CC}2{X}2D{DD}11{X}\\
 data out & 13{Z}4D{AA}4D{BBAA}4D{CCBBAA}10D{DDCCBBAA}\\
-fifo push & 29{L}2{H}6{L}\\
+fifo push & 25{L}2{H}9{L}\\
 \end{tikztimingtable}
 
+- 10 bit data is done via 2 writes to the module.  The data is scaled up to 16 bits.  If it is unsigned, pre-pend zeros.  If it is signed data, sign extend.  This example show 2 negative numbers getting sign extended.
 
+\begin{tikztimingtable}
+wb rst & 4{L}4{H}28{L}\\
+wb clk & 36{C} \\
+signed data & 11{L}25{H} \\
+data ready & 11{L}2{H}2{L}2{H}19{L} \\
+adc data in & 11{X}4D{3AD}4D{2ef}17{X} \\
+data out & 13{Z}4D{0000FFAD}19D{FEEFFFAD}\\
+fifo push & 17{L}2{H}17{L}\\
+\end{tikztimingtable}
 
 * Testing
 ** Run Simulations
