@@ -1,0 +1,97 @@
+[timestart] 0
+[size] 1920 1103
+[pos] -1 -1
+*-13.226336 15575 15605 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_wb_daq_channel.
+[treeopen] tb_wb_daq_channel.dut.
+@200
+-ADC
+@28
+tb_wb_daq_channel.adc0.adc_clk
+@22
+tb_wb_daq_channel.adc0.data_out[7:0]
+@28
+tb_wb_daq_channel.adc0.data_ready
+tb_wb_daq_channel.adc0.data_ready_local
+tb_wb_daq_channel.adc0.enable
+@22
+tb_wb_daq_channel.adc0.index[31:0]
+tb_wb_daq_channel.adc0.previous_index[31:0]
+@28
+tb_wb_daq_channel.adc0.shift_delay[2:0]
+@200
+-Aggregate
+@22
+tb_wb_daq_channel.dut.aggregate.adc_data_in[7:0]
+@28
+tb_wb_daq_channel.dut.aggregate.byte_location[1:0]
+@22
+tb_wb_daq_channel.dut.aggregate.data_out[31:0]
+@28
+tb_wb_daq_channel.dut.aggregate.data_ready
+tb_wb_daq_channel.dut.aggregate.fifo_push
+tb_wb_daq_channel.dut.aggregate.sign_bit
+@22
+tb_wb_daq_channel.dut.aggregate.sign_extend32[31:0]
+@28
+tb_wb_daq_channel.dut.aggregate.signed_data
+@200
+-FIFO
+@22
+tb_wb_daq_channel.dut.fifo0.data_in[31:0]
+tb_wb_daq_channel.dut.fifo0.data_out[31:0]
+@28
+tb_wb_daq_channel.dut.fifo0.empty
+tb_wb_daq_channel.dut.fifo0.full
+@22
+tb_wb_daq_channel.dut.fifo0.i[31:0]
+tb_wb_daq_channel.dut.fifo0.number_samples[4:0]
+@28
+tb_wb_daq_channel.dut.fifo0.pop
+tb_wb_daq_channel.dut.fifo0.push
+@22
+tb_wb_daq_channel.dut.fifo0.rd_ptr[3:0]
+tb_wb_daq_channel.dut.fifo0.wr_ptr[3:0]
+@200
+-To SRAM
+@28
+tb_wb_daq_channel.dut.fifo_to_sram0.active
+tb_wb_daq_channel.dut.fifo_to_sram0.data_done
+tb_wb_daq_channel.dut.fifo_to_sram0.empty
+@22
+tb_wb_daq_channel.dut.fifo_to_sram0.fifo_data_in[31:0]
+tb_wb_daq_channel.dut.fifo_to_sram0.fifo_number_samples[4:0]
+tb_wb_daq_channel.dut.fifo_to_sram0.fifo_number_samples_terminal[4:0]
+@28
+tb_wb_daq_channel.dut.fifo_to_sram0.grant
+tb_wb_daq_channel.dut.fifo_to_sram0.pop
+@22
+tb_wb_daq_channel.dut.fifo_to_sram0.sram_data_out[31:0]
+@28
+tb_wb_daq_channel.dut.fifo_to_sram0.sram_start
+@200
+-TB
+@28
+tb_wb_daq_channel.adc_clk
+@22
+tb_wb_daq_channel.adc_data_out[7:0]
+@28
+tb_wb_daq_channel.adc_data_ready
+tb_wb_daq_channel.adc_enable
+@22
+tb_wb_daq_channel.control[31:0]
+@29
+tb_wb_daq_channel.start_sram
+@28
+tb_wb_daq_channel.grant
+tb_wb_daq_channel.data_done
+@22
+tb_wb_daq_channel.data_out[31:0]
+@28
+tb_wb_daq_channel.fifo_empty
+@22
+tb_wb_daq_channel.fifo_number_samples_terminal[4:0]
+@28
+tb_wb_daq_channel.master_enable
+[pattern_trace] 1
+[pattern_trace] 0

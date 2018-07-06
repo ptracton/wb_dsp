@@ -16,24 +16,42 @@ module fifo_to_sram (/*AUTOARG*/
    fifo_number_samples_terminal, data_done, fifo_data_in
    ) ;
 
-   parameter NUMBER_SAMPLES_BITS = 8;
-   
+   parameter FIFO_DEPTH = 16;   
    
    input wb_clk;
    input wb_rst;
    input empty;
    input grant;
-   input [NUMBER_SAMPLES_BITS-1:0] fifo_number_samples;   
-   input [NUMBER_SAMPLES_BITS-1:0] fifo_number_samples_terminal;
+   input [$clog2(FIFO_DEPTH):0] fifo_number_samples;   
+   input [$clog2(FIFO_DEPTH):0] fifo_number_samples_terminal;
    input       data_done;   
-   output wire pop;
+   output reg  pop;
    input [31:0] fifo_data_in;
    output reg [31:0] sram_data_out;
    output reg          sram_start;
 
    reg                 active;
+   
+   reg 		       data_done_reg;
+   wire 	       data_done_edge;
 
-   assign pop = data_done;
+   // watch the rising edge of data_done
+   assign data_done_edge = (data_done & !data_done_reg);
+   
+   always @(posedge wb_clk)
+     if (wb_rst) begin
+	data_done_reg <= 0;	
+     end else begin
+	data_done_reg <= data_done;	
+     end
+ 
+   always @(posedge wb_clk)
+     if (wb_rst) begin
+	pop <= 0;	
+     end else begin
+	pop <= data_done_edge | (pop & !empty);	
+     end
+   //assign pop = data_done_edge;
    
    
    //

@@ -7,7 +7,6 @@
 // Last Modified On: Wed Dec 16 12:36:20 2015
 // Update Count    : 0
 // Status          : Unknown, Use with caution!
-`include "wb_dsp_includes.vh"
 
 
 module adc (/*AUTOARG*/
@@ -64,7 +63,7 @@ module adc (/*AUTOARG*/
    // in the ADC_CLK domain.  Needs to synch data to WB_CLK
    // domain.
    //
-   always @(posedge adc_clk)
+   always @(posedge adc_clk or posedge wb_rst)
      if (wb_rst) begin
         data_out <=0;
         index <= 0;        
