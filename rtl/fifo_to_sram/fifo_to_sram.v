@@ -12,18 +12,19 @@ module fifo_to_sram (/*AUTOARG*/
    // Outputs
    pop, sram_data_out, sram_start,
    // Inputs
-   wb_clk, wb_rst, empty, full, grant, fifo_number_samples,
+   wb_clk, wb_rst, empty, grant, fifo_number_samples,
    fifo_number_samples_terminal, data_done, fifo_data_in
    ) ;
 
+   parameter NUMBER_SAMPLES_BITS = 8;
+   
    
    input wb_clk;
    input wb_rst;
    input empty;
-   input full;
    input grant;
-   input [5:0] fifo_number_samples;   
-   input [5:0] fifo_number_samples_terminal;
+   input [NUMBER_SAMPLES_BITS-1:0] fifo_number_samples;   
+   input [NUMBER_SAMPLES_BITS-1:0] fifo_number_samples_terminal;
    input       data_done;   
    output wire pop;
    input [31:0] fifo_data_in;
@@ -60,21 +61,16 @@ module fifo_to_sram (/*AUTOARG*/
    //
    always @(posedge wb_clk)
      if (wb_rst) begin
-        //pop <=0;    
         sram_data_out <= 0;      
         sram_start <= 0;        
      end else begin
         if ((active && !pop) || 
             (data_done & !empty)) begin
-           //pop <= 1;       
            sram_data_out <= fifo_data_in;
            sram_start <= 1;           
         end else if (grant) begin
-           //sram_data_out <= 0;
            sram_start <= 0;           
-        end else begin
-           //pop <= 0;
-        end
+        end 
      end // else: !if(wb_rst)   
    
 endmodule // fifo_to_sram

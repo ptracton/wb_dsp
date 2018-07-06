@@ -1,0 +1,10 @@
+@startuml
+
+FIFO -> FIFO_TO_SRAM: enough samples to process
+FIFO_TO_SRAM -> STATE_MACHINE: assert sram_start=1
+STATE_MACHINE -> FIFO_TO_SRAM: assert grant=1 when ready
+FIFO_TO_SRAM -> STATE_MACHINE : deassert sram_start = 0
+FIFO_TO_SRAM -> FIFO_TO_SRAM: wait for data_done = 1
+STATE_MACHINE -> FIFO_TO_SRAM: assert data_done = 1
+FIFO_TO_SRAM -> FIFO: if not empty, assert POP and start again
+@enduml
