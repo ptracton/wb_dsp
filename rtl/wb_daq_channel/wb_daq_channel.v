@@ -16,7 +16,7 @@ module wb_daq_channel (/*AUTOARG*/
    data_out, start_sram, fifo_empty,
    // Inputs
    wb_clk, wb_rst, adc_clk, master_enable, control, data_done,
-   fifo_number_samples_terminal, grant, adc_data_out, adc_data_ready
+   fifo_number_samples_terminal, adc_data_out, adc_data_ready
    ) ;
 
 
@@ -36,7 +36,6 @@ module wb_daq_channel (/*AUTOARG*/
    input [dw-1:0] 	control;
    input 		data_done;   
    input [$clog2(FIFO_DEPTH):0] fifo_number_samples_terminal;
-   input 		grant;
    
    
 
@@ -105,7 +104,6 @@ module wb_daq_channel (/*AUTOARG*/
                  .data_done(data_done),
                  .fifo_number_samples(fifo_number_samples),
 		 .fifo_number_samples_terminal(fifo_number_samples_terminal),
-		 .grant(grant),
 		 .empty(fifo_empty),
 		 .fifo_data_in(fifo_data_out)
 		 ) ;

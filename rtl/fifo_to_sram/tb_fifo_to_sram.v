@@ -44,7 +44,6 @@ module tb_fifo_to_sram (/*AUTOARG*/) ;
    
    wire 		full;
    wire 		empty;
-   reg 			grant;
    wire [4:0] 		fifo_number_samples;
    reg [4:0] 		fifo_number_samples_terminal;
    reg 			data_done;
@@ -59,7 +58,6 @@ module tb_fifo_to_sram (/*AUTOARG*/) ;
 			 .wb_clk		(wb_clk),
 			 .wb_rst		(wb_rst),
 			 .empty		(empty),
-			 .grant		(grant),
 			 .fifo_number_samples(fifo_number_samples),
 			 .fifo_number_samples_terminal(fifo_number_samples_terminal),
 			 .data_done		(data_done),
@@ -108,9 +106,9 @@ module tb_fifo_to_sram (/*AUTOARG*/) ;
       
       begin
 	 @(posedge wb_clk);
-	 grant <= 1;
+
 	 repeat(numberOfCycles) @(posedge wb_clk);
-	 grant <= 0;
+
 	 data_done <= 1;
 	 @(posedge wb_clk);
 	 data_done <= 0;
@@ -139,7 +137,6 @@ module tb_fifo_to_sram (/*AUTOARG*/) ;
    
    initial begin
 
-      grant <= 0;
       fifo_number_samples_terminal <= 0;
       data_done <= 0;
 

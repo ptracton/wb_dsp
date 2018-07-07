@@ -51,7 +51,6 @@ module tb_wb_daq_channel (/*AUTOARG*/) ;
    reg 		adc_enable;
    reg 		master_enable;
    reg [31:0] 	control;                        // FW controlled register
-   reg 		grant;
    reg [4:0] 	fifo_number_samples_terminal;   // FW controlled register
    reg 		data_done;
    wire [7:0] 	adc_data_out;
@@ -70,7 +69,6 @@ module tb_wb_daq_channel (/*AUTOARG*/) ;
 		      .control		(control),
 		      .data_done	(data_done),
 		      .fifo_number_samples_terminal(fifo_number_samples_terminal),
-		      .grant		(grant),
 		      .adc_data_out	(adc_data_out),
 		      .adc_data_ready	(adc_data_ready));
    
@@ -88,8 +86,6 @@ module tb_wb_daq_channel (/*AUTOARG*/) ;
 	) ;
    
 
-
-/* -----\/----- EXCLUDED -----\/-----
    //
    // Measure the width of the PUSH pulse to make sure it is not too long or short.
    // Short pulses could miss data being stored.
@@ -120,7 +116,7 @@ module tb_wb_daq_channel (/*AUTOARG*/) ;
 	 TEST.compare_values("Push wrong size!", WB_CLK_PERIOD, $time-PushStart);
       end
    end
- -----/\----- EXCLUDED -----/\----- */
+
 
    localparam STATE_IDLE = 4'h0;
    localparam STATE_CAPTURE_SRAM_DATA = 4'h1;
@@ -139,20 +135,17 @@ module tb_wb_daq_channel (/*AUTOARG*/) ;
 
    always @(*)
      if (wb_rst) begin
-	grant = 0;
 	data_done = 0;
 	next_state = 0;
 	capture_sram_data = 0;	
      end else begin
 	case (state)
 	  STATE_IDLE : begin
-	     grant = 0;
 	     data_done = 0;
 	     next_state = 0;
 	     capture_sram_data = 0;	     
 	     if (start_sram) begin
 		next_state = STATE_CAPTURE_SRAM_DATA;
-		grant = 1;
 	     end else begin
 		next_state = STATE_IDLE;		
 	     end
@@ -183,7 +176,6 @@ module tb_wb_daq_channel (/*AUTOARG*/) ;
       adc_enable = 0;
       master_enable = 0;
       control = 0;
-      grant = 0;
       fifo_number_samples_terminal = 4;
       data_done = 0;      
       
