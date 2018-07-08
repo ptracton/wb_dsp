@@ -44,7 +44,8 @@ module wb_daq_channel (/*AUTOARG*/
    wire 		      enable = master_enable & control[0];
    wire [dw-1:0] 	      aggregate_data_out;   
    wire 		      fifo_push;
-
+   wire 		      fifo_pop;
+   
    wire 		      signed_data = control[`CONTROL_REG_SIGNED_DATA];   
    
    wire [dw-1:0] 	      fifo_data_out;   

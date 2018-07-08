@@ -21,7 +21,7 @@ modelsim:
 	$(MODELSIM) -c -do $(MODULE)_modelsim.f
 
 lint:
-	$(LINTER) --lint-only $(MODULE).v -I ../
+	$(LINTER) --lint-only -I../ ../wb_daq_data_aggregation/wb_daq_data_aggregation.v  ../fifo/fifo.v ../fifo_to_sram/fifo_to_sram.v  $(MODULE).v 
 
 
 synthesis:
