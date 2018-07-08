@@ -41,7 +41,7 @@ module tb_wb_daq_channel (/*AUTOARG*/) ;
    // General purpose test support
    //
    test_tasks #("wb_daq_channel",
-		9) TEST();
+		16) TEST();
 
    // Beginning of automatic wires (for undeclared instantiated-module outputs)
    wire [31:0]	data_out;		// From dut of wb_daq_channel.v
@@ -187,9 +187,49 @@ module tb_wb_daq_channel (/*AUTOARG*/) ;
       adc_enable = 1;    // Turn on ADC
       control[0] = 1;       // Turn on channel
       master_enable = 1; // Turn on channel
-       
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h03020100, capture_sram_data);
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h07060504, capture_sram_data);
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h0b0a0908, capture_sram_data);
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h0f0e0d0c, capture_sram_data);
+
+      repeat(3) @(posedge wb_clk);
       
-      repeat(60) @(posedge adc_clk);
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h13121110, capture_sram_data);
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h17161514, capture_sram_data);
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h1b1a1918, capture_sram_data);
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h1f1e1d1c, capture_sram_data);
+
+      repeat(3) @(posedge wb_clk);
+      
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h23222120, capture_sram_data);
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h27262524, capture_sram_data);
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h2b2a2928, capture_sram_data);
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h2f2e2d2c, capture_sram_data);
+
+      repeat(3) @(posedge wb_clk);
+      
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h33323130, capture_sram_data);
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h37363534, capture_sram_data);
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h3b3a3938, capture_sram_data);
+      @(posedge state == STATE_DATA_DONE);
+      TEST.compare_values("SRAM VALUE",32'h3f3e3d3c, capture_sram_data);      
+      
+      repeat(2) @(posedge adc_clk);
       
       TEST.all_tests_completed();
    end
