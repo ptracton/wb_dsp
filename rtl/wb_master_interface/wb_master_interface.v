@@ -64,15 +64,15 @@ module wb_master_interface (/*AUTOARG*/
      if (wb_rst) begin
         next_state = STATE_IDLE;
         active = 0;   
-        wb_adr_o <= 0;
-        wb_dat_o <= 0;
-        wb_sel_o <= 0;
-        wb_we_o  <= 0;
-        wb_cyc_o <= 0;
-        wb_stb_o <= 0;
-        wb_cti_o <= 0;
-        wb_bte_o <= 0;  
-        data_rd  <= 0;        
+        wb_adr_o = 0;
+        wb_dat_o = 0;
+        wb_sel_o = 0;
+        wb_we_o  = 0;
+        wb_cyc_o = 0;
+        wb_stb_o = 0;
+        wb_cti_o = 0;
+        wb_bte_o = 0;  
+        data_rd  = 0;        
      end else begin // if (wb_rst)
         case (state)
           STATE_IDLE: begin
