@@ -12,42 +12,6 @@ wire [31:0] wb_s2m_daq_dat;
 wire        wb_s2m_daq_ack;
 wire        wb_s2m_daq_err;
 wire        wb_s2m_daq_rty;
-wire [31:0] wb_m2s_ram0_adr;
-wire [31:0] wb_m2s_ram0_dat;
-wire  [3:0] wb_m2s_ram0_sel;
-wire        wb_m2s_ram0_we;
-wire        wb_m2s_ram0_cyc;
-wire        wb_m2s_ram0_stb;
-wire  [2:0] wb_m2s_ram0_cti;
-wire  [1:0] wb_m2s_ram0_bte;
-wire [31:0] wb_s2m_ram0_dat;
-wire        wb_s2m_ram0_ack;
-wire        wb_s2m_ram0_err;
-wire        wb_s2m_ram0_rty;
-wire [31:0] wb_m2s_ram1_adr;
-wire [31:0] wb_m2s_ram1_dat;
-wire  [3:0] wb_m2s_ram1_sel;
-wire        wb_m2s_ram1_we;
-wire        wb_m2s_ram1_cyc;
-wire        wb_m2s_ram1_stb;
-wire  [2:0] wb_m2s_ram1_cti;
-wire  [1:0] wb_m2s_ram1_bte;
-wire [31:0] wb_s2m_ram1_dat;
-wire        wb_s2m_ram1_ack;
-wire        wb_s2m_ram1_err;
-wire        wb_s2m_ram1_rty;
-wire [31:0] wb_m2s_ram2_adr;
-wire [31:0] wb_m2s_ram2_dat;
-wire  [3:0] wb_m2s_ram2_sel;
-wire        wb_m2s_ram2_we;
-wire        wb_m2s_ram2_cyc;
-wire        wb_m2s_ram2_stb;
-wire  [2:0] wb_m2s_ram2_cti;
-wire  [1:0] wb_m2s_ram2_bte;
-wire [31:0] wb_s2m_ram2_dat;
-wire        wb_s2m_ram2_ack;
-wire        wb_s2m_ram2_err;
-wire        wb_s2m_ram2_rty;
 wire [31:0] wb_m2s_ram3_adr;
 wire [31:0] wb_m2s_ram3_dat;
 wire  [3:0] wb_m2s_ram3_sel;
@@ -60,6 +24,42 @@ wire [31:0] wb_s2m_ram3_dat;
 wire        wb_s2m_ram3_ack;
 wire        wb_s2m_ram3_err;
 wire        wb_s2m_ram3_rty;
+wire [31:0] wb_m2s_ram2_adr;
+wire [31:0] wb_m2s_ram2_dat;
+wire  [3:0] wb_m2s_ram2_sel;
+wire        wb_m2s_ram2_we;
+wire        wb_m2s_ram2_cyc;
+wire        wb_m2s_ram2_stb;
+wire  [2:0] wb_m2s_ram2_cti;
+wire  [1:0] wb_m2s_ram2_bte;
+wire [31:0] wb_s2m_ram2_dat;
+wire        wb_s2m_ram2_ack;
+wire        wb_s2m_ram2_err;
+wire        wb_s2m_ram2_rty;
+wire [31:0] wb_m2s_ram1_adr;
+wire [31:0] wb_m2s_ram1_dat;
+wire  [3:0] wb_m2s_ram1_sel;
+wire        wb_m2s_ram1_we;
+wire        wb_m2s_ram1_cyc;
+wire        wb_m2s_ram1_stb;
+wire  [2:0] wb_m2s_ram1_cti;
+wire  [1:0] wb_m2s_ram1_bte;
+wire [31:0] wb_s2m_ram1_dat;
+wire        wb_s2m_ram1_ack;
+wire        wb_s2m_ram1_err;
+wire        wb_s2m_ram1_rty;
+wire [31:0] wb_m2s_ram0_adr;
+wire [31:0] wb_m2s_ram0_dat;
+wire  [3:0] wb_m2s_ram0_sel;
+wire        wb_m2s_ram0_we;
+wire        wb_m2s_ram0_cyc;
+wire        wb_m2s_ram0_stb;
+wire  [2:0] wb_m2s_ram0_cti;
+wire  [1:0] wb_m2s_ram0_bte;
+wire [31:0] wb_s2m_ram0_dat;
+wire        wb_s2m_ram0_ack;
+wire        wb_s2m_ram0_err;
+wire        wb_s2m_ram0_rty;
 
 wb_intercon wb_intercon0
    (.wb_clk_i      (wb_clk),
@@ -76,30 +76,18 @@ wb_intercon wb_intercon0
     .wb_daq_ack_o  (wb_s2m_daq_ack),
     .wb_daq_err_o  (wb_s2m_daq_err),
     .wb_daq_rty_o  (wb_s2m_daq_rty),
-    .wb_ram0_adr_o (wb_m2s_ram0_adr),
-    .wb_ram0_dat_o (wb_m2s_ram0_dat),
-    .wb_ram0_sel_o (wb_m2s_ram0_sel),
-    .wb_ram0_we_o  (wb_m2s_ram0_we),
-    .wb_ram0_cyc_o (wb_m2s_ram0_cyc),
-    .wb_ram0_stb_o (wb_m2s_ram0_stb),
-    .wb_ram0_cti_o (wb_m2s_ram0_cti),
-    .wb_ram0_bte_o (wb_m2s_ram0_bte),
-    .wb_ram0_dat_i (wb_s2m_ram0_dat),
-    .wb_ram0_ack_i (wb_s2m_ram0_ack),
-    .wb_ram0_err_i (wb_s2m_ram0_err),
-    .wb_ram0_rty_i (wb_s2m_ram0_rty),
-    .wb_ram1_adr_o (wb_m2s_ram1_adr),
-    .wb_ram1_dat_o (wb_m2s_ram1_dat),
-    .wb_ram1_sel_o (wb_m2s_ram1_sel),
-    .wb_ram1_we_o  (wb_m2s_ram1_we),
-    .wb_ram1_cyc_o (wb_m2s_ram1_cyc),
-    .wb_ram1_stb_o (wb_m2s_ram1_stb),
-    .wb_ram1_cti_o (wb_m2s_ram1_cti),
-    .wb_ram1_bte_o (wb_m2s_ram1_bte),
-    .wb_ram1_dat_i (wb_s2m_ram1_dat),
-    .wb_ram1_ack_i (wb_s2m_ram1_ack),
-    .wb_ram1_err_i (wb_s2m_ram1_err),
-    .wb_ram1_rty_i (wb_s2m_ram1_rty),
+    .wb_ram3_adr_o (wb_m2s_ram3_adr),
+    .wb_ram3_dat_o (wb_m2s_ram3_dat),
+    .wb_ram3_sel_o (wb_m2s_ram3_sel),
+    .wb_ram3_we_o  (wb_m2s_ram3_we),
+    .wb_ram3_cyc_o (wb_m2s_ram3_cyc),
+    .wb_ram3_stb_o (wb_m2s_ram3_stb),
+    .wb_ram3_cti_o (wb_m2s_ram3_cti),
+    .wb_ram3_bte_o (wb_m2s_ram3_bte),
+    .wb_ram3_dat_i (wb_s2m_ram3_dat),
+    .wb_ram3_ack_i (wb_s2m_ram3_ack),
+    .wb_ram3_err_i (wb_s2m_ram3_err),
+    .wb_ram3_rty_i (wb_s2m_ram3_rty),
     .wb_ram2_adr_o (wb_m2s_ram2_adr),
     .wb_ram2_dat_o (wb_m2s_ram2_dat),
     .wb_ram2_sel_o (wb_m2s_ram2_sel),
@@ -112,16 +100,28 @@ wb_intercon wb_intercon0
     .wb_ram2_ack_i (wb_s2m_ram2_ack),
     .wb_ram2_err_i (wb_s2m_ram2_err),
     .wb_ram2_rty_i (wb_s2m_ram2_rty),
-    .wb_ram3_adr_o (wb_m2s_ram3_adr),
-    .wb_ram3_dat_o (wb_m2s_ram3_dat),
-    .wb_ram3_sel_o (wb_m2s_ram3_sel),
-    .wb_ram3_we_o  (wb_m2s_ram3_we),
-    .wb_ram3_cyc_o (wb_m2s_ram3_cyc),
-    .wb_ram3_stb_o (wb_m2s_ram3_stb),
-    .wb_ram3_cti_o (wb_m2s_ram3_cti),
-    .wb_ram3_bte_o (wb_m2s_ram3_bte),
-    .wb_ram3_dat_i (wb_s2m_ram3_dat),
-    .wb_ram3_ack_i (wb_s2m_ram3_ack),
-    .wb_ram3_err_i (wb_s2m_ram3_err),
-    .wb_ram3_rty_i (wb_s2m_ram3_rty));
+    .wb_ram1_adr_o (wb_m2s_ram1_adr),
+    .wb_ram1_dat_o (wb_m2s_ram1_dat),
+    .wb_ram1_sel_o (wb_m2s_ram1_sel),
+    .wb_ram1_we_o  (wb_m2s_ram1_we),
+    .wb_ram1_cyc_o (wb_m2s_ram1_cyc),
+    .wb_ram1_stb_o (wb_m2s_ram1_stb),
+    .wb_ram1_cti_o (wb_m2s_ram1_cti),
+    .wb_ram1_bte_o (wb_m2s_ram1_bte),
+    .wb_ram1_dat_i (wb_s2m_ram1_dat),
+    .wb_ram1_ack_i (wb_s2m_ram1_ack),
+    .wb_ram1_err_i (wb_s2m_ram1_err),
+    .wb_ram1_rty_i (wb_s2m_ram1_rty),
+    .wb_ram0_adr_o (wb_m2s_ram0_adr),
+    .wb_ram0_dat_o (wb_m2s_ram0_dat),
+    .wb_ram0_sel_o (wb_m2s_ram0_sel),
+    .wb_ram0_we_o  (wb_m2s_ram0_we),
+    .wb_ram0_cyc_o (wb_m2s_ram0_cyc),
+    .wb_ram0_stb_o (wb_m2s_ram0_stb),
+    .wb_ram0_cti_o (wb_m2s_ram0_cti),
+    .wb_ram0_bte_o (wb_m2s_ram0_bte),
+    .wb_ram0_dat_i (wb_s2m_ram0_dat),
+    .wb_ram0_ack_i (wb_s2m_ram0_ack),
+    .wb_ram0_err_i (wb_s2m_ram0_err),
+    .wb_ram0_rty_i (wb_s2m_ram0_rty));
 

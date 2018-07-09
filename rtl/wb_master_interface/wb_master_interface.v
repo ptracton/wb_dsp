@@ -70,7 +70,7 @@ module wb_master_interface (/*AUTOARG*/
         wb_we_o  = 0;
         wb_cyc_o = 0;
         wb_stb_o = 0;
-        wb_cti_o = 0;
+        wb_cti_o = 1;
         wb_bte_o = 0;  
         data_rd  = 0;        
      end else begin // if (wb_rst)
@@ -83,7 +83,7 @@ module wb_master_interface (/*AUTOARG*/
              wb_we_o  = 0;
              wb_cyc_o = 0;
              wb_stb_o = 0;
-             wb_cti_o = 0;
+             wb_cti_o = 1;
              wb_bte_o = 0;              
              if (start) begin
                 next_state = STATE_WAIT_ACK;
@@ -93,7 +93,7 @@ module wb_master_interface (/*AUTOARG*/
                 wb_we_o  = write;
                 wb_cyc_o = 1;
                 wb_stb_o = 1;
-                wb_cti_o = 0;
+                wb_cti_o = 1;
                 wb_bte_o = 0;                 
                 active   = 1;
                 data_rd  =0;                
@@ -102,6 +102,9 @@ module wb_master_interface (/*AUTOARG*/
              end
           end // case: STATE_IDLE
           STATE_WAIT_ACK: begin
+	     wb_we_o  = write;
+             wb_cyc_o = 1;
+             wb_stb_o = 1;	     
              if (wb_err_i || wb_rty_i) begin
                 next_state = STATE_ERROR;
              end else if (wb_ack_i) begin                   

@@ -42,36 +42,49 @@ module tb_wb_master_interface (/*AUTOARG*/) ;
    test_tasks #("wb_master_interface",
 		16) TEST();
 
+`define RAM0_ADDRESS 32'h20000000
+`define RAM1_ADDRESS 32'h30000000
+`define RAM2_ADDRESS 32'h90000000
+`define RAM3_ADDRESS 32'hA0000000
+  
+   
 `include "bus_matrix.vh"
    
    localparam aw = 32;
    localparam dw = 32;
+   wire [31:0] data_rd;
+   wire        active;
+   reg 	       start;
+   reg [31:0]  address;   
+   reg [3:0]   selection;
+   reg 	       write;
+   reg [31:0]  data_wr;
    
    
    wb_master_interface dut( 
 			   // Outputs
 			   .wb_adr_o		(wb_m2s_daq_adr),
-			   .wb_dat_o		(),
-			   .wb_sel_o		(),
-			   .wb_we_o		(),
-			   .wb_cyc_o		(),
-			   .wb_stb_o		(),
-			   .wb_cti_o		(),
-			   .wb_bte_o		(),
-			   .data_rd		(),
-			   .active		(),
+			   .wb_dat_o		(wb_m2s_daq_dat),
+			   .wb_sel_o		(wb_m2s_daq_sel),
+			   .wb_we_o		(wb_m2s_daq_we),
+			   .wb_cyc_o		(wb_m2s_daq_cyc),
+			   .wb_stb_o		(wb_m2s_daq_stb),
+			   .wb_cti_o		(wb_m2s_daq_cti),
+			   .wb_bte_o		(wb_m2s_daq_bte),
+			   .data_rd		(data_rd),
+			   .active		(active),
 			   // Inputs
 			   .wb_clk		(wb_clk),
 			   .wb_rst		(wb_rst),
-			   .wb_dat_i		(),
-			   .wb_ack_i		(),
-			   .wb_err_i		(),
-			   .wb_rty_i		(),
-			   .start		(),
-			   .address		(),
-			   .selection		(),
-			   .write		(),
-			   .data_wr		()
+			   .wb_dat_i		(wb_s2m_daq_dat),
+			   .wb_ack_i		(wb_s2m_daq_ack),
+			   .wb_err_i		(wb_s2m_daq_err),
+			   .wb_rty_i		(wb_s2m_daq_rty),
+			   .start		(start),
+			   .address		(address),
+			   .selection		(selection),
+			   .write		(write),
+			   .data_wr		(data_wr)
 			    );
    
    
@@ -179,12 +192,31 @@ module tb_wb_master_interface (/*AUTOARG*/) ;
    
    
    initial begin
+
+      start = 0;
+      address = 0;
+      selection = 0;
+      write = 0;
+      data_wr = 0;
+      
       
       //
       // Wait for reset to release
       //
       @(negedge wb_rst);
       repeat(5) @(posedge wb_clk);
+      address =  `RAM0_ADDRESS;
+      selection = 4'hF;
+      write = 1;
+      data_wr = 32'ha5a5_b6b6;
+      start = 1;
+
+      @(posedge wb_clk);
+      start = 0;
+      repeat(5) @(posedge wb_clk);
+      TEST.compare_values("RAM0 0", 32'ha5a5_b6b6, ram0.ram0.mem[0]);
+      
+      
       
       TEST.all_tests_completed();
    end

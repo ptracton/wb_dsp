@@ -47,7 +47,7 @@ module wb_ram
       if(wb_rst_i) begin
 	 adr_r <= {aw{1'b0}};
       valid_r <= 1'b0;
-      wb_ack_o <= 1'b0;
+//      wb_ack_o <= 1'b0;
    end
    end
 
