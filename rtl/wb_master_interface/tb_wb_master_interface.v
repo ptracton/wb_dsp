@@ -97,7 +97,7 @@ module tb_wb_master_interface (/*AUTOARG*/) ;
     .wb_clk_i(wb_clk),
     .wb_rst_i(wb_rst),
     
-    .wb_adr_i(wb_m2s_ram0_adr),
+    .wb_adr_i(wb_m2s_ram0_adr[14:0]),
     .wb_dat_i(wb_m2s_ram0_dat),
     .wb_sel_i(wb_m2s_ram0_sel),
     .wb_we_i(wb_m2s_ram0_we),
@@ -123,7 +123,7 @@ module tb_wb_master_interface (/*AUTOARG*/) ;
     .wb_clk_i(wb_clk),
     .wb_rst_i(wb_rst),
     
-    .wb_adr_i(wb_m2s_ram1_adr),
+    .wb_adr_i(wb_m2s_ram1_adr[14:0]),
     .wb_dat_i(wb_m2s_ram1_dat),
     .wb_sel_i(wb_m2s_ram1_sel),
     .wb_we_i(wb_m2s_ram1_we),
@@ -148,7 +148,7 @@ module tb_wb_master_interface (/*AUTOARG*/) ;
     .wb_clk_i(wb_clk),
     .wb_rst_i(wb_rst),
     
-    .wb_adr_i(wb_m2s_ram2_adr),
+    .wb_adr_i(wb_m2s_ram2_adr[14:0]),
     .wb_dat_i(wb_m2s_ram2_dat),
     .wb_sel_i(wb_m2s_ram2_sel),
     .wb_we_i(wb_m2s_ram2_we),
@@ -173,7 +173,7 @@ module tb_wb_master_interface (/*AUTOARG*/) ;
     .wb_clk_i(wb_clk),
     .wb_rst_i(wb_rst),
     
-    .wb_adr_i(wb_m2s_ram3_adr),
+    .wb_adr_i(wb_m2s_ram3_adr[14:0]),
     .wb_dat_i(wb_m2s_ram3_dat),
     .wb_sel_i(wb_m2s_ram3_sel),
     .wb_we_i(wb_m2s_ram3_we),
@@ -189,6 +189,29 @@ module tb_wb_master_interface (/*AUTOARG*/) ;
    
    assign wb_s2m_ram3_rty = 0;
 
+   task WriteRAM;
+      input [31:0] Waddress;
+      input [3:0]  Wselection;
+      input [31:0] Wdata;
+      begin
+	 @(posedge wb_clk);
+	 address = Waddress;
+	 selection = Wselection;
+	 data_wr = Wdata;
+	 write = 1;
+	 start = 1;
+	 @(posedge wb_clk);
+	 write = 0;
+	 start = 0;
+	 address = $random;
+	 data_wr = $random;
+	 selection = $random;
+	 @(posedge wb_clk);
+      end
+   endtask // WriteRAM
+   
+   
+   
    
    
    initial begin
@@ -204,18 +227,32 @@ module tb_wb_master_interface (/*AUTOARG*/) ;
       // Wait for reset to release
       //
       @(negedge wb_rst);
-      repeat(5) @(posedge wb_clk);
-      address =  `RAM0_ADDRESS;
-      selection = 4'hF;
-      write = 1;
-      data_wr = 32'ha5a5_b6b6;
-      start = 1;
+      repeat(10) @(posedge wb_clk);
 
-      @(posedge wb_clk);
-      start = 0;
-      repeat(5) @(posedge wb_clk);
-      TEST.compare_values("RAM0 0", 32'ha5a5_b6b6, ram0.ram0.mem[0]);
+      WriteRAM(`RAM0_ADDRESS, 4'hF, 32'ha5a5_b6b6);
+      WriteRAM(`RAM0_ADDRESS+4, 4'hF, 32'h01234567);
+
+      WriteRAM(`RAM1_ADDRESS, 4'hF, 32'h1a1a_1b1b);
+      WriteRAM(`RAM2_ADDRESS, 4'hF, 32'h2a2a_2b2b);
+      WriteRAM(`RAM3_ADDRESS, 4'hF, 32'h3a3a_3b3b);
       
+      WriteRAM(`RAM1_ADDRESS+4, 4'hF, 32'h11234567);
+      WriteRAM(`RAM2_ADDRESS+4, 4'hF, 32'h21234567);
+      WriteRAM(`RAM3_ADDRESS+4, 4'hF, 32'h31234567);
+      
+      repeat(10) @(posedge wb_clk);
+      
+      TEST.compare_values("RAM0 0", 32'ha5a5_b6b6, ram0.ram0.mem[0]);
+      TEST.compare_values("RAM0 4", 32'h0123_4567, ram0.ram0.mem[1]);      
+
+      TEST.compare_values("RAM1 0", 32'h1a1a_1b1b, ram1.ram0.mem[0]);
+      TEST.compare_values("RAM1 4", 32'h1123_4567, ram1.ram0.mem[1]);      
+
+      TEST.compare_values("RAM2 0", 32'h2a2a_2b2b, ram2.ram0.mem[0]);
+      TEST.compare_values("RAM2 4", 32'h2123_4567, ram2.ram0.mem[1]);      
+
+      TEST.compare_values("RAM3 0", 32'h3a3a_3b3b, ram3.ram0.mem[0]);
+      TEST.compare_values("RAM3 4", 32'h3123_4567, ram3.ram0.mem[1]);      
       
       
       TEST.all_tests_completed();
