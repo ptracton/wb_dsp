@@ -124,11 +124,14 @@ module wb_master_interface (/*AUTOARG*/
              wb_cyc_o = 1;
              wb_stb_o = 1;
              wb_cti_o = 1;
-             wb_bte_o = 0;                 
+             wb_bte_o = 0;                 	    
 	     
              if (wb_err_i || wb_rty_i) begin
                 next_state = STATE_ERROR;
-             end else if (wb_ack_i) begin                   
+             end else if (wb_ack_i) begin  
+		if (!write) begin
+		   data_rd = wb_dat_i;		
+		end                 
                 next_state = STATE_IDLE;
              end else begin                
                 next_state = STATE_WAIT_ACK;

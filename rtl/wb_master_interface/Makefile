@@ -14,7 +14,7 @@ sim:
 
 xrun:
 	$(RM) -rf xrun.history xrun.log  xcelium.d/ dump.vcd
-	$(XCELIUM) -f $(MODULE)_sim.f
+	$(XCELIUM) -f $(MODULE)_sim.f +access+rwc +define+NCVERILOG
 
 modelsim:
 	$(RM) -rf vsim.wlf work/

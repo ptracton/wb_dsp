@@ -6,8 +6,8 @@ module dump;
    initial
      begin
 `ifdef NCVERILOG
-	      $shm_open("test.shm");
-	      $shm_probe(testbench, "MAC");
+	      $shm_open("dump.shm");
+	      $shm_probe(tb_wb_master_interface, "MAC");
 `else	
 	      $dumpfile("dump.vcd");
 	      $dumpvars(0, tb_wb_master_interface);
