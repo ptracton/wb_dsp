@@ -260,7 +260,7 @@ module tb_wb_master_interface (/*AUTOARG*/) ;
 	 release dut.wb_ack_i;
 	 release dut.wb_rty_i;
       end
-   endtask; // RetryRAM
+   endtask // RetryRAM
    
    
    

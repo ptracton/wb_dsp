@@ -1,0 +1,136 @@
+#+TITLE:     Wishbone Bus Master in Verilog
+#+AUTHOR:    Philip Tracton
+#+EMAIL:     ptracton@gmail.com
+#+OPTIONS: toc:1          only inlcude two levels in TOC
+#+OPTIONS: toc:nil        no default TOC at all
+#+LATEX_HEADER: \setlength{\parindent}{1cm}
+#+LaTex_HEADER: \usepackage{listings}
+#+LaTex_HEADER: \usepackage{tikz-timing}
+#+LaTex_HEADER: \usepackage{minted}
+#+OPTIONS: ^:nil
+
+\maketitle
+\newpage
+ #+TOC: headlines 1
+\newpage
+
+* Theory
+
+* Operations
+** Parameters
+** Signals
+#+CAPTION: wb_master_interface Port Signals
+#+ATTR_LaTeX: :environment longtable :align |p{3cm}|c|p{4cm}|p{6cm}|
+|---+---------------+-------------+----------+---------------------------------------|
+|   | *Signal Name* | *Direction* |   *Size* | *Behavior*                            |
+| / | <>            | >           |        > | >                                     |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_clk        | Input       |        1 | Clock for synchronous behavior        |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_rst        | Input       |        1 | Synchronous reset                     |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_adr_o      | Output      | [aw-1:0] | Address we are accessing              |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_dat_o      | Output      | [dw-1:0] | Data to write to slave                |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_sel_o      | Output      |    [3:0] | Which bytes are we accessing          |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_we_o       | Output      |        1 | Write Enable                          |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_cyc_o      | Output      |        1 | Bus cycle transaction                 |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_stb_o      | Output      |        1 | Bus cycle strobe                      |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_cti_o      | Output      |        1 |                                       |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_bte_o      | Output      |        1 |                                       |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_dat_i      | Input       | [dw-1:0] | Data read from slave                  |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_ack_i      | Input       |        1 | Acknowledge signal from slave         |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_err_i      | Input       |        1 | Error signal from slave               |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | wb_rty_i      | Input       |        1 | Retry signal from slave               |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | start         | Input       |        1 | Start transaction                     |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | address       | Input       | [aw-1:0] | address for transaction               |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | write         | Input       |        1 | If high, write transaction, else read |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | data_wr       | Input       | [dw-1:0] | Data to write to slave                |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | data_rd       | Output      | [dw-1:0] | Data read from slave                  |
+|---+---------------+-------------+----------+---------------------------------------|
+|   | active        | Output      |        1 | Bus transaction in progress           |
+|---+---------------+-------------+----------+---------------------------------------|
+
+** Bus Cycles
+- Write to slave cycle
+
+\begin{tikztimingtable}
+wb rst & 4{L}4{H}18{L}\\
+wb clk & 26{C} \\
+start & 13{L}2{H}11{L} \\
+write & 13{L}2{H}11{L} \\
+selection & 13{L}2D{VALID}11{L} \\	
+address & 13{L}2D{VALID}11{L} \\
+wb adr o & 13{L}4D{VALID}9{L} \\
+wb dat o & 13{L}4D{VALID}9{L} \\
+wb sel o & 13{L}4D{VALID}9{L} \\
+wb we o  & 13{L}4{H}9{L} \\
+wb cyc o & 13{L}4{H}9{L} \\
+wb stb o & 13{L}4{H}9{L} \\
+wb cti o & 13{L}4D{VALID}9{L} \\
+wb bte o & 26{L} \\
+wb ack i & 15{L}2{H}9{L}\\
+active   & 13{L}4{H}9{L}\\
+\end{tikztimingtable}
+
+- Read from slave cycle
+
+\begin{tikztimingtable}
+wb rst & 4{L}4{H}18{L}\\
+wb clk & 26{C} \\
+start & 13{L}2{H}11{L} \\
+write & 26{L} \\
+selection & 13{L}2D{VALID}11{L} \\	
+address & 13{L}2D{VALID}11{L} \\
+wb adr o & 13{L}4D{VALID}9{L} \\
+wb sel o & 13{L}4D{VALID}9{L} \\
+wb we o  & 26{L} \\
+wb cyc o & 13{L}4{H}9{L} \\
+wb stb o & 13{L}4{H}9{L} \\
+wb cti o & 13{L}4D{VALID}9{L} \\
+wb bte o & 26{L} \\
+wb dat i & 15{L}2D{VALID}9{L} \\
+wb ack i & 15{L}2{H}9{L}\\
+active   & 13{L}4{H}9{L}\\
+data rd  & 15{L}4D{VALID}7{L} \\
+\end{tikztimingtable}
+
+* Testing
+** Run Simulations
+Several different simulators were used to verify the RTL.  The test bench is self checking and indicates pass/fail for both individual tests and the overal test run.  
+
+*** Icarus Verilog
+- This is the primary tool since it is free and runs everywhere.  To run the simulation with this tool use /*make sim*/.  This will produce a dump.vcd that can be viewed with GtkWave and a fifo_to_sram_iverilog.log
+
+*** Modelsim
+- Use /*make modelsim*/ to execute the simulation via the modelsim command line options
+- If the modelsim GUI is started, the modelsim.do file will run and produce the waveforms
+
+*** Xcelium
+- Use /*make xrun*/ run the simulation with the Cadence Xcelium tools if you have access to them.  This will produce a dump.vcd that van be viewed with Simvision.
+
+** Cleaning Up
+- Use /*make clean*/ to remove all produced output from any of the simulations or documentation tools.
+
+** Linting
+- Use /*make lint*/ to use verilator in it's lint-only mode on fifo_to_sram.v.  It will pass silently.  There is only feedback if there is a problem.
+
+\newpage
+* Synthesis
+** Yosys
+- Use the command /*make synthesis*/ to synthesize the fifo_to_sram.v file into a fifo_to_sram_synth.v for Xilinx technology.  This is a new tool that is being learned as this is developed.  It will silently run and produce both a fifo_to_sram_xilinx_synthesis.v and a fifo_to_sram_yosys.log.
