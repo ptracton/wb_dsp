@@ -1,5 +1,5 @@
 
-TOPTARGETS := clean sim xrun
+TOPTARGETS := clean sim xrun modelsim synthesis lint
 
 
 SUBDIRS = fifo fifo_to_sram wb_master_interface wb_daq_channel wb_daq_data_aggregation

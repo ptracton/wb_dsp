@@ -53,7 +53,7 @@ module testbench (/*AUTOARG*/ ) ;
    //
 `include "wb_dsp_testbench_intercon.vh"
 
-`include "hack.vh"
+//`include "hack.vh"
    
    wire interrupt;
    wire [3:0]  begin_equation;
