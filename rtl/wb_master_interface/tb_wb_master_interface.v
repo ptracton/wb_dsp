@@ -40,7 +40,7 @@ module tb_wb_master_interface (/*AUTOARG*/) ;
    // General purpose test support
    //
    test_tasks #("wb_master_interface",
-		8) TEST();
+		14) TEST();
 
 `define RAM0_ADDRESS 32'h20000000
 `define RAM1_ADDRESS 32'h30000000
@@ -279,6 +279,11 @@ module tb_wb_master_interface (/*AUTOARG*/) ;
       // Wait for reset to release
       //
       @(negedge wb_rst);
+
+
+      //
+      // Writing and reading words
+      //
       repeat(10) @(posedge wb_clk);
 
       WriteRAM(`RAM0_ADDRESS, 4'hF, 32'ha5a5_b6b6);
@@ -318,13 +323,43 @@ module tb_wb_master_interface (/*AUTOARG*/) ;
       ReadRAM(`RAM3_ADDRESS+4, 4'hF, read_ram);
       TEST.compare_values("RAM3 4", 32'h3123_4567, read_ram);      
 
-/* -----\/----- EXCLUDED -----\/-----
+
       repeat(10) @(posedge wb_clk);
+
+      //
+      // Half-Byte Writing and Reading
+      //
+      WriteRAM(`RAM0_ADDRESS+64, 4'h3, 32'hFFFF_dead);
+      ReadRAM(`RAM0_ADDRESS+64, 4'h3, read_ram);
+      TEST.compare_values("RAM0 Half-Byte0", 32'hxxxx_dead, read_ram); 
+
+      WriteRAM(`RAM0_ADDRESS+64, 4'hC, 32'hbeef_FFFF);
+      ReadRAM(`RAM0_ADDRESS+64, 4'hC, read_ram);
+      TEST.compare_values("RAM0 Half-Byte 1", 32'hbeef_dead, read_ram); 
+
+     
       
-      RetryRAM(`RAM0_ADDRESS, 4'hF, 32'h11223344);
-      ReadRAM(`RAM0_ADDRESS, 4'hF, read_ram);
-      TEST.compare_values("RAM0 0", 32'ha5a5_b6b6, read_ram);  
- -----/\----- EXCLUDED -----/\----- */
+      repeat(10) @(posedge wb_clk);
+
+      //
+      // Byte Writing and Reading
+      //
+      WriteRAM(`RAM0_ADDRESS+100, 4'h1, 32'hFFFF_FFaa);
+      ReadRAM(`RAM0_ADDRESS+100, 4'h1, read_ram);
+      TEST.compare_values("RAM0 Byte0", 32'hxxxxxxaa, read_ram); 
+
+      WriteRAM(`RAM0_ADDRESS+100, 4'h2, 32'hFFFF_bbFF);
+      ReadRAM(`RAM0_ADDRESS+100, 4'h2, read_ram);
+      TEST.compare_values("RAM0 Byte 1", 32'hxxxx_bbaa, read_ram); 
+
+      WriteRAM(`RAM0_ADDRESS+100, 4'h4, 32'hFFCC_FFFF);
+      ReadRAM(`RAM0_ADDRESS+100, 4'h4, read_ram);
+      TEST.compare_values("RAM0 Byte 2", 32'hxxCC_bbaa, read_ram); 
+
+      WriteRAM(`RAM0_ADDRESS+100, 4'h8, 32'hDDFF_FFFF);
+      ReadRAM(`RAM0_ADDRESS+100, 4'h8, read_ram);
+      TEST.compare_values("RAM0 Byte 3", 32'hddcc_bbaa, read_ram); 
+      
       
       TEST.all_tests_completed();
    end
