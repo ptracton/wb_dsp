@@ -88,14 +88,14 @@ module tb_wb_daq_slave_registers (/*AUTOARG*/) ;
 			      // Inputs
 			      .wb_clk		(wb_clk),
 			      .wb_rst		(wb_rst),
-			      .wb_adr_i		(wb_m2s_daq_registers_adr),
+			      .wb_adr_i		(wb_m2s_daq_registers_adr[7:0]),
 			      .wb_dat_i		(wb_m2s_daq_registers_dat),
 			      .wb_sel_i		(wb_m2s_daq_registers_sel),
 			      .wb_we_i		(wb_m2s_daq_registers_we),
 			      .wb_cyc_i		(wb_m2s_daq_registers_cyc),
 			      .wb_stb_i		(wb_m2s_daq_registers_stb),
 			      .wb_cti_i		(wb_m2s_daq_registers_cti),
-			      .wb_bte_i		(wb_m2s_daq_registers_adrbte),
+			      .wb_bte_i		(wb_m2s_daq_registers_bte),
 			      .daq_channel0_status_reg(daq_channel0_status),
 			      .daq_channel1_status_reg(daq_channel1_status),
 			      .daq_channel2_status_reg(daq_channel2_status),
@@ -105,7 +105,7 @@ module tb_wb_daq_slave_registers (/*AUTOARG*/) ;
 
 
    wb_bfm_master     
-     #(.aw(8))
+     #(.aw(32))
    master
    (
     .wb_clk_i(wb_clk),
@@ -129,7 +129,9 @@ module tb_wb_daq_slave_registers (/*AUTOARG*/) ;
    assign wb_s2m_ram0_ack = 0;
    assign wb_s2m_ram0_err = 0;
    assign wb_s2m_ram0_rty = 0;
+   reg 	       err_o;
    
+       
    initial begin
       daq_channel0_status = 0;
       daq_channel1_status = 0;
@@ -152,8 +154,11 @@ module tb_wb_daq_slave_registers (/*AUTOARG*/) ;
       
       master.write(`REGISTER_ADDRESS + `DAQ_CHANNEL0_ADDRESS_OFFSET,
 		   32'h12345678,
-		   4'hF
-		   );
+		   4'hF,
+		   err_o
+		   );      
+      TEST.compare_values("DAQ 0 Channel Offset 32bit write", 32'h12345678, daq_channel0_address);
+      
       
       repeat(10) @(posedge wb_clk);
       
